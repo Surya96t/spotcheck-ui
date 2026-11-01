@@ -1,0 +1,26 @@
+---
+title: Select
+description: "A ruled dropdown for choosing from a short list."
+group: core
+order: 10
+engine: Base UI
+keyboard:
+  - { keys: "Space", action: "Open the list" }
+  - { keys: "↑ ↓", action: "Move through options" }
+  - { keys: "Enter", action: "Choose an option" }
+  - { keys: "Esc", action: "Close without changing" }
+reducedMotion: "The list appears without animation."
+---
+
+## Usage
+
+```tsx
+import { Select } from "@/components/ledger/select"
+
+<Select
+  label="Model"
+  options={[{ value: "atlas-l", label: "atlas-l" }, { value: "atlas-m", label: "atlas-m" }]}
+  value={model}
+  onValueChange={setModel}
+/>
+```

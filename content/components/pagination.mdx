@@ -1,0 +1,19 @@
+---
+title: Pagination
+description: "Ruled page numbers that collapse long runs."
+group: core
+order: 13
+engine: React
+keyboard:
+  - { keys: "Tab", action: "Move between pages" }
+  - { keys: "Enter", action: "Go to the page" }
+reducedMotion: "Nothing here animates."
+---
+
+## Usage
+
+```tsx
+import { Pagination } from "@/components/ledger/pagination"
+
+<Pagination page={page} pageCount={24} onPageChange={setPage} />
+```

@@ -1,0 +1,18 @@
+---
+title: Switch
+description: "A square switch with a real switch role."
+group: core
+order: 6
+engine: Base UI
+keyboard:
+  - { keys: "Space", action: "Turn on or off" }
+reducedMotion: "The knob moves at once."
+---
+
+## Usage
+
+```tsx
+import { Switch } from "@/components/ledger/switch"
+
+<Switch checked={stream} onCheckedChange={setStream}>Stream responses</Switch>
+```

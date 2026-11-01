@@ -1,0 +1,21 @@
+---
+title: Hold Button
+description: "A destructive action that needs a press and hold, with a fill that shows progress."
+group: core
+order: 3
+engine: rAF
+keyboard:
+  - { keys: "Space", action: "Hold to confirm" }
+  - { keys: "Enter", action: "Hold to confirm" }
+reducedMotion: "The fill stays, because it's the only sign of how long is left. Nothing else moves."
+---
+
+## Usage
+
+```tsx
+import { HoldButton } from "@/components/ledger/hold-button"
+
+<HoldButton duration={1200} onConfirm={deleteWorkspace}>Hold to delete</HoldButton>
+```
+
+Letting go early cancels. Once confirmed, screen readers hear "Confirmed" and pressing again resets it.

@@ -1,0 +1,24 @@
+---
+title: Tooltip
+description: "A short ink label on hover or focus."
+group: core
+order: 18
+engine: Base UI
+keyboard:
+  - { keys: "Tab", action: "Focus the control to show the tooltip" }
+  - { keys: "Esc", action: "Hide the tooltip" }
+reducedMotion: "The label appears without animation."
+---
+
+## Usage
+
+```tsx
+import { Tooltip } from "@/components/ledger/tooltip"
+import { Button } from "@/components/ledger/button"
+
+<Tooltip content="Runs in the background">
+  <Button>Queue run</Button>
+</Tooltip>
+```
+
+Tooltips are for sighted pointer and keyboard users. They never appear on touch, and screen readers don't get the text, so give the control its own label and keep essential information out.

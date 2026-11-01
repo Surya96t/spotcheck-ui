@@ -103,7 +103,7 @@ shadcn files such as `components/ui/button.tsx`. Groups like Motion and Depth ar
 
 ### Site
 
-- **Routes:** home with hero, `/components` index, one page per component, `/docs` guides,
+- **Routes:** landing page, `/components` index, one page per component, `/docs` guides,
   `/field-notes`, and static `/r/*.json`.
 - **Component page:** demo, engine tag, description, install command, usage, props, keyboard,
   reduced-motion note.
@@ -134,16 +134,27 @@ shadcn files such as `components/ui/button.tsx`. Groups like Motion and Depth ar
 |---|---|---|---|
 | 0 | Proof | Git repo, Next app, tokens, fonts, registry, CI, preview deploy; `roll-number`, `detent-slider`, `bar-terrain` | All three install from a real URL into a clean shadcn app that uses `.dark`, and look right in all skins and both themes |
 | 1 | Site shell | Rail, top bar, hero, component page template, generated props, search, `command-palette` | One finished component page at 390px and 1440px |
-| 2 | Core kit | Brief's Core, Base UI primitives, extracted atoms | A sample settings screen can be built from Ledger parts alone |
-| 3 | Motion | Motion, Springs and Timelines groups | Each passes its smoke test and the axe check |
+| 2 | Core kit | Brief's Core, Base UI primitives, extracted atoms, `settings-screen` | A sample settings screen can be built from Ledger parts alone |
+| 3 | Motion | Motion, Springs and Timelines groups, `/components` index | Each passes its smoke test and the axe check |
 | 4 | AI and review | AI group, reworked `stamp-approval`, `run-receipt`, `trace-waterfall`, `diff-review`, `model-race`, `chat-screen` | A demo works against a real AI SDK stream |
-| 5 | Public launch, v0.1 | `dashboard`, field notes, SEO, name, domain, shadcn directory PR | Live on the real domain and listed |
-| 6 | Depth, v0.2 onward | WebGL and Depth groups, `configurator` as a block, one release at a time | Each release ships with its demo and tests |
-| 7 | Ongoing | Next-tier components, 21st.dev submission | Driven by what people use |
+| 5 | Landing page | A real landing page at `/`, with the catalog moved to `/components` | A first-time visitor can tell what Ledger is, see it work and reach the install step without opening the catalog |
+| 6 | Public launch, v0.1 | `dashboard`, field notes, SEO, name, domain, shadcn directory PR | Live on the real domain and listed |
+| 7 | Depth, v0.2 onward | WebGL and Depth groups, `configurator` as a block, one release at a time | Each release ships with its demo and tests |
+| 8 | Ongoing | Next-tier components, 21st.dev submission | Driven by what people use |
 
 AI moved ahead of WebGL and Depth because it carries the positioning, and launching first gives
 us real feedback before the most expensive work. `bar-terrain` still lands in Phase 0, so the
 hero and the WebGL path are proven early.
+
+### Landing page
+
+Added after Phase 2, because the home page is a catalog and no phase covered selling the idea.
+
+- **What it needs:** what Ledger is for and who it's for, a showcase, how it compares with other
+  libraries, a clear next step, and the prototype's footer.
+- **What it can show:** Depth comes after launch, so the showcase uses `bar-terrain` and the Motion
+  and AI pieces. If that isn't enough, pull one or two Depth pieces forward when we plan the phase.
+- **Still open:** the direction. Collect sites or references you like before the phase starts.
 
 ## Open decisions
 
@@ -193,6 +204,21 @@ hero and the WebGL path are proven early.
   8,192px tall, and tall pages at 2.6× go over that.
 - **Worth repeating:** the tests passed with descriptions hidden on phones. Keep looking at the
   screenshots at the end of each phase.
+
+## Phase 2 results
+
+- **Shipped:** 29 components, for 33 in the catalog. That's the brief's Core, the Base UI primitives,
+  the atoms pulled from the prototype, and `settings-screen`, the exit check.
+- **Simple or compound:** data-driven props for Select, Combobox, Radio Group and Segmented. Flat
+  compound parts for Tabs, Dialog, Sheet, Popover and Dropdown Menu, because they hold your own
+  content.
+- **Sheet:** built on Base UI's Drawer, so swipe to dismiss already works. That covers the
+  "draggable sheet" on the next-tier list.
+- **New tokens:** `ledger-heading` (75% width, weight 800) and `ledger-focus`, because installed apps
+  don't get the site's global focus style.
+- **Base UI behaviour to remember:** tooltips are hidden from screen readers, and a toast's dismiss
+  button is only reachable after F6 moves focus into the toast.
+- **Table width:** minimum width now comes from the column count, not a fixed 620px.
 
 ## Design language
 

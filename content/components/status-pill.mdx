@@ -1,0 +1,21 @@
+---
+title: Status Pill
+description: "A square marker and a mono label, in one of four tones."
+group: core
+order: 20
+engine: CSS
+keyboard: []
+reducedMotion: "Nothing here animates."
+---
+
+## Usage
+
+```tsx
+import { StatusPill } from "@/components/ledger/status-pill"
+
+<StatusPill tone="ok">pass</StatusPill>
+<StatusPill tone="warn">drift</StatusPill>
+<StatusPill tone="bad">fail</StatusPill>
+```
+
+Always include a word, because colour alone doesn't reach everyone.

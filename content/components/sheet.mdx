@@ -1,0 +1,22 @@
+---
+title: Sheet
+description: "A side panel you can swipe away, for detail that shouldn't leave the page."
+group: core
+order: 15
+engine: Base UI
+keyboard:
+  - { keys: "Esc", action: "Close and return focus" }
+reducedMotion: "The sheet appears at once, with no slide."
+---
+
+## Usage
+
+```tsx
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ledger/sheet"
+import { Button } from "@/components/ledger/button"
+
+<Sheet swipeDirection="right">
+  <SheetTrigger render={<Button />}>Run details</SheetTrigger>
+  <SheetContent title="R-2041" description="support-qa, atlas-l">…</SheetContent>
+</Sheet>
+```

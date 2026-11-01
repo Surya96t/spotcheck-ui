@@ -11,6 +11,7 @@ export const components = defineDocs({
       group: z.enum(["core", "motion", "springs", "timelines", "webgl", "depth", "ai", "screens"]),
       order: z.number(),
       engine: z.string(),
+      wide: z.boolean().default(false),
       keyboard: z.array(z.object({ keys: z.string(), action: z.string() })).default([]),
       reducedMotion: z.string(),
     }),

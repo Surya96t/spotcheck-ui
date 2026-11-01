@@ -1,0 +1,27 @@
+---
+title: Tabs
+description: "Condensed uppercase labels with a heavy accent bar that slides between tabs."
+group: core
+order: 5
+engine: Base UI
+keyboard:
+  - { keys: "← →", action: "Move between tabs" }
+  - { keys: "Home", action: "Jump to the first tab" }
+  - { keys: "End", action: "Jump to the last tab" }
+reducedMotion: "The bar jumps to the active tab."
+---
+
+## Usage
+
+```tsx
+import { Tabs, TabsList, TabsPanel, TabsTab } from "@/components/ledger/tabs"
+
+<Tabs defaultValue="overview">
+  <TabsList>
+    <TabsTab value="overview">Overview</TabsTab>
+    <TabsTab value="tokens">Tokens</TabsTab>
+  </TabsList>
+  <TabsPanel value="overview">…</TabsPanel>
+  <TabsPanel value="tokens">…</TabsPanel>
+</Tabs>
+```

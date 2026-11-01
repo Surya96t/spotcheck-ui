@@ -1,0 +1,21 @@
+---
+title: Segmented
+description: "Ruled buttons for choosing one option from a few."
+group: core
+order: 7
+engine: Base UI
+keyboard:
+  - { keys: "← →", action: "Move between options" }
+  - { keys: "Space", action: "Choose the focused option" }
+reducedMotion: "Nothing here animates."
+---
+
+## Usage
+
+```tsx
+import { Segmented } from "@/components/ledger/segmented"
+
+<Segmented label="Range" options={["Day", "Week", "Month"]} value={range} onValueChange={setRange} />
+```
+
+One option always stays selected, so pressing the current one does nothing.

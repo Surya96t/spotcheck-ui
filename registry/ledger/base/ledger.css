@@ -28,6 +28,9 @@
   --display-style: normal;
   --display-stretch: 62%;
   --display-tracking: -0.01em;
+
+  --heading-weight: 800;
+  --heading-stretch: 75%;
 }
 
 :root,
@@ -76,6 +79,8 @@
   --display-weight: 600;
   --display-stretch: 100%;
   --display-tracking: 0;
+  --heading-weight: 600;
+  --heading-stretch: 100%;
 }
 
 [data-skin="folio"] {
@@ -87,6 +92,8 @@
   --display-style: italic;
   --display-stretch: 100%;
   --display-tracking: -0.02em;
+  --heading-weight: 400;
+  --heading-stretch: 100%;
 }
 
 @theme inline {
@@ -109,6 +116,21 @@
   font-stretch: var(--display-stretch);
   letter-spacing: var(--display-tracking);
   text-transform: var(--display-case);
+}
+
+@utility ledger-heading {
+  font-family: var(--f-display);
+  font-weight: var(--heading-weight);
+  font-style: var(--display-style);
+  font-stretch: var(--heading-stretch);
+  text-transform: var(--display-case);
+}
+
+@utility ledger-focus {
+  &:focus-visible {
+    outline: 2px solid var(--accent-ink);
+    outline-offset: 2px;
+  }
 }
 
 @utility ledger-label {

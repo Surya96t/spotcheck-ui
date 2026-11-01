@@ -1,0 +1,28 @@
+---
+title: Ledger Table
+description: "Full-bleed rows with the title inside the grid, a numbered rail and sortable headers."
+group: core
+order: 1
+engine: React
+wide: true
+keyboard:
+  - { keys: "Tab", action: "Move between column headers" }
+  - { keys: "Enter", action: "Sort by the focused column" }
+  - { keys: "← →", action: "Scroll a wide table once it has focus" }
+reducedMotion: "Rows invert on hover at once, with no fade."
+---
+
+## Usage
+
+```tsx
+import { LedgerTable, type LedgerColumn } from "@/components/ledger/ledger-table"
+
+const columns: LedgerColumn<Run>[] = [
+  { key: "id", label: "Run", emphasis: true },
+  { key: "score", label: "Score", numeric: true },
+]
+
+<LedgerTable title="Eval runs" rows={runs} columns={columns} rowKey="id" defaultSort={{ key: "score", dir: "desc" }} />
+```
+
+Sorting needs a client component, so a custom `render` has to come from one too. Define `columns` in a `"use client"` file.

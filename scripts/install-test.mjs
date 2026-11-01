@@ -11,7 +11,7 @@ const NEXT_VERSION = "16.4.3"
 const SHADCN_VERSION = "4.23.0"
 const PORT = 4310
 const APP_PORT = 4320
-const COMPONENTS = ["roll-number", "detent-slider", "bar-terrain", "command-palette"]
+const COMPONENTS = ["roll-number", "detent-slider", "bar-terrain", "command-palette", "settings-screen"]
 const REGISTRY_URL = process.env.LEDGER_REGISTRY_URL?.replace(/\/$/, "") ?? `http://127.0.0.1:${PORT}`
 const serveLocally = !process.env.LEDGER_REGISTRY_URL
 const ROOT = process.cwd()
@@ -86,6 +86,16 @@ async function checkInBrowser(app) {
     assertEqual(await page.getByRole("option").count(), 1, "the command palette opens with its hotkey")
     await page.keyboard.press("Escape")
 
+    await page.getByRole("tab", { name: "Alerts" }).click()
+    const toggle = page.getByRole("switch", { name: "Post spend alerts to the team" })
+    await toggle.click()
+    assertEqual(await toggle.getAttribute("aria-checked"), "true", "the settings screen works after install")
+    const outline = await page.getByRole("tab", { name: "Alerts" }).evaluate((el) => {
+      el.focus()
+      return getComputedStyle(el).fontStretch
+    })
+    assertEqual(outline, "75%", "ledger-heading reached the installed stylesheet")
+
     const stretch = await page.getByTestId("roll").evaluate((el) => getComputedStyle(el).fontStretch)
     assertEqual(stretch, "62%", "display type uses the condensed width")
     const loaded = await page.evaluate(async () => {
@@ -146,6 +156,7 @@ import { BarTerrain } from "@/components/ledger/bar-terrain"
 import { CommandPalette } from "@/components/ledger/command-palette"
 import { DetentSlider } from "@/components/ledger/detent-slider"
 import { RollNumber } from "@/components/ledger/roll-number"
+import { SettingsScreen } from "@/components/ledger/settings-screen"
 
 export default function Page() {
   const [dark, setDark] = useState(false)
@@ -156,6 +167,7 @@ export default function Page() {
       <RollNumber data-testid="roll" value={1284903} style={{ fontSize: 64 }} />
       <DetentSlider label="Temperature" min={0} max={2} step={0.2} defaultValue={0.8} />
       <BarTerrain className="h-80" />
+      <SettingsScreen />
       <CommandPalette groups={[{ label: "Actions", commands: [{ id: "a", label: "Run it", onSelect: () => {} }] }]} open={palette} onOpenChange={setPalette} />
     </main>
   )

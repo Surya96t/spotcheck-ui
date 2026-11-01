@@ -6,8 +6,8 @@ import type { ReactNode } from "react"
 import { Demo } from "@/components/site/demos"
 import { InstallCommand } from "@/components/site/install-command"
 import { mdxComponents } from "@/components/site/mdx"
-import { Tag } from "@/components/site/tag"
 import { getComponents, getProps, getRegistryItem } from "@/lib/catalog"
+import { Tag } from "@/registry/ledger/components/ledger/tag"
 
 type Params = { params: Promise<{ slug: string }> }
 
@@ -80,7 +80,17 @@ export default async function ComponentPage({ params }: Params) {
       </section>
 
       <Row title="Props">
-        <div aria-hidden className={`${PROP_GRID} border-ink hidden border-b-(length:--rule) lg:grid`}>
+        {props.length === 0 && (
+          <p>
+            {page.data.group === "screens"
+              ? "None. This is a block you edit directly."
+              : "No props of its own. It passes everything to its HTML element."}
+          </p>
+        )}
+        <div
+          aria-hidden
+          className={`${PROP_GRID} border-ink hidden border-b-(length:--rule) ${props.length ? "lg:grid" : ""}`}
+        >
           <span className="ledger-label py-1.5">Prop</span>
           <span className="ledger-label py-1.5">Type</span>
           <span className="ledger-label py-1.5">Default</span>

@@ -1,0 +1,25 @@
+---
+title: Dialog
+description: "A modal with a hard shadow. Focus stays inside and returns when it closes."
+group: core
+order: 14
+engine: Base UI
+keyboard:
+  - { keys: "Esc", action: "Close and return focus" }
+  - { keys: "Tab", action: "Move inside the dialog" }
+reducedMotion: "The dialog appears without its short slide."
+---
+
+## Usage
+
+```tsx
+import { Dialog, DialogClose, DialogContent, DialogTrigger } from "@/components/ledger/dialog"
+import { Button } from "@/components/ledger/button"
+
+<Dialog>
+  <DialogTrigger render={<Button variant="ink" />}>New key</DialogTrigger>
+  <DialogContent title="New API key" description="It's shown once.">
+    <DialogClose render={<Button />}>Done</DialogClose>
+  </DialogContent>
+</Dialog>
+```
