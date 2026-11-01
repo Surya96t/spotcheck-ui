@@ -7,6 +7,7 @@ const slugs = (directory: string) => readdirSync(directory).map((file) => file.r
 
 const ROUTES = [
   "/",
+  "/components",
   ...slugs("content/components").map((slug) => `/components/${slug}`),
   ...slugs("content/docs").map((slug) => `/docs/${slug}`),
 ]
@@ -101,8 +102,8 @@ test("rail shows the current page on phones", async ({ page, isMobile }) => {
 
 test("next link moves through the catalog", async ({ page }) => {
   await page.goto("/components/roll-number")
-  await page.getByRole("navigation", { name: "Other components" }).getByRole("link", { name: /Detent Slider/ }).click()
-  await expect(page).toHaveURL(/detent-slider/)
+  await page.getByRole("navigation", { name: "Other components" }).getByRole("link", { name: /Scramble Text/ }).click()
+  await expect(page).toHaveURL(/scramble-text/)
 })
 
 test.describe("search", () => {

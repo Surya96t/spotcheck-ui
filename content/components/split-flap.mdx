@@ -1,0 +1,26 @@
+---
+title: Split-Flap Board
+description: "A departures board for jobs. Each changed cell spins through glyphs, staggered by column and row."
+group: timelines
+order: 1
+engine: anime.js
+wide: true
+keyboard:
+  - { keys: "Tab", action: "Focus the board so it can be scrolled" }
+reducedMotion: "Changed cells update at once."
+---
+
+## Usage
+
+```tsx
+import { SplitFlap } from "@/components/ledger/split-flap"
+
+<SplitFlap
+  rows={jobs}
+  width={22}
+  columns={[{ label: "Job", start: 0 }, { label: "Target", start: 8 }]}
+  accentCharacters={3}
+/>
+```
+
+Pass new `rows` and only the cells that differ will spin. Keep the number of rows the same between updates.

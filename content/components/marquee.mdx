@@ -1,0 +1,21 @@
+---
+title: Marquee
+description: "A ruled band of display type that pauses on hover or focus."
+group: motion
+order: 3
+engine: CSS
+wide: true
+keyboard:
+  - { keys: "Tab", action: "Focus the band to pause it" }
+reducedMotion: "The band stands still."
+---
+
+## Usage
+
+```tsx
+import { Marquee } from "@/components/ledger/marquee"
+
+<Marquee items={["Open source", "React", "Copy · paste · own"]} speed={22} />
+```
+
+Screen readers get the list of items once, not the moving copies.

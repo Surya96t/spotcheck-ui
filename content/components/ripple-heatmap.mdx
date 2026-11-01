@@ -1,0 +1,29 @@
+---
+title: Ripple Heatmap
+description: "A weekday by hour grid. Press a cell and the grid ripples out from it."
+group: timelines
+order: 2
+engine: anime.js
+keyboard:
+  - { keys: "← → ↑ ↓", action: "Move between cells" }
+  - { keys: "Home", action: "Start of the row" }
+  - { keys: "End", action: "End of the row" }
+  - { keys: "Enter", action: "Pick the cell" }
+reducedMotion: "Cells stay still, and picking one still works."
+---
+
+## Usage
+
+```tsx
+import { RippleHeatmap } from "@/components/ledger/ripple-heatmap"
+
+<RippleHeatmap
+  label="Requests per hour by weekday"
+  values={perHour}
+  rowLabels={["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]}
+  cellLabel={(cell) => `${cell.value} at ${cell.column}:00`}
+  onPick={setFocus}
+/>
+```
+
+`values` runs from 0 to 1, row by row. The whole grid is one tab stop, and arrow keys move inside it.

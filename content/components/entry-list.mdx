@@ -1,0 +1,19 @@
+---
+title: Entry List
+description: "Rows slide in one after another, like entries posted to a ledger."
+group: motion
+order: 4
+engine: CSS
+keyboard: []
+reducedMotion: "Rows appear at once."
+---
+
+## Usage
+
+```tsx
+import { EntryList } from "@/components/ledger/entry-list"
+
+<EntryList entries={invoices} stagger={90} />
+```
+
+It plays when it mounts. Change its `key` to play it again.

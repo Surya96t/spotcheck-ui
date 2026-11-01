@@ -103,6 +103,36 @@ const DEMOS = {
   "settings-screen": dynamic(
     () => import("@/registry/ledger/examples/settings-screen-demo").then((module) => module.SettingsScreenDemo),
   ),
+  "scramble-text": dynamic(
+    () => import("@/registry/ledger/examples/scramble-text-demo").then((module) => module.ScrambleTextDemo),
+  ),
+  "marquee": dynamic(
+    () => import("@/registry/ledger/examples/marquee-demo").then((module) => module.MarqueeDemo),
+  ),
+  "entry-list": dynamic(
+    () => import("@/registry/ledger/examples/entry-list-demo").then((module) => module.EntryListDemo),
+  ),
+  "scrub-input": dynamic(
+    () => import("@/registry/ledger/examples/scrub-input-demo").then((module) => module.ScrubInputDemo),
+  ),
+  "magnetic-button": dynamic(
+    () => import("@/registry/ledger/examples/magnetic-button-demo").then((module) => module.MagneticButtonDemo),
+  ),
+  "stamp-approval": dynamic(
+    () => import("@/registry/ledger/examples/stamp-approval-demo").then((module) => module.StampApprovalDemo),
+  ),
+  "split-flap": dynamic(
+    () => import("@/registry/ledger/examples/split-flap-demo").then((module) => module.SplitFlapDemo),
+  ),
+  "ripple-heatmap": dynamic(
+    () => import("@/registry/ledger/examples/ripple-heatmap-demo").then((module) => module.RippleHeatmapDemo),
+  ),
+  "draw-chart": dynamic(
+    () => import("@/registry/ledger/examples/draw-chart-demo").then((module) => module.DrawChartDemo),
+  ),
+  "swipe-review": dynamic(
+    () => import("@/registry/ledger/examples/swipe-review-demo").then((module) => module.SwipeReviewDemo),
+  ),
 }
 
 export function Demo({ slug }: { slug: string }) {

@@ -30,12 +30,15 @@ export function SiteSearch({ components, guides }: { components: ComponentLink[]
     },
     {
       label: "Guides",
-      commands: guides.map((guide) => ({
-        id: guide.href,
-        label: guide.name,
-        keywords: guide.description,
-        onSelect: () => router.push(guide.href),
-      })),
+      commands: [
+        ...guides.map((guide) => ({
+          id: guide.href,
+          label: guide.name,
+          keywords: guide.description,
+          onSelect: () => router.push(guide.href),
+        })),
+        { id: "/components", label: "All components", onSelect: () => router.push("/components") },
+      ],
     },
     {
       label: "Appearance",

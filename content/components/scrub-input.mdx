@@ -1,0 +1,27 @@
+---
+title: Scrub Input
+description: "Drag a number sideways to change it while the digits roll. Press it to type."
+group: motion
+order: 5
+engine: CSS
+keyboard:
+  - { keys: "↑ →", action: "Increase by a step" }
+  - { keys: "↓ ←", action: "Decrease by a step" }
+  - { keys: "Page Up", action: "Increase by ten steps" }
+  - { keys: "Page Down", action: "Decrease by ten steps" }
+  - { keys: "Home", action: "Jump to the minimum" }
+  - { keys: "End", action: "Jump to the maximum" }
+  - { keys: "Enter", action: "Type a value" }
+  - { keys: "Esc", action: "Cancel typing" }
+reducedMotion: "Digits change at once, without rolling."
+---
+
+## Usage
+
+```tsx
+import { ScrubInput } from "@/components/ledger/scrub-input"
+
+<ScrubInput label="Max tokens" value={tokens} onValueChange={setTokens} min={0} max={4000} step={50} />
+```
+
+Hold Shift while dragging to move ten steps at a time.

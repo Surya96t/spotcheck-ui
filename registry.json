@@ -724,6 +724,215 @@
           "type": "registry:component"
         }
       ]
+    },
+    {
+      "name": "scramble-text",
+      "type": "registry:component",
+      "title": "Scramble Text",
+      "description": "Decodes left to right from block glyphs, on mount and on hover.",
+      "categories": [
+        "motion"
+      ],
+      "registryDependencies": [
+        "{{REGISTRY_URL}}/r/ledger-base.json",
+        "{{REGISTRY_URL}}/r/use-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ledger/components/ledger/scramble-text.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "marquee",
+      "type": "registry:component",
+      "title": "Marquee",
+      "description": "A ruled band of display type that pauses on hover or focus.",
+      "categories": [
+        "motion"
+      ],
+      "registryDependencies": [
+        "{{REGISTRY_URL}}/r/ledger-base.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ledger/components/ledger/marquee.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "entry-list",
+      "type": "registry:component",
+      "title": "Entry List",
+      "description": "Rows slide in one after another, like entries posted to a ledger.",
+      "categories": [
+        "motion"
+      ],
+      "registryDependencies": [
+        "{{REGISTRY_URL}}/r/ledger-base.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ledger/components/ledger/entry-list.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "scrub-input",
+      "type": "registry:component",
+      "title": "Scrub Input",
+      "description": "Drag a number sideways to change it while the digits roll. Press it to type.",
+      "categories": [
+        "motion"
+      ],
+      "registryDependencies": [
+        "{{REGISTRY_URL}}/r/ledger-base.json",
+        "{{REGISTRY_URL}}/r/roll-number.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ledger/components/ledger/scrub-input.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "magnetic-button",
+      "type": "registry:component",
+      "title": "Magnetic Button",
+      "description": "Leans toward the pointer from outside its edges, while the label lags behind.",
+      "categories": [
+        "springs"
+      ],
+      "dependencies": [
+        "motion"
+      ],
+      "registryDependencies": [
+        "{{REGISTRY_URL}}/r/ledger-base.json",
+        "{{REGISTRY_URL}}/r/button.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ledger/components/ledger/magnetic-button.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "stamp-approval",
+      "type": "registry:component",
+      "title": "Stamp Approval",
+      "description": "Human sign-off for an agent's tool call. The decision lands as a rubber stamp.",
+      "categories": [
+        "springs"
+      ],
+      "dependencies": [
+        "motion"
+      ],
+      "registryDependencies": [
+        "{{REGISTRY_URL}}/r/ledger-base.json",
+        "{{REGISTRY_URL}}/r/button.json",
+        "{{REGISTRY_URL}}/r/tag.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ledger/components/ledger/stamp-approval.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "split-flap",
+      "type": "registry:component",
+      "title": "Split-Flap Board",
+      "description": "A departures board for jobs. Each changed cell spins through glyphs, staggered by column and row.",
+      "categories": [
+        "timelines"
+      ],
+      "dependencies": [
+        "animejs"
+      ],
+      "registryDependencies": [
+        "{{REGISTRY_URL}}/r/ledger-base.json",
+        "{{REGISTRY_URL}}/r/use-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ledger/components/ledger/split-flap.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "ripple-heatmap",
+      "type": "registry:component",
+      "title": "Ripple Heatmap",
+      "description": "A weekday by hour grid. Press a cell and the grid ripples out from it.",
+      "categories": [
+        "timelines"
+      ],
+      "dependencies": [
+        "animejs"
+      ],
+      "registryDependencies": [
+        "{{REGISTRY_URL}}/r/ledger-base.json",
+        "{{REGISTRY_URL}}/r/use-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ledger/components/ledger/ripple-heatmap.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "draw-chart",
+      "type": "registry:component",
+      "title": "Draw Chart",
+      "description": "One timeline: the line draws, points drop in and the headline number counts up.",
+      "categories": [
+        "timelines"
+      ],
+      "dependencies": [
+        "animejs"
+      ],
+      "registryDependencies": [
+        "{{REGISTRY_URL}}/r/ledger-base.json",
+        "{{REGISTRY_URL}}/r/use-in-view.json",
+        "{{REGISTRY_URL}}/r/use-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ledger/components/ledger/draw-chart.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "swipe-review",
+      "type": "registry:component",
+      "title": "Swipe Review",
+      "description": "A card queue for grading model answers. Drag right to accept, left to reject.",
+      "categories": [
+        "timelines"
+      ],
+      "dependencies": [
+        "animejs"
+      ],
+      "registryDependencies": [
+        "{{REGISTRY_URL}}/r/ledger-base.json",
+        "{{REGISTRY_URL}}/r/button.json",
+        "{{REGISTRY_URL}}/r/use-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ledger/components/ledger/swipe-review.tsx",
+          "type": "registry:component"
+        }
+      ]
     }
   ]
 }

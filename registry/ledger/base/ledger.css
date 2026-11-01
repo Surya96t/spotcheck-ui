@@ -50,6 +50,8 @@
 
   /* Named --accent-ink because shadcn already owns --accent. */
   --accent-ink: light-dark(var(--accent-light), var(--accent-dark));
+  /* For accents on an ink panel, which needs the colour meant for the opposite mode. */
+  --accent-on-ink: light-dark(var(--accent-dark), var(--accent-light));
 }
 
 .light,
@@ -96,6 +98,19 @@
   --heading-stretch: 100%;
 }
 
+@keyframes ledger-marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes ledger-entry {
+  from {
+    opacity: 0;
+    transform: translateX(-18px);
+  }
+}
+
 @theme inline {
   --color-paper: var(--paper);
   --color-ink: var(--ink);
@@ -107,6 +122,7 @@
   --color-bad: var(--bad);
   --color-on-accent: var(--on-accent);
   --color-accent-ink: var(--accent-ink);
+  --color-accent-on-ink: var(--accent-on-ink);
 }
 
 @utility ledger-display {
