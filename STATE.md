@@ -15,15 +15,15 @@ _none_
 _none_
 
 ## Recent decisions
-- narrowed positioning to reviewing, grading and auditing AI work plus motion on controls because AI Elements and assistant-ui already cover chat parts
-- chose AI before WebGL and Depth, with public v0.1 before Depth, because AI carries the positioning and launch feedback should come before the most expensive work
-- chose a Phase 0 slice (roll-number, detent-slider, bar-terrain installed into a clean shadcn app) because install, tokens and fonts are the riskiest setup
-- chose do-not-copy for Animate UI, React Bits, Aceternity and coss ui because of Commons Clause terms, a source redistribution ban and an AGPL default
-- kept Ledger UI as a working title only because Ledger SAS publishes a React UI library; trademark check required before buying a domain
-- chose registry/ledger/components/ledger/ over group folders because the CLI rewrites imports from that path and components install clear of shadcn's ui folder
-- chose Fontsource packages over registry:font because registry:font has no field for Archivo's width axis
-- chose a registry:item ledger-base over registry:base so adding a component never touches the user's project config
-- renamed the accent token to --accent-ink because shadcn owns --accent and installing would repaint the user's app
-- chose tokens that stay light unless .dark or data-theme opts in, over following the system by default, because a shadcn app with no theme provider would end up half dark
+- chose static Next.js App Router over React + Vite because prerendered docs pages, plain static /r JSON and matching most installers beat the lighter setup
+- chose one Next app at the repo root over the brief's apps/docs monorepo because there is one deployable and no npm package to publish
+- chose the shadcn CLI and static registry JSON over a custom npx ledger-ui command because shadcn already handles install and the npm name ledger-ui is taken
+- chose Base UI primitives over hand-building dialog, select and popover because accessibility is the hard part
+- chose headless fumadocs-core and fumadocs-mdx over fumadocs-ui because its layout would fight the ledger shell
+- chose R3F 9 with React 19 over R3F 10 because v10 is an alpha and WebGPU-first
+- changed light tokens --ok #14733F, --warn #8F5500, --mute #5C616A because the originals miss 4.5:1 on small text
+- chose flat named exports over Tabs.List style because dot access fails across the Next server/client boundary
+- chose WebGL one frame per state change under reduced motion over one frame ever because the prototype loop would freeze interactive 3D controls
+- chose to re-declare tokens on every scope because Tailwind compiles light-dark() to a fallback fixed on the declaring element
 
 ## Notes
