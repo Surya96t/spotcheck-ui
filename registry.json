@@ -1,0 +1,90 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "ledger",
+  "homepage": "{{REGISTRY_URL}}",
+  "items": [
+    {
+      "name": "ledger-base",
+      "type": "registry:item",
+      "title": "Ledger base",
+      "description": "Tokens, skins, fonts and shared utilities used by every Ledger component.",
+      "dependencies": [
+        "@fontsource-variable/archivo",
+        "@fontsource/ibm-plex-mono",
+        "@fontsource/instrument-serif"
+      ],
+      "registryDependencies": ["utils"]
+    },
+    {
+      "name": "use-reduced-motion",
+      "type": "registry:hook",
+      "title": "useReducedMotion",
+      "description": "Tracks the prefers-reduced-motion setting without a motion engine.",
+      "files": [{ "path": "registry/ledger/hooks/use-reduced-motion.ts", "type": "registry:hook" }]
+    },
+    {
+      "name": "use-in-view",
+      "type": "registry:hook",
+      "title": "useInView",
+      "description": "Reports whether an element is on screen, for pausing render loops.",
+      "files": [{ "path": "registry/ledger/hooks/use-in-view.ts", "type": "registry:hook" }]
+    },
+    {
+      "name": "use-gl-palette",
+      "type": "registry:hook",
+      "title": "useGlPalette",
+      "description": "Reads CSS colour tokens for WebGL and follows theme and skin changes.",
+      "files": [{ "path": "registry/ledger/hooks/use-gl-palette.ts", "type": "registry:hook" }]
+    },
+    {
+      "name": "roll-number",
+      "type": "registry:component",
+      "title": "Roll Number",
+      "description": "Each digit is its own column, so only the digits that change move.",
+      "categories": ["motion"],
+      "registryDependencies": ["{{REGISTRY_URL}}/r/ledger-base.json"],
+      "files": [
+        {
+          "path": "registry/ledger/components/ledger/roll-number.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "detent-slider",
+      "type": "registry:component",
+      "title": "Detent Slider",
+      "description": "Drags freely, then springs into the nearest step with overshoot.",
+      "categories": ["springs"],
+      "dependencies": ["motion"],
+      "registryDependencies": ["{{REGISTRY_URL}}/r/ledger-base.json"],
+      "files": [
+        {
+          "path": "registry/ledger/components/ledger/detent-slider.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "bar-terrain",
+      "type": "registry:component",
+      "title": "Bar Terrain",
+      "description": "An instanced field of bars driven by a height function, with a pointer bump.",
+      "categories": ["webgl"],
+      "dependencies": ["three", "@react-three/fiber"],
+      "devDependencies": ["@types/three"],
+      "registryDependencies": [
+        "{{REGISTRY_URL}}/r/ledger-base.json",
+        "{{REGISTRY_URL}}/r/use-gl-palette.json",
+        "{{REGISTRY_URL}}/r/use-in-view.json",
+        "{{REGISTRY_URL}}/r/use-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ledger/components/ledger/bar-terrain.tsx",
+          "type": "registry:component"
+        }
+      ]
+    }
+  ]
+}

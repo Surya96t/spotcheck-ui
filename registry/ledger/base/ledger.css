@@ -1,0 +1,120 @@
+/* Ledger UI base: tokens, skins and shared utilities.
+   scripts/build-registry.mjs turns this file into the `css` of the ledger-base registry item,
+   so what the site uses is exactly what installs. */
+@import "@fontsource-variable/archivo/wdth.css";
+@import "@fontsource/ibm-plex-mono/400.css";
+@import "@fontsource/ibm-plex-mono/500.css";
+@import "@fontsource/ibm-plex-mono/600.css";
+@import "@fontsource/instrument-serif/400.css";
+@import "@fontsource/instrument-serif/400-italic.css";
+
+/* Colour mode comes from color-scheme. Each scope re-declares the tokens because Tailwind compiles
+   light-dark() to a fallback that resolves on the element declaring it, not where it's used. */
+:root {
+  color-scheme: light;
+
+  --accent-light: #2433e0;
+  --accent-dark: #7e88ff;
+
+  --rule: 2px;
+
+  --f-body: "Archivo Variable", system-ui, sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+  --f-serif: "Instrument Serif", Georgia, serif;
+
+  --f-display: var(--f-body);
+  --display-weight: 900;
+  --display-case: uppercase;
+  --display-style: normal;
+  --display-stretch: 62%;
+  --display-tracking: -0.01em;
+}
+
+:root,
+.light,
+.dark,
+[data-theme],
+[data-skin] {
+  --paper: light-dark(#edefec, #0c0d0f);
+  --ink: light-dark(#0d0e11, #e8eae5);
+  --mute: light-dark(#5c616a, #8d929a);
+  --wash: light-dark(#dfe3de, #191b1f);
+  --raise: light-dark(#f7f8f6, #131518);
+  --ok: light-dark(#14733f, #40c47a);
+  --warn: light-dark(#8f5500, #e6a43a);
+  --bad: light-dark(#be2219, #ff5f52);
+  --on-accent: light-dark(#ffffff, #0c0d0f);
+
+  /* Named --accent-ink because shadcn already owns --accent. */
+  --accent-ink: light-dark(var(--accent-light), var(--accent-dark));
+}
+
+.light,
+[data-theme="light"] {
+  color-scheme: light;
+}
+
+.dark,
+[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+[data-theme="system"] {
+  color-scheme: light dark;
+}
+
+[data-skin="ledger"] {
+  --accent-light: #2433e0;
+  --accent-dark: #7e88ff;
+}
+
+[data-skin="terminal"] {
+  --accent-light: #a3530a;
+  --accent-dark: #ffb020;
+  --f-body: var(--f-mono);
+  --f-display: var(--f-mono);
+  --display-weight: 600;
+  --display-stretch: 100%;
+  --display-tracking: 0;
+}
+
+[data-skin="folio"] {
+  --accent-light: #c1122c;
+  --accent-dark: #ff5468;
+  --f-display: var(--f-serif);
+  --display-weight: 400;
+  --display-case: none;
+  --display-style: italic;
+  --display-stretch: 100%;
+  --display-tracking: -0.02em;
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-ink: var(--ink);
+  --color-mute: var(--mute);
+  --color-wash: var(--wash);
+  --color-raise: var(--raise);
+  --color-ok: var(--ok);
+  --color-warn: var(--warn);
+  --color-bad: var(--bad);
+  --color-on-accent: var(--on-accent);
+  --color-accent-ink: var(--accent-ink);
+}
+
+@utility ledger-display {
+  font-family: var(--f-display);
+  font-weight: var(--display-weight);
+  font-style: var(--display-style);
+  font-stretch: var(--display-stretch);
+  letter-spacing: var(--display-tracking);
+  text-transform: var(--display-case);
+}
+
+@utility ledger-label {
+  font-family: var(--f-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--mute);
+}

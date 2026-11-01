@@ -1,0 +1,1501 @@
+<title>Ledger UI</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..900&family=IBM+Plex+Mono:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap">
+<style>
+/* Layout: a ledger. Narrow index rail on the left, full-bleed specimen grid ruled in ink, titles seated on the baseline of each cell. */
+:root{
+  --paper:#EDEFEC; --ink:#0D0E11; --mute:#646972; --wash:#DFE3DE; --raise:#F7F8F6;
+  --a1:#2433E0; --a2:#A3530A; --a3:#C1122C;
+  --ok:#17804A; --warn:#A86400; --bad:#BE2219;
+  --on-accent:#FFFFFF;
+  --f-display:"Archivo",system-ui,sans-serif; --f-body:"Archivo",system-ui,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,monospace; --f-serif:"Instrument Serif",Georgia,serif;
+  --rail:13.5rem; --rule:2px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#0C0D0F; --ink:#E8EAE5; --mute:#8D929A; --wash:#191B1F; --raise:#131518;
+  --a1:#7E88FF; --a2:#FFB020; --a3:#FF5468; --ok:#40C47A; --warn:#E6A43A; --bad:#FF5F52; --on-accent:#0C0D0F; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#0C0D0F; --ink:#E8EAE5; --mute:#8D929A; --wash:#191B1F; --raise:#131518;
+  --a1:#7E88FF; --a2:#FFB020; --a3:#FF5468; --ok:#40C47A; --warn:#E6A43A; --bad:#FF5F52; --on-accent:#0C0D0F; color-scheme:dark}
+
+html,body{height:100%}
+body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.5;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--paper)}
+*{box-sizing:border-box}
+button,input,textarea,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+.app{--accent:var(--a1);display:grid;grid-template-columns:var(--rail) minmax(0,1fr);border-left:var(--rule) solid var(--ink);border-right:var(--rule) solid var(--ink);min-height:100%}
+.app[data-skin="terminal"]{--accent:var(--a2);--f-display:var(--f-mono);--f-body:var(--f-mono)}
+.app[data-skin="folio"]{--accent:var(--a3);--f-display:var(--f-serif)}
+.app[data-skin="terminal"]{font-size:14px}
+
+/* RAIL */
+.rail{position:sticky;top:env(safe-area-inset-top,0px);height:100dvh;overflow:auto;border-right:var(--rule) solid var(--ink);display:flex;flex-direction:column;font-family:var(--f-mono);font-size:12px}
+.rail .mark{padding:14px 12px 10px;border-bottom:var(--rule) solid var(--ink);font-family:var(--f-display);font-weight:900;font-stretch:62%;font-size:28px;line-height:.9;letter-spacing:-.01em;text-transform:uppercase}
+.app[data-skin="folio"] .rail .mark{font-weight:400;text-transform:none;font-size:30px;font-style:italic}
+.rail .grp{padding:14px 12px 4px;color:var(--mute);letter-spacing:.12em;text-transform:uppercase;font-size:10.5px}
+.rail a{display:flex;gap:10px;padding:5px 12px;color:inherit;text-decoration:none;align-items:baseline}
+.rail a span:first-child{color:var(--mute);font-variant-numeric:tabular-nums;width:2.6em;flex:none}
+.rail a:hover{background:var(--ink);color:var(--paper)}
+.rail a:hover span:first-child{color:var(--paper)}
+.rail .foot{margin-top:auto;padding:12px;border-top:var(--rule) solid var(--ink);color:var(--mute);font-size:11px}
+
+/* TOPBAR */
+main{min-width:0}
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--paper);display:flex;flex-wrap:wrap;gap:0;border-bottom:var(--rule) solid var(--ink);font-family:var(--f-mono);font-size:12px}
+.top .cell{padding:10px 14px;border-right:var(--rule) solid var(--ink);display:flex;align-items:center;gap:10px}
+.top .cell:last-child{border-right:0;margin-left:auto}
+.top .lbl{color:var(--mute);letter-spacing:.12em;text-transform:uppercase;font-size:10.5px}
+.seg{display:inline-flex;border:var(--rule) solid var(--ink)}
+.seg button{background:none;border:0;padding:4px 10px;cursor:pointer;font-family:var(--f-mono);font-size:12px}
+.seg button+button{border-left:var(--rule) solid var(--ink)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+
+/* HERO */
+.hero{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);border-bottom:var(--rule) solid var(--ink)}
+.hero h1{margin:0;padding:28px 18px 16px;font-family:var(--f-display);font-weight:900;font-stretch:62%;text-transform:uppercase;font-size:clamp(64px,11vw,168px);line-height:.82;letter-spacing:-.02em;display:flex;align-items:flex-end;min-height:15rem;border-right:var(--rule) solid var(--ink)}
+.app[data-skin="folio"] .hero h1{font-weight:400;text-transform:none;font-style:italic;letter-spacing:-.03em}
+.app[data-skin="terminal"] .hero h1{font-weight:600;font-size:clamp(48px,7.5vw,112px)}
+.hero h1 em{font-style:normal;color:var(--accent)}
+.hero .meta{display:grid;grid-template-rows:auto 1fr auto auto;min-width:0}
+.hero .meta p{margin:0;padding:18px;align-self:end;max-width:44ch;font-size:16px;text-wrap:pretty}
+.hero .stats{display:grid;grid-template-columns:repeat(3,1fr);border-top:var(--rule) solid var(--ink)}
+.hero .stats div{padding:10px 14px 8px;border-right:var(--rule) solid var(--ink);display:flex;flex-direction:column;justify-content:flex-end;min-height:76px}
+.hero .stats div:last-child{border-right:0}
+.hero .stats b{font-family:var(--f-display);font-stretch:62%;font-weight:800;font-size:34px;line-height:1;font-variant-numeric:tabular-nums}
+.hero .stats small,.kick{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--mute)}
+.install{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 14px;border-top:var(--rule) solid var(--ink);font-family:var(--f-mono);font-size:13px;background:var(--ink);color:var(--paper)}
+.install code{overflow-x:auto;white-space:nowrap;min-width:0}
+.install button{background:var(--accent);color:var(--on-accent);border:0;padding:4px 10px;cursor:pointer;font-family:var(--f-mono);font-size:12px;flex:none}
+
+/* SECTIONS */
+.sect-h{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;padding:30px 18px 10px;border-bottom:var(--rule) solid var(--ink)}
+.sect-h h2{margin:0;font-family:var(--f-display);font-weight:900;font-stretch:62%;text-transform:uppercase;font-size:clamp(36px,5vw,64px);line-height:.85}
+.app[data-skin="folio"] .sect-h h2{font-weight:400;text-transform:none;font-style:italic}
+.sect-h p{margin:0;max-width:40ch;color:var(--mute);font-size:13.5px;text-align:right}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+.spec{border-bottom:var(--rule) solid var(--ink);display:flex;flex-direction:column;min-width:0;scroll-margin-top:60px}
+.spec{border-right:var(--rule) solid var(--ink)}
+.grid{margin-right:calc(-1 * var(--rule))}
+.spec.wide{grid-column:1/-1}
+.spec-h{display:grid;grid-template-columns:auto 1fr auto;align-items:end;gap:12px;padding:16px 16px 8px;border-bottom:1px dashed color-mix(in srgb,var(--ink) 35%,transparent)}
+.spec-h .no{font-family:var(--f-mono);font-size:11px;color:var(--mute);font-variant-numeric:tabular-nums}
+.spec-h h3{margin:0;font-family:var(--f-display);font-weight:800;font-stretch:75%;font-size:24px;line-height:1;text-transform:uppercase;letter-spacing:-.005em}
+.app[data-skin="folio"] .spec-h h3{font-weight:400;text-transform:none;font-size:28px}
+.app[data-skin="terminal"] .spec-h h3{font-size:17px;font-weight:600}
+.tag{font-family:var(--f-mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;border:1.5px solid var(--ink);padding:2px 6px}
+.tag.ai{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+.spec .desc{margin:0;padding:8px 16px 0;color:var(--mute);font-size:13.5px;max-width:62ch}
+.stage{padding:18px 16px 20px;flex:1;min-width:0}
+.spec-f{display:flex;border-top:var(--rule) solid var(--ink);font-family:var(--f-mono);font-size:11.5px}
+.spec-f button{background:none;border:0;border-right:var(--rule) solid var(--ink);padding:7px 12px;cursor:pointer;letter-spacing:.06em;text-transform:uppercase}
+.spec-f button:hover{background:var(--ink);color:var(--paper)}
+.spec-f .file{margin-left:auto;padding:7px 12px;color:var(--mute)}
+pre.usage{margin:0;padding:14px 16px;background:var(--ink);color:var(--paper);font-family:var(--f-mono);font-size:12.5px;line-height:1.55;overflow-x:auto}
+
+/* PRIMITIVES */
+.btn{--sh:var(--ink);position:relative;display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border:var(--rule) solid var(--ink);background:var(--paper);cursor:pointer;font-family:var(--f-mono);font-size:12.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;box-shadow:4px 4px 0 var(--sh);transition:transform .08s,box-shadow .08s}
+.btn:active{transform:translate(4px,4px);box-shadow:0 0 0 var(--sh)}
+.btn.ink{background:var(--ink);color:var(--paper)}
+.btn.acc{background:var(--accent);color:var(--on-accent);border-color:var(--ink)}
+.btn.ghost{box-shadow:none;border-style:dashed}
+.btn.ghost:active{transform:none;background:var(--wash)}
+.btn .fill{position:absolute;inset:0;background:var(--bad);transform-origin:left;transform:scaleX(var(--p,0))}
+.btn .lab{position:relative}
+.row{display:flex;flex-wrap:wrap;gap:16px;align-items:center}
+.col{display:flex;flex-direction:column;gap:14px}
+
+.field{display:flex;flex-direction:column;gap:4px}
+.field label{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--mute);display:flex;justify-content:space-between}
+.field input,.field textarea{background:transparent;border:0;border-bottom:var(--rule) solid var(--ink);padding:6px 0 4px;font-size:20px;font-family:var(--f-display);font-stretch:80%;outline:none;border-radius:0;width:100%}
+.field input:focus{border-bottom-color:var(--accent)}
+.field .err{color:var(--bad);font-family:var(--f-mono);font-size:11.5px}
+
+.tabs{position:relative;display:flex;border-bottom:var(--rule) solid var(--ink);overflow-x:auto}
+.tabs button{background:none;border:0;padding:8px 14px 6px;cursor:pointer;font-family:var(--f-display);font-stretch:75%;font-weight:700;font-size:18px;text-transform:uppercase;color:var(--mute);white-space:nowrap}
+.tabs button[aria-selected="true"]{color:var(--ink)}
+.tabs .bar{position:absolute;bottom:-2px;height:5px;background:var(--accent);transition:left .35s cubic-bezier(.2,.8,.2,1),width .35s cubic-bezier(.2,.8,.2,1)}
+.tabpanel{padding:14px 0 0;font-size:14px;color:var(--mute);max-width:52ch;min-height:4.5em}
+
+.switch{display:inline-flex;align-items:center;gap:10px;cursor:pointer;font-family:var(--f-mono);font-size:12px;background:none;border:0;padding:0}
+.switch .trk{width:46px;height:24px;border:var(--rule) solid var(--ink);position:relative;background:var(--paper)}
+.switch .knb{position:absolute;top:2px;left:2px;width:16px;height:16px;background:var(--ink);transition:left .2s}
+.switch[aria-checked="true"] .trk{background:var(--accent)}
+.switch[aria-checked="true"] .knb{left:24px;background:var(--paper)}
+
+/* TABLE */
+.tscroll{overflow-x:auto;margin:-18px -16px -20px}
+table.ledger{border-collapse:collapse;width:100%;min-width:620px;font-variant-numeric:tabular-nums}
+table.ledger td,table.ledger th{padding:22px 12px 6px;vertical-align:bottom;text-align:left;border-left:1px solid color-mix(in srgb,var(--ink) 18%,transparent)}
+table.ledger .rn{width:2.6rem;border-left:0;border-right:var(--rule) solid var(--ink);font-family:var(--f-mono);font-size:11px;color:var(--mute);text-align:right;padding-right:8px}
+table.ledger .title td{padding:26px 12px 10px;font-family:var(--f-display);font-weight:900;font-stretch:62%;text-transform:uppercase;font-size:42px;line-height:.9;border-left:0}
+.app[data-skin="folio"] table.ledger .title td{font-weight:400;text-transform:none;font-style:italic}
+table.ledger .title td.rn{font-size:11px;font-weight:400;font-family:var(--f-mono);font-style:normal;line-height:1.5}
+table.ledger th{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--mute);font-weight:500;padding-top:10px;border-bottom:var(--rule) solid var(--ink)}
+table.ledger th button{all:unset;cursor:pointer;display:inline-flex;gap:6px}
+table.ledger th button:focus-visible{outline:2px solid var(--accent)}
+table.ledger th[aria-sort] {color:var(--ink)}
+table.ledger .num{text-align:right}
+table.ledger tbody tr{transition:background .12s}
+table.ledger tbody tr:hover{background:var(--ink);color:var(--paper)}
+table.ledger tbody tr:hover td{color:var(--paper)}
+table.ledger td.big{font-family:var(--f-display);font-stretch:75%;font-weight:700;font-size:20px;line-height:1}
+.pill{display:inline-flex;align-items:center;gap:6px;font-family:var(--f-mono);font-size:11px;text-transform:uppercase;letter-spacing:.08em}
+.pill::before{content:"";width:8px;height:8px;background:currentColor}
+.pill.pass{color:var(--ok)}.pill.drift{color:var(--warn)}.pill.fail{color:var(--bad)}
+tr:hover .pill{color:inherit}
+.bar-in{display:inline-block;height:6px;background:var(--accent);vertical-align:middle;margin-right:8px}
+
+/* MOTION */
+.roll{display:inline-flex;font-family:var(--f-display);font-weight:900;font-stretch:62%;font-size:clamp(56px,8vw,92px);line-height:1;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.app[data-skin="folio"] .roll{font-weight:400}
+.rc{display:inline-block;height:1em;overflow:hidden}
+.rs{display:flex;flex-direction:column;transition:transform .9s cubic-bezier(.2,.9,.15,1)}
+.rs span{height:1em;display:block}
+.scr{font-family:var(--f-display);font-weight:900;font-stretch:62%;font-size:clamp(34px,5vw,54px);line-height:.95;text-transform:uppercase;word-break:break-word}
+.app[data-skin="folio"] .scr{font-weight:400}
+.marq{overflow:hidden;border-top:var(--rule) solid var(--ink);border-bottom:var(--rule) solid var(--ink);margin:0 -16px;white-space:nowrap}
+.marq .tr{display:inline-flex;animation:mq 22s linear infinite}
+.marq:hover .tr{animation-play-state:paused}
+.marq span{font-family:var(--f-display);font-weight:800;font-stretch:62%;text-transform:uppercase;font-size:34px;padding:8px 18px;line-height:1}
+.marq span:nth-child(even){color:var(--accent)}
+@keyframes mq{to{transform:translateX(-50%)}}
+.stg{list-style:none;margin:0;padding:0}
+.stg li{display:grid;grid-template-columns:2.4rem 1fr auto;gap:10px;align-items:end;padding:12px 0 4px;border-bottom:1px solid color-mix(in srgb,var(--ink) 18%,transparent);animation:sin .55s cubic-bezier(.2,.8,.2,1) both}
+.stg li b{font-family:var(--f-display);font-stretch:75%;font-size:19px;text-transform:uppercase}
+.stg li span{font-family:var(--f-mono);font-size:11px;color:var(--mute)}
+@keyframes sin{from{opacity:.0;transform:translateX(-18px)}to{opacity:1;transform:none}}
+
+/* AI */
+.stream{font-size:16px;line-height:1.6;max-width:62ch;min-height:8.5em;text-wrap:pretty}
+.cite{display:inline-flex;align-items:center;justify-content:center;min-width:1.4em;height:1.25em;padding:0 4px;margin:0 2px;font-family:var(--f-mono);font-size:10.5px;background:var(--ink);color:var(--paper);vertical-align:2px;cursor:help}
+.cite:hover{background:var(--accent);color:var(--on-accent)}
+.caret{display:inline-block;width:.55em;height:1.05em;background:var(--accent);vertical-align:-2px;margin-left:2px;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.srcs{display:flex;flex-wrap:wrap;gap:0;margin-top:14px;border:var(--rule) solid var(--ink)}
+.srcs div{flex:1 1 140px;padding:6px 10px;border-right:var(--rule) solid var(--ink);font-size:12px;min-width:0}
+.srcs div:last-child{border-right:0}
+.srcs b{font-family:var(--f-mono);font-size:10.5px;color:var(--mute);display:block}
+
+.trace{font-family:var(--f-mono);font-size:12.5px}
+.trace .st{display:grid;grid-template-columns:1.6rem 5.2rem minmax(0,1fr) 4.4rem;gap:10px;align-items:end;padding:10px 0 5px;border-bottom:1px solid color-mix(in srgb,var(--ink) 18%,transparent);cursor:pointer;background:none;border-left:0;border-right:0;border-top:0;width:100%;text-align:left}
+.trace .st:hover{background:var(--wash)}
+.trace .ic{width:12px;height:12px;border:var(--rule) solid var(--ink);align-self:center}
+.trace .done .ic{background:var(--ink)}
+.trace .run .ic{background:var(--accent);border-color:var(--accent);animation:pulse .8s ease-in-out infinite alternate}
+.trace .queued{color:var(--mute)}
+.trace .tool{font-weight:600;text-transform:uppercase}
+.trace .arg{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.trace .ms{text-align:right;font-variant-numeric:tabular-nums;color:var(--mute)}
+.trace .out{padding:6px 0 10px 2.6rem;color:var(--mute)}
+.trace .tl{height:6px;background:var(--wash);margin:12px 0 0;position:relative}
+.trace .tl i{position:absolute;top:0;bottom:0;background:var(--accent);transition:width .3s}
+@keyframes pulse{to{opacity:.35}}
+
+.composer{border:var(--rule) solid var(--ink);background:var(--raise)}
+.composer textarea{width:100%;border:0;background:transparent;resize:none;padding:12px 14px;font-size:16px;font-family:var(--f-body);min-height:84px;outline:none}
+.chips{display:flex;flex-wrap:wrap;gap:6px;padding:0 14px 10px}
+.chip{display:inline-flex;align-items:center;gap:6px;border:1.5px solid var(--ink);padding:2px 4px 2px 8px;font-family:var(--f-mono);font-size:11.5px;background:var(--paper)}
+.chip button{background:none;border:0;cursor:pointer;padding:0 4px;font-size:13px;line-height:1}
+.cbar{display:flex;flex-wrap:wrap;align-items:stretch;border-top:var(--rule) solid var(--ink);font-family:var(--f-mono);font-size:12px}
+.cbar > *{border-right:var(--rule) solid var(--ink)}
+.cbar select{background:var(--paper);border:0;padding:8px 10px;font-family:var(--f-mono);font-size:12px;border-radius:0;cursor:pointer}
+.cbar .meter{flex:1;display:flex;align-items:center;gap:10px;padding:0 12px;min-width:140px}
+.cbar .meter div{flex:1;height:6px;background:var(--wash)}
+.cbar .meter i{display:block;height:100%;background:var(--ink)}
+.cbar .send{border-right:0;background:var(--accent);color:var(--on-accent);border:0;padding:8px 16px;cursor:pointer;font-family:var(--f-mono);font-weight:600;letter-spacing:.08em;text-transform:uppercase}
+.cbar .send:disabled{background:var(--wash);color:var(--mute);cursor:not-allowed}
+.toast{margin-top:10px;font-family:var(--f-mono);font-size:12px;color:var(--ok)}
+
+.think{display:flex;align-items:flex-end;gap:16px;flex-wrap:wrap}
+.wave{display:flex;align-items:flex-end;gap:3px;height:56px}
+.wave i{width:6px;background:var(--ink);height:20%;animation:wv 1.1s ease-in-out infinite}
+.wave i:nth-child(3n){background:var(--accent)}
+@keyframes wv{0%,100%{height:14%}50%{height:100%}}
+.think .msg{font-family:var(--f-display);font-weight:800;font-stretch:62%;font-size:30px;text-transform:uppercase;line-height:1}
+.app[data-skin="folio"] .think .msg{font-weight:400;text-transform:none;font-style:italic}
+
+.ctx .bar{display:flex;height:34px;border:var(--rule) solid var(--ink)}
+.ctx .bar div{height:100%;border-right:var(--rule) solid var(--ink);transition:width .5s}
+.ctx .legend{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));margin-top:10px;gap:8px 14px}
+.ctx .legend div{display:flex;flex-direction:column;gap:2px;font-family:var(--f-mono);font-size:11px;color:var(--mute)}
+.ctx .legend b{font-family:var(--f-display);font-stretch:75%;font-size:22px;color:var(--ink);font-variant-numeric:tabular-nums;line-height:1}
+.ctx .legend i{display:inline-block;width:10px;height:10px;margin-right:6px;border:1.5px solid var(--ink);vertical-align:-1px}
+
+.mx{overflow-x:auto}
+.mx table{border-collapse:collapse;font-family:var(--f-mono);font-size:12px;font-variant-numeric:tabular-nums;width:100%;min-width:420px}
+.mx th{text-align:left;font-weight:500;color:var(--mute);padding:6px 8px;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase}
+.mx td{padding:0;border:1.5px solid var(--paper)}
+.mx td div{padding:14px 8px 4px;text-align:right}
+.mx td.mn{font-weight:600;padding:4px 8px;border:0;white-space:nowrap}
+
+/* SCREENS */
+.frame{border:var(--rule) solid var(--ink);background:var(--raise);position:relative;overflow:hidden}
+.frame .chrome{display:flex;justify-content:space-between;align-items:center;padding:6px 10px;border-bottom:var(--rule) solid var(--ink);font-family:var(--f-mono);font-size:11px;color:var(--mute)}
+.frame .chrome i{display:inline-block;width:9px;height:9px;border:1.5px solid var(--ink);margin-right:4px}
+.cmdk-stage{height:360px;display:grid;place-items:center;padding:16px}
+.cmdk-hint{text-align:center;font-family:var(--f-mono);font-size:12px;color:var(--mute)}
+.kbd{display:inline-block;border:1.5px solid var(--ink);border-bottom-width:3px;padding:1px 6px;font-family:var(--f-mono);font-size:11px;color:var(--ink);background:var(--paper)}
+.scrim{position:absolute;inset:0;background:color-mix(in srgb,var(--ink) 30%,transparent);display:flex;justify-content:center;align-items:flex-start;padding:34px 14px}
+.cmdk{width:min(520px,100%);background:var(--paper);border:var(--rule) solid var(--ink);box-shadow:8px 8px 0 var(--ink);animation:pop .18s cubic-bezier(.2,.8,.2,1)}
+@keyframes pop{from{transform:translateY(-8px);opacity:.4}}
+.cmdk input{width:100%;border:0;border-bottom:var(--rule) solid var(--ink);padding:12px 14px;font-size:18px;font-family:var(--f-display);font-stretch:80%;background:transparent;outline:none}
+.cmdk ul{list-style:none;margin:0;padding:4px 0;max-height:220px;overflow:auto}
+.cmdk li.g{padding:8px 14px 2px;font-family:var(--f-mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--mute)}
+.cmdk li.it{display:flex;justify-content:space-between;padding:7px 14px;cursor:pointer;font-size:14px}
+.cmdk li.it[aria-selected="true"]{background:var(--ink);color:var(--paper)}
+.cmdk li.it[aria-selected="true"] .kbd{background:var(--ink);color:var(--paper);border-color:var(--paper)}
+.cmdk .empty{padding:14px;color:var(--mute);font-family:var(--f-mono);font-size:12px}
+
+.chat{display:grid;grid-template-columns:200px minmax(0,1fr);height:440px}
+.chat aside{border-right:var(--rule) solid var(--ink);display:flex;flex-direction:column;font-size:13px;min-width:0}
+.chat aside .new{margin:10px;border:var(--rule) solid var(--ink);background:var(--ink);color:var(--paper);padding:6px;font-family:var(--f-mono);font-size:11.5px;text-transform:uppercase;letter-spacing:.08em;cursor:pointer}
+.chat aside button.th{all:unset;cursor:pointer;padding:8px 12px 4px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chat aside button.th small{display:block;font-family:var(--f-mono);font-size:10px;color:var(--mute)}
+.chat aside button.th[aria-current="true"]{background:var(--accent);color:var(--on-accent)}
+.chat aside button.th[aria-current="true"] small{color:inherit;opacity:.8}
+.chat aside button.th:focus-visible{outline:2px solid var(--accent)}
+.chat .pane{display:flex;flex-direction:column;min-width:0}
+.chat .log{flex:1;overflow:auto;padding:14px;display:flex;flex-direction:column;gap:14px}
+.msgu{align-self:flex-end;max-width:78%;background:var(--ink);color:var(--paper);padding:8px 12px;font-size:14px}
+.msga{max-width:88%;font-size:14px}
+.msga .who{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--mute);margin-bottom:2px}
+.chat .mini{display:flex;border-top:var(--rule) solid var(--ink)}
+.chat .mini input{flex:1;border:0;background:transparent;padding:10px 12px;outline:none;min-width:0}
+.chat .mini button{border:0;border-left:var(--rule) solid var(--ink);background:var(--accent);color:var(--on-accent);padding:0 14px;font-family:var(--f-mono);font-size:12px;cursor:pointer;text-transform:uppercase}
+
+.dash .kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-bottom:var(--rule) solid var(--ink)}
+.dash .kpi{padding:12px 12px 8px;border-right:var(--rule) solid var(--ink);display:flex;flex-direction:column;gap:2px;min-width:0}
+.dash .kpi:last-child{border-right:0}
+.dash .kpi b{font-family:var(--f-display);font-stretch:62%;font-weight:900;font-size:40px;line-height:.95;font-variant-numeric:tabular-nums}
+.app[data-skin="folio"] .dash .kpi b{font-weight:400}
+.dash .kpi svg{width:100%;height:34px;display:block;margin-top:6px}
+.delta{font-family:var(--f-mono);font-size:11px}
+.delta.up{color:var(--ok)}.delta.dn{color:var(--bad)}
+.dash .split{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr)}
+.dash .chart{padding:12px;border-right:var(--rule) solid var(--ink);min-width:0}
+.dash .chart svg{width:100%;height:170px;display:block}
+.dash .feed{padding:12px;font-family:var(--f-mono);font-size:12px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.dash .feed div{display:grid;grid-template-columns:3.6rem 1fr;gap:8px}
+.dash .feed span{color:var(--mute)}
+
+.colophon{padding:22px 18px 40px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;font-size:13.5px}
+.colophon h4{margin:0 0 6px;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--mute);font-weight:500}
+.colophon p{margin:0;max-width:40ch}
+
+/* ── v2: engines ── */
+.terrain{height:250px;border-bottom:var(--rule) solid var(--ink);position:relative;cursor:crosshair;touch-action:pan-y;min-width:0;overflow:hidden}
+.spec .terrain{height:360px;border:var(--rule) solid var(--ink)}
+.terrain canvas,.gl canvas{display:block;width:100%;height:100%}
+.cap{position:absolute;left:10px;bottom:8px;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute);pointer-events:none}
+.dval{font-family:var(--f-display);font-weight:900;font-stretch:62%;font-size:64px;line-height:.9;font-variant-numeric:tabular-nums}
+.app[data-skin="folio"] .dval{font-weight:400}
+
+.mag-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));border:1px dashed color-mix(in srgb,var(--ink) 40%,transparent)}
+.mag-zone{display:grid;place-items:center;padding:44px 12px;min-width:0}
+.mag-zone+.mag-zone{border-left:1px dashed color-mix(in srgb,var(--ink) 40%,transparent)}
+.btn.mag{font-size:14px;padding:16px 22px;will-change:transform}
+
+.dslider{position:relative;height:56px;margin:8px 12px 0;cursor:pointer;touch-action:none}
+.dslider::before{content:"";position:absolute;left:0;right:0;top:27px;height:2px;background:var(--ink)}
+.dfill{position:absolute;left:0;top:24px;height:8px;background:var(--accent);width:0}
+.dslider i{position:absolute;top:14px;width:2px;height:28px;margin-left:-1px;background:color-mix(in srgb,var(--ink) 30%,transparent)}
+.dslider i.on{background:var(--ink)}
+.dthumb{position:absolute;left:0;top:10px;width:0;height:36px}
+.dthumb span{position:absolute;left:-14px;top:4px;width:28px;height:28px;background:var(--ink);border:var(--rule) solid var(--paper);box-shadow:0 0 0 var(--rule) var(--ink)}
+.dslider:focus-visible{outline:none}
+.dslider:focus-visible .dthumb span{background:var(--accent)}
+.dlabels{display:flex;justify-content:space-between;margin:0 4px;font-family:var(--f-mono);font-size:10.5px;color:var(--mute);font-variant-numeric:tabular-nums}
+.zone{font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;border:var(--rule) solid var(--ink);padding:3px 8px}
+
+.ticket{position:relative;border:var(--rule) solid var(--ink);background:var(--raise);padding:14px 16px 16px;font-family:var(--f-mono);font-size:13px;max-width:640px;overflow:hidden}
+.t-h{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;border-bottom:1px dashed color-mix(in srgb,var(--ink) 40%,transparent);padding-bottom:8px;margin-bottom:10px}
+.t-call{font-family:var(--f-display);font-weight:800;font-stretch:75%;font-size:26px;line-height:1}
+.app[data-skin="folio"] .t-call{font-weight:400}
+.t-call span{color:var(--mute)}
+.t-args{border-collapse:collapse;margin:8px 0 8px 18px}
+.t-args td{padding:3px 14px 3px 0;vertical-align:bottom}
+.t-args td:first-child{color:var(--mute)}
+.stamp{position:absolute;right:18px;top:38%;padding:6px 14px;border:4px double currentColor;font-family:var(--f-display);font-weight:900;font-stretch:62%;font-size:44px;letter-spacing:.06em;text-transform:uppercase;line-height:1;pointer-events:none;mix-blend-mode:multiply;transform:rotate(-8deg);
+  -webkit-mask-image:repeating-linear-gradient(115deg,#000 0 3px,rgba(0,0,0,.72) 3px 5px);mask-image:repeating-linear-gradient(115deg,#000 0 3px,rgba(0,0,0,.72) 3px 5px)}
+.stamp.approved{color:var(--accent)}.stamp.denied{color:var(--bad)}
+:root[data-theme="dark"] .stamp{mix-blend-mode:normal}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .stamp{mix-blend-mode:normal}}
+
+.flap{background:var(--ink);color:var(--paper);padding:12px;overflow-x:auto}
+.flap-h{display:flex;gap:0;color:color-mix(in srgb,var(--paper) 60%,transparent);margin-bottom:8px;min-width:max-content}
+.flap-h span{width:calc(8 * (1.3em + 3px))}
+.flap-h span:last-child{width:auto}
+.flap-r{display:flex;gap:3px;margin-bottom:3px;min-width:max-content;perspective:300px}
+.flap-r span{width:1.3em;height:1.75em;display:grid;place-items:center;background:color-mix(in srgb,var(--paper) 10%,var(--ink));font-family:var(--f-mono);font-weight:600;font-size:clamp(13px,1.8vw,19px);position:relative;transform-origin:50% 50%;backface-visibility:hidden}
+.flap-r span::after{content:"";position:absolute;left:0;right:0;top:50%;height:1px;background:var(--ink)}
+.flap-r span:nth-last-child(-n+3){color:var(--accent)}
+
+.heat-wrap{display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px;overflow-x:auto}
+.heat-days{display:grid;grid-template-rows:repeat(7,1fr);gap:3px}
+.heat-days span{display:flex;align-items:center;font-size:10px}
+.heat{display:grid;grid-template-columns:repeat(24,minmax(12px,1fr));gap:3px;min-width:360px}
+.hc{aspect-ratio:1;border:0;padding:0;cursor:pointer;max-width:100%}
+.hc.sel{outline:2px solid var(--ink);outline-offset:1px}
+.hc:focus-visible{outline:2px solid var(--ink)}
+
+.drawsvg{width:100%;height:auto;display:block}
+
+.swipe{position:relative;height:300px;display:grid;place-items:center;isolation:isolate}
+.rcard{position:absolute;inset:14px 12% 26px;background:var(--raise);border:var(--rule) solid var(--ink);box-shadow:6px 6px 0 var(--ink);padding:14px 16px;user-select:none;display:flex;flex-direction:column;gap:2px;overflow:hidden}
+.rq{font-family:var(--f-display);font-weight:800;font-stretch:75%;font-size:24px;line-height:1.05;text-wrap:balance}
+.app[data-skin="folio"] .rq{font-weight:400}
+.ra{margin:2px 0 8px;font-size:14px;max-width:52ch}
+.verdict{position:absolute;top:12px;padding:3px 8px;border:3px solid currentColor;font-family:var(--f-mono);font-weight:600;font-size:14px;letter-spacing:.1em;text-transform:uppercase;pointer-events:none}
+.verdict.ok{right:12px;color:var(--ok);transform:rotate(6deg)}
+.verdict.no{left:12px;color:var(--bad);transform:rotate(-6deg)}
+.swipe-empty{display:flex;flex-direction:column;align-items:center;gap:10px}
+.swipe-empty b{font-family:var(--f-display);font-stretch:62%;font-weight:900;font-size:40px;text-transform:uppercase}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+
+.embed{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);border:var(--rule) solid var(--ink)}
+.gl{position:relative;height:380px;cursor:grab;touch-action:none;border-right:var(--rule) solid var(--ink);min-width:0;overflow:hidden}
+.embed-side{padding:12px 14px;min-width:0;display:flex;flex-direction:column}
+.qlist{display:flex;flex-direction:column;margin-top:6px;border:var(--rule) solid var(--ink)}
+.qlist button{background:none;border:0;text-align:left;padding:8px 10px;cursor:pointer;font-size:14px}
+.qlist button+button{border-top:1px solid color-mix(in srgb,var(--ink) 25%,transparent)}
+.qlist button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.hits{list-style:none;margin:6px 0 0;padding:0;font-family:var(--f-mono);font-size:12px;counter-reset:h}
+.hits li{display:grid;grid-template-columns:1.6em minmax(0,1fr) auto;gap:6px;padding:6px 0 2px;border-bottom:1px solid color-mix(in srgb,var(--ink) 15%,transparent);counter-increment:h;align-items:end}
+.hits li::before{content:counter(h,decimal-leading-zero);color:var(--mute)}
+.hits li span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hits li span:last-child{color:var(--accent);font-variant-numeric:tabular-nums}
+@media (max-width:760px){
+  .embed{grid-template-columns:minmax(0,1fr)}
+  .gl{border-right:0;border-bottom:var(--rule) solid var(--ink);height:300px}
+  .mag-row{grid-template-columns:minmax(0,1fr)}
+  .mag-zone+.mag-zone{border-left:0;border-top:1px dashed color-mix(in srgb,var(--ink) 40%,transparent)}
+  .rcard{inset:14px 4% 26px}
+  .stamp{font-size:32px;right:10px}
+}
+
+/* ── v3: depth ── */
+.kv{display:flex;justify-content:space-between;align-items:flex-end;gap:10px;padding:8px 0 3px;border-bottom:1px solid color-mix(in srgb,var(--ink) 18%,transparent);font-size:13.5px;min-width:0}
+.kv>span:first-child{color:var(--mute);font-family:var(--f-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase}
+.kv b{font-family:var(--f-display);font-stretch:75%;font-size:20px;font-variant-numeric:tabular-nums}
+.kv .roll{font-size:30px}
+.kv.big .roll{font-size:46px}
+.kv.big>span:last-child{font-family:var(--f-mono);font-size:12px;display:flex;align-items:flex-end;gap:6px}
+
+.tilt-wrap{display:flex;flex-direction:column;align-items:center;gap:16px}
+.tilt-stage{perspective:900px;padding:22px 8px 10px;width:100%;display:grid;place-items:center;touch-action:pan-y}
+.tilt{position:relative;width:min(300px,100%);padding:20px 20px 22px;background:var(--raise);border:var(--rule) solid var(--ink);box-shadow:8px 8px 0 var(--ink);transform-style:preserve-3d;display:flex;flex-direction:column;gap:14px;will-change:transform}
+.tilt .z{transform-style:preserve-3d}
+.tilt-name{font-family:var(--f-display);font-weight:900;font-stretch:62%;font-size:46px;line-height:.9;text-transform:uppercase}
+.app[data-skin="folio"] .tilt-name{font-weight:400;text-transform:none;font-style:italic}
+.tilt .roll{font-size:62px;margin-bottom:6px}
+.tilt-list{list-style:none;margin:0;padding:0;font-size:14px}
+.tilt-list li{padding:6px 0 2px;border-bottom:1px solid color-mix(in srgb,var(--ink) 18%,transparent)}
+.tilt-list li::before{content:"+ ";color:var(--accent);font-family:var(--f-mono)}
+.tilt-badge{position:absolute;top:-14px;right:-14px;background:var(--accent);color:var(--on-accent);font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:6px 10px;border:var(--rule) solid var(--ink)}
+.glare{position:absolute;inset:0;pointer-events:none;opacity:0;background:radial-gradient(circle at var(--gx,50%) var(--gy,50%),color-mix(in srgb,#fff 42%,transparent),transparent 58%)}
+
+.orb{display:grid;grid-template-columns:minmax(0,1fr);gap:0;border:var(--rule) solid var(--ink)}
+.orb-gl{height:250px;border-bottom:var(--rule) solid var(--ink);cursor:default;touch-action:pan-y}
+.orb-side{padding:12px 14px 14px;display:flex;flex-direction:column;gap:8px;align-items:flex-start}
+.orb-text{margin:0;min-height:3.2em;font-family:var(--f-display);font-stretch:80%;font-size:21px;line-height:1.2;text-wrap:pretty}
+
+.cfg{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);border:var(--rule) solid var(--ink)}
+.cfg-gl{height:430px;border-right:var(--rule) solid var(--ink)}
+.cfg-side{padding:14px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.cfg-row{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center;justify-content:space-between}
+.field input.rng{-webkit-appearance:none;appearance:none;width:100%;height:26px;padding:0;border:0;background:transparent;cursor:pointer;font-size:inherit}
+input.rng::-webkit-slider-runnable-track{height:2px;background:var(--ink)}
+input.rng::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:20px;height:20px;margin-top:-9px;background:var(--accent);border:var(--rule) solid var(--ink);border-radius:0}
+input.rng::-moz-range-track{height:2px;background:var(--ink)}
+input.rng::-moz-range-thumb{width:16px;height:16px;border-radius:0;background:var(--accent);border:var(--rule) solid var(--ink)}
+input.rng:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.bom{border-top:var(--rule) solid var(--ink);margin-top:auto}
+
+.cf{position:relative;height:320px;perspective:1100px;overflow:hidden;cursor:grab;touch-action:pan-y;border:1px dashed color-mix(in srgb,var(--ink) 40%,transparent)}
+.cf:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.cf-card{position:absolute;left:50%;top:50%;width:min(220px,50%);height:262px;background:var(--raise);border:var(--rule) solid var(--ink);box-shadow:6px 6px 0 var(--ink);padding:14px;display:flex;flex-direction:column;gap:4px;user-select:none;will-change:transform}
+.cf-card.on::before{content:"";position:absolute;inset:0 0 auto;height:7px;background:var(--accent)}
+.cf-name{font-family:var(--f-display);font-weight:900;font-stretch:62%;font-size:32px;line-height:.92;text-transform:uppercase;word-break:break-word;margin-top:6px}
+.app[data-skin="folio"] .cf-name{font-weight:400;text-transform:none;font-style:italic}
+.cf-num{font-family:var(--f-display);font-weight:800;font-stretch:75%;font-size:28px;font-variant-numeric:tabular-nums;line-height:1}
+.cf-bar{height:6px;background:var(--wash);margin-top:8px}.cf-bar i{display:block;height:100%;background:var(--accent)}
+
+.cube-box{position:relative;height:250px;perspective:1300px}
+.cube{position:absolute;inset:0;transform-style:preserve-3d}
+.face{position:absolute;inset:0;backface-visibility:hidden;background:var(--raise);border:var(--rule) solid var(--ink);padding:14px 16px;display:flex;flex-direction:column;gap:2px}
+.face-v{font-family:var(--f-display);font-weight:900;font-stretch:62%;font-size:64px;line-height:.9;font-variant-numeric:tabular-nums;margin-top:4px}
+.app[data-skin="folio"] .face-v{font-weight:400}
+.fbars{display:flex;align-items:flex-end;gap:6px;height:60px;margin-top:auto}
+.fbars i{flex:1}
+.face-n{font-size:12.5px;color:var(--mute);padding-top:6px}
+
+.fold-h{padding:0 0 10px;border-bottom:var(--rule) solid var(--ink)}
+.fold-t{font-family:var(--f-display);font-weight:900;font-stretch:62%;font-size:34px;line-height:.95;text-transform:uppercase}
+.app[data-skin="folio"] .fold-t{font-weight:400;text-transform:none;font-style:italic}
+.fhead{all:unset;box-sizing:border-box;display:grid;grid-template-columns:2rem minmax(0,1fr) auto 1.4rem;gap:10px;align-items:end;width:100%;padding:12px 0 6px;border-bottom:1px solid color-mix(in srgb,var(--ink) 30%,transparent);cursor:pointer}
+.fhead:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.fhead b{font-family:var(--f-display);font-stretch:75%;font-weight:800;font-size:21px;text-transform:uppercase;line-height:1}
+.app[data-skin="folio"] .fhead b{font-weight:400;text-transform:none}
+.fhead i{font-style:normal;font-family:var(--f-mono);font-size:20px;line-height:1;transition:transform .3s;text-align:center}
+.fitem.open .fhead i{transform:rotate(45deg);color:var(--accent)}
+.fitem.open .fhead{border-bottom-color:var(--ink)}
+.fbody{overflow:hidden}
+.finner{perspective:700px;padding:2px 0 10px}
+.frow{display:grid;grid-template-columns:4.6rem minmax(0,1fr);gap:10px;padding:8px 0 3px;border-bottom:1px dashed color-mix(in srgb,var(--ink) 25%,transparent);transform-origin:50% 0;background:var(--paper);font-size:14px}
+.frow span:first-child{font-family:var(--f-mono);font-size:11.5px;color:var(--mute);font-variant-numeric:tabular-nums}
+
+.drum-wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:22px;align-items:center}
+.drum{position:relative;height:260px;perspective:900px;overflow:hidden;cursor:grab;touch-action:none;border:var(--rule) solid var(--ink);background:var(--raise);
+  -webkit-mask-image:linear-gradient(transparent,#000 24%,#000 76%,transparent);mask-image:linear-gradient(transparent,#000 24%,#000 76%,transparent)}
+.drum:focus-visible{outline:none}
+.drum:focus-visible .drum-band{background:color-mix(in srgb,var(--accent) 12%,transparent)}
+.drum-wheel{position:absolute;left:0;right:0;top:50%;height:42px;margin-top:-21px;transform-style:preserve-3d}
+.drum-it{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--f-display);font-stretch:75%;font-weight:800;font-size:25px;text-transform:uppercase;backface-visibility:hidden;user-select:none}
+.app[data-skin="folio"] .drum-it{font-weight:400;text-transform:none}
+.drum-it.on{color:var(--accent)}
+.drum-band{position:absolute;left:0;right:0;top:50%;height:46px;margin-top:-23px;border-top:var(--rule) solid var(--ink);border-bottom:var(--rule) solid var(--ink);pointer-events:none}
+.drum-side{display:flex;flex-direction:column;gap:2px;min-width:0}
+.drum-name{font-family:var(--f-display);font-weight:900;font-stretch:62%;font-size:48px;line-height:.9;text-transform:uppercase;margin-bottom:6px;word-break:break-word}
+.app[data-skin="folio"] .drum-name{font-weight:400;text-transform:none;font-style:italic}
+.drum-side .kick:last-child{margin-top:10px}
+
+.lb,.globe{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.35fr);border:var(--rule) solid var(--ink)}
+.globe{grid-template-columns:minmax(0,1.3fr) minmax(0,1fr)}
+.lb-t,.globe-side{min-width:0;border-right:var(--rule) solid var(--ink);display:flex;flex-direction:column}
+.globe-side{border-right:0}
+.lb-r{all:unset;box-sizing:border-box;display:grid;grid-template-columns:minmax(0,1.4fr) 4.2rem 4.2rem 4.4rem;gap:8px;align-items:end;padding:10px 12px 4px;border-bottom:1px solid color-mix(in srgb,var(--ink) 18%,transparent);font-family:var(--f-mono);font-size:12px;font-variant-numeric:tabular-nums;cursor:pointer;width:100%}
+.lb-r span{text-align:right}
+.lb-r b{font-family:var(--f-display);font-stretch:75%;font-weight:700;font-size:18px;line-height:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lb-r b small{display:block;font-family:var(--f-mono);font-weight:400;font-size:10px;color:var(--mute);margin-top:3px}
+.lb-r.lb-hd span:first-child{text-align:left}
+.lb-r.lb-hd{cursor:default;padding-top:6px;border-bottom:var(--rule) solid var(--ink)}
+.lb-r.on,.lb-r:not(.lb-hd):hover{background:var(--ink);color:var(--paper)}
+.lb-r.on b small,.lb-r:not(.lb-hd):hover b small{color:inherit;opacity:.7}
+.lb-r:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.lb-r .up{color:var(--ok)}.lb-r .dn{color:var(--bad)}
+.lb-r.on .up,.lb-r.on .dn{color:inherit}
+.lb-gl{height:380px}
+.globe-gl{height:440px;border-right:var(--rule) solid var(--ink)}
+.globe .lb-r{grid-template-columns:minmax(0,1.3fr) 3.6rem minmax(0,1fr) 3.4rem}
+.rtt{display:block;height:6px;background:var(--wash);align-self:center}
+.rtt i{display:block;height:100%;background:var(--accent)}
+.lb-r.on .rtt i{background:var(--paper)}
+.gtip{position:absolute;pointer-events:none;background:var(--ink);color:var(--paper);font-family:var(--f-mono);font-size:11.5px;padding:4px 8px;white-space:nowrap;z-index:2}
+
+@media (max-width:760px){
+  .cfg,.lb,.globe{grid-template-columns:minmax(0,1fr)}
+  .cfg-gl,.globe-gl{border-right:0;border-bottom:var(--rule) solid var(--ink);height:320px}
+  .lb-t{border-right:0;border-bottom:var(--rule) solid var(--ink);order:2}
+  .lb-gl{height:300px}
+  .drum-wrap{grid-template-columns:minmax(0,1fr)}
+  .lb-r{grid-template-columns:minmax(0,1.3fr) 3.4rem 3.6rem 3.8rem}
+}
+
+@media (max-width:980px){
+  .grid{grid-template-columns:minmax(0,1fr)}
+  .hero{grid-template-columns:minmax(0,1fr)}
+  .hero h1{border-right:0;border-bottom:var(--rule) solid var(--ink);min-height:0}
+  .dash .kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .dash .kpi:nth-child(2){border-right:0}
+  .dash .kpi:nth-child(-n+2){border-bottom:var(--rule) solid var(--ink)}
+  .dash .split{grid-template-columns:minmax(0,1fr)}
+  .dash .chart{border-right:0;border-bottom:var(--rule) solid var(--ink)}
+  .colophon{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:760px){
+  .app{grid-template-columns:minmax(0,1fr)}
+  .rail{position:static;height:auto;flex-direction:row;overflow-x:auto;border-right:0;border-bottom:var(--rule) solid var(--ink);white-space:nowrap;align-items:stretch}
+  .rail .mark{border-bottom:0;border-right:var(--rule) solid var(--ink);display:flex;align-items:center}
+  .rail .grp,.rail .foot{display:none}
+  .rail a{align-items:center}
+  .sect-h{flex-direction:column;align-items:flex-start}
+  .sect-h p{text-align:left}
+  .chat{grid-template-columns:minmax(0,1fr)}
+  .chat aside{display:none}
+  .top .cell{border-right:0;padding:8px 12px}
+  .top .cell:last-child{margin-left:0;width:100%;border-top:1px dashed color-mix(in srgb,var(--ink) 30%,transparent)}
+}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
+}
+</style>
+
+<div id="root"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/htm@3.1.1/dist/htm.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/motion@11.18.2/dist/motion.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/animejs@4.0.2/lib/anime.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+<script>
+const {useState,useEffect,useRef,useMemo,useCallback,useLayoutEffect}=React;
+const html=htm.bind(React.createElement);
+const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ───────── REGISTRY ───────── */
+const GROUPS=[
+ {id:'core',name:'Core',blurb:'Primitives cut from the ledger grid. Hard rules, no radius, type that sits on the baseline.'},
+ {id:'motion',name:'Motion',blurb:'Typographic motion. Numbers roll, headings decode, lists file in like entries.'},
+ {id:'springs',name:'Springs',engine:'motion.dev',blurb:'Physics on the controls people touch most. Buttons lean toward the pointer, sliders snap into detents, stamps land with weight.'},
+ {id:'timelines',name:'Timelines',engine:'anime.js',blurb:'Sequenced motion: split-flap boards, staggered grid ripples, lines that draw themselves, cards that spring back.'},
+ {id:'webgl',name:'WebGL',engine:'three.js',blurb:'Data you can stand inside. Instanced bar fields and an embedding space for retrieval.'},
+ {id:'depth',name:'Depth',blurb:'3D built into everyday components. CSS 3D for cards, wheels, cubes and folds; three.js where the data needs a real scene. The controls around each one stay ordinary.'},
+ {id:'ai',name:'AI',blurb:'Interfaces for model output: streaming, agent traces, context budgets, eval grids.'},
+ {id:'screens',name:'Screens',blurb:'Full-screen blocks assembled from the parts above. Drop in, then cut down.'},
+ {id:'field',name:'Field notes',blurb:'Research behind the library: what each neighbour does well, and what can legally be borrowed.'},
+];
+
+/* ───────── SHELL ───────── */
+function copy(text,el){
+  try{navigator.clipboard.writeText(text).then(()=>flash(el,'Copied'),()=>sel(el));}catch(e){sel(el)}
+  function flash(b,t){if(!b)return;const o=b.textContent;b.textContent=t;setTimeout(()=>b.textContent=o,1200)}
+  function sel(b){flash(b,'Select & copy')}
+}
+function Spec({id,no,name,tag,desc,usage,file,wide,children}){
+  const [open,setOpen]=useState(false);
+  return html`<section className=${'spec'+(wide?' wide':'')} id=${id} aria-labelledby=${id+'-h'}>
+    <div className="spec-h"><span className="no">${no}</span><h3 id=${id+'-h'}>${name}</h3><span className=${'tag'+(tag==='AI'||/\./.test(tag)?' ai':'')}>${tag}</span></div>
+    ${desc&&html`<p className="desc">${desc}</p>`}
+    <div className="stage">${children}</div>
+    ${open&&html`<pre className="usage">${usage}</pre>`}
+    <div className="spec-f">
+      <button onClick=${()=>setOpen(o=>!o)} aria-expanded=${open}>${open?'Hide usage':'Usage'}</button>
+      <button onClick=${e=>copy(usage,e.currentTarget)}>Copy</button>
+      <span className="file">${file}</span>
+    </div>
+  </section>`;
+}
+
+/* ───────── CORE ───────── */
+const RUNS=[
+ {id:'R-2041',model:'atlas-l',set:'support-qa',score:.912,p50:840,status:'pass'},
+ {id:'R-2040',model:'atlas-m',set:'support-qa',score:.884,p50:410,status:'pass'},
+ {id:'R-2039',model:'atlas-s',set:'support-qa',score:.801,p50:160,status:'drift'},
+ {id:'R-2038',model:'local/32b',set:'support-qa',score:.742,p50:1290,status:'fail'},
+ {id:'R-2037',model:'atlas-l',set:'tool-use',score:.957,p50:1120,status:'pass'},
+ {id:'R-2036',model:'atlas-m',set:'tool-use',score:.931,p50:530,status:'pass'},
+];
+const RUN_COLS=[{k:'id',l:'Run',big:1},{k:'model',l:'Model'},{k:'set',l:'Dataset'},{k:'score',l:'Score',n:1,r:r=>html`<span className="bar-in" style=${{width:Math.round((r.score-.7)*220)+'px'}}></span>${r.score.toFixed(3)}`},{k:'p50',l:'p50 ms',n:1,r:r=>r.p50.toLocaleString()},{k:'status',l:'Status',r:r=>html`<span className=${'pill '+r.status}>${r.status}</span>`}];
+function LedgerTable({title='Eval runs, Oct',data=RUNS,cols=RUN_COLS,init={k:'score',d:-1},rowKey='id'}){
+  const [sort,setSort]=useState(init);
+  const rows=useMemo(()=>[...data].sort((a,b)=>(a[sort.k]>b[sort.k]?1:a[sort.k]<b[sort.k]?-1:0)*sort.d),[sort,data]);
+  const by=k=>setSort(s=>({k,d:s.k===k?-s.d:-1}));
+  return html`<div className="tscroll"><table className="ledger">
+    <thead><tr className="title"><td className="rn">00</td><td colSpan=${cols.length}>${title}</td></tr>
+    <tr><th className="rn">#</th>${cols.map(c=>html`<th key=${c.k} className=${c.n?'num':''} aria-sort=${sort.k===c.k?(sort.d>0?'ascending':'descending'):undefined}>
+      <button onClick=${()=>by(c.k)}>${c.l}${sort.k===c.k?(sort.d>0?' ↑':' ↓'):''}</button></th>`)}</tr></thead>
+    <tbody>${rows.map((r,i)=>html`<tr key=${r[rowKey]}>
+      <td className="rn">${String(i+1).padStart(2,'0')}</td>
+      ${cols.map(c=>html`<td key=${c.k} className=${(c.big?'big ':'')+(c.n?'num':'')}>${c.r?c.r(r):r[c.k]}</td>`)}</tr>`)}</tbody>
+  </table></div>`;
+}
+function HoldButton({ms=1200,onDone,children}){
+  const [p,setP]=useState(0);const raf=useRef();const t0=useRef();const [done,setDone]=useState(false);
+  const start=()=>{if(done)return;t0.current=performance.now();const step=t=>{const v=Math.min(1,(t-t0.current)/ms);setP(v);if(v<1)raf.current=requestAnimationFrame(step);else{setDone(true);onDone&&onDone()}};raf.current=requestAnimationFrame(step)};
+  const stop=()=>{cancelAnimationFrame(raf.current);if(!done)setP(0)};
+  useEffect(()=>()=>cancelAnimationFrame(raf.current),[]);
+  return html`<button className="btn" style=${{'--p':p}} onPointerDown=${start} onPointerUp=${stop} onPointerLeave=${stop}
+    onKeyDown=${e=>{if((e.key===' '||e.key==='Enter')&&!e.repeat){e.preventDefault();start()}}} onKeyUp=${stop}
+    onClick=${()=>done&&(setDone(false),setP(0))}>
+    <span className="fill"></span><span className="lab">${done?'Deleted · tap to reset':children}</span></button>`;
+}
+function Buttons(){
+  return html`<div className="col">
+    <div className="row"><button className="btn ink">Deploy</button><button className="btn acc">Run eval</button><button className="btn">Export CSV</button><button className="btn ghost">Cancel</button></div>
+    <div className="row"><${HoldButton}>Hold to delete<//><span className="kick">Press and hold 1.2s</span></div>
+  </div>`;
+}
+function Fields(){
+  const [v,setV]=useState('support-qa');const [k,setK]=useState('sk-');
+  const bad=k.length>0&&k.length<12;
+  return html`<div className="col" style=${{maxWidth:'420px'}}>
+    <div className="field"><label htmlFor="f-ds"><span>Dataset name</span><span>${v.length}/32</span></label>
+      <input id="f-ds" value=${v} maxLength="32" onInput=${e=>setV(e.target.value)}/></div>
+    <div className="field"><label htmlFor="f-key"><span>API key</span><span>Required</span></label>
+      <input id="f-key" value=${k} onInput=${e=>setK(e.target.value)} style=${bad?{borderBottomColor:'var(--bad)'}:null} aria-invalid=${bad}/>
+      ${bad&&html`<span className="err">Keys are at least 12 characters. Paste the full key.</span>`}</div>
+  </div>`;
+}
+function Tabs(){
+  const items=[['Overview','Each component is one file. Copy it in, own it, edit the tokens at the top.'],['Tokens','Six colors, three type roles, one rule weight. Skins swap the accent and the display face.'],['Motion','CSS for the simple things, rAF for numbers and text. Every effect checks reduced motion.'],['License','MIT. Use it in commercial work, no attribution needed.']];
+  const [i,setI]=useState(0);const refs=useRef([]);const [bar,setBar]=useState({left:0,width:0});
+  useLayoutEffect(()=>{const b=refs.current[i];if(b)setBar({left:b.offsetLeft,width:b.offsetWidth})},[i]);
+  useEffect(()=>{const f=()=>{const b=refs.current[i];if(b)setBar({left:b.offsetLeft,width:b.offsetWidth})};addEventListener('resize',f);document.fonts&&document.fonts.ready.then(f);return()=>removeEventListener('resize',f)},[i]);
+  return html`<div><div className="tabs" role="tablist">${items.map((t,j)=>html`<button key=${j} role="tab" aria-selected=${i===j} ref=${el=>refs.current[j]=el} onClick=${()=>setI(j)}>${t[0]}</button>`)}<span className="bar" style=${bar}></span></div>
+  <div className="tabpanel" role="tabpanel">${items[i][1]}</div></div>`;
+}
+function Toggles(){
+  const [a,setA]=useState(true);const [b,setB]=useState(false);const [m,setM]=useState('Week');
+  return html`<div className="col">
+    <div className="row"><button className="switch" role="switch" aria-checked=${a} onClick=${()=>setA(!a)}><span className="trk"><span className="knb"></span></span>Stream responses</button>
+    <button className="switch" role="switch" aria-checked=${b} onClick=${()=>setB(!b)}><span className="trk"><span className="knb"></span></span>Cache prompts</button></div>
+    <div className="seg" role="group" aria-label="Range">${['Day','Week','Month','Year'].map(x=>html`<button key=${x} aria-pressed=${m===x} onClick=${()=>setM(x)}>${x}</button>`)}</div>
+  </div>`;
+}
+
+/* ───────── MOTION ───────── */
+function Roll({value,text}){
+  const s=text??value.toLocaleString('en-US');const n=s.length;
+  return html`<span className="roll" aria-label=${s}>${s.split('').map((c,i)=>/\d/.test(c)
+    ?html`<span className="rc" key=${'d'+(n-i)} aria-hidden="true"><span className="rs" style=${{transform:`translateY(${-Number(c)*10}%)`}}>${'0123456789'.split('').map(d=>html`<span key=${d}>${d}</span>`)}</span></span>`
+    :html`<span key=${'s'+(n-i)} aria-hidden="true">${c}</span>`)}</span>`;
+}
+function RollDemo(){
+  const [v,setV]=useState(1284903);
+  useEffect(()=>{if(RM)return;const t=setInterval(()=>setV(x=>x+Math.floor(Math.random()*4800)),2400);return()=>clearInterval(t)},[]);
+  return html`<div className="col"><span className="kick">Tokens processed today</span><${Roll} value=${v}/>
+  <div className="row"><button className="btn" onClick=${()=>setV(Math.floor(Math.random()*9e6))}>Randomize</button></div></div>`;
+}
+function Scramble({text}){
+  const [out,setOut]=useState(text);const raf=useRef();
+  const run=useCallback(()=>{cancelAnimationFrame(raf.current);if(RM){setOut(text);return}
+    const ch='█▓▒░/\\<>_#01';let f=0;const tick=()=>{f++;setOut(text.split('').map((c,i)=>c===' '?' ':(i<f/2.4?c:ch[(Math.random()*ch.length)|0])).join(''));if(f<text.length*2.4+3)raf.current=requestAnimationFrame(tick);else setOut(text)};tick()},[text]);
+  useEffect(()=>{run();return()=>cancelAnimationFrame(raf.current)},[run]);
+  return html`<div className="col"><div className="scr" onMouseEnter=${run} aria-label=${text}><span aria-hidden="true">${out}</span></div>
+  <div className="row"><button className="btn" onClick=${run}>Replay</button><span className="kick">Also runs on hover</span></div></div>`;
+}
+function Marquee(){
+  const words=['Ledger UI','Open source','React','Copy · paste · own','Brutal type','AI-ready','MIT'];
+  const seq=[...words,...words];
+  return html`<div className="marq" aria-label=${words.join(', ')}><div className="tr" aria-hidden="true">${seq.map((w,i)=>html`<span key=${i}>${w} ✶</span>`)}</div></div>`;
+}
+function Stagger(){
+  const [k,setK]=useState(0);
+  const items=[['Invoice INV-0412','Paid','₹48,200'],['Invoice INV-0413','Due 4 Nov','₹12,750'],['Invoice INV-0414','Draft','₹6,900'],['Invoice INV-0415','Overdue','₹31,000']];
+  return html`<div className="col"><ul className="stg" key=${k}>${items.map((it,i)=>html`<li key=${i} style=${{animationDelay:(i*90)+'ms'}}><span>${String(i+1).padStart(2,'0')}</span><b>${it[0]}</b><span>${it[1]} · ${it[2]}</span></li>`)}</ul>
+  <div className="row"><button className="btn" onClick=${()=>setK(k+1)}>Replay</button></div></div>`;
+}
+
+/* ───────── AI ───────── */
+const ANSWER='Refunds over 30 days need manager approval {1}. Partial refunds are allowed when the order shipped in parts {2}, and store credit is issued instantly while card refunds take 5 to 7 business days {3}.';
+function Stream(){
+  const toks=useMemo(()=>ANSWER.split(/(\s+)/),[]);
+  const [n,setN]=useState(0);const [run,setRun]=useState(true);
+  useEffect(()=>{if(!run)return;if(RM){setN(toks.length);setRun(false);return}
+    if(n>=toks.length){setRun(false);return}const t=setTimeout(()=>setN(n+1),28+Math.random()*40);return()=>clearTimeout(t)},[n,run]);
+  const shown=toks.slice(0,n).map((t,i)=>{const m=t.match(/^\{(\d)\}(.*)$/);return m?html`<span key=${i}><span className="cite" title=${'Source '+m[1]}>${m[1]}</span>${m[2]}</span>`:t});
+  return html`<div className="col">
+    <div className="stream" aria-live="polite">${shown}${run&&html`<span className="caret"></span>`}</div>
+    <div className="srcs">${[['1','refund-policy.md §2'],['2','fulfilment/split.md'],['3','payments-faq.pdf p.4']].map(s=>html`<div key=${s[0]}><b>[${s[0]}]</b>${s[1]}</div>`)}</div>
+    <div className="row">${run?html`<button className="btn" onClick=${()=>setRun(false)}>Stop</button>`:html`<button className="btn acc" onClick=${()=>{setN(0);setRun(true)}}>Regenerate</button>`}<span className="kick">${n}/${toks.length} tokens</span></div>
+  </div>`;
+}
+const STEPS=[
+ {tool:'plan',arg:'split question into 3 sub-queries',ms:220,out:'3 sub-queries: policy window, partial refunds, payout timing'},
+ {tool:'search',arg:'kb: "refund window approval"',ms:640,out:'14 chunks from 5 files'},
+ {tool:'fetch',arg:'refund-policy.md',ms:310,out:'2,140 tokens read'},
+ {tool:'rerank',arg:'top 14 → 5',ms:180,out:'kept 5, dropped 9 below 0.42'},
+ {tool:'answer',arg:'compose with citations',ms:1450,out:'412 tokens, 3 citations'},
+];
+function Trace(){
+  const [at,setAt]=useState(0);const [open,setOpen]=useState(-1);
+  useEffect(()=>{if(at>=STEPS.length)return;const t=setTimeout(()=>setAt(at+1),RM?0:STEPS[at].ms*.9);return()=>clearTimeout(t)},[at]);
+  const total=STEPS.reduce((a,s)=>a+s.ms,0);const doneMs=STEPS.slice(0,at).reduce((a,s)=>a+s.ms,0);
+  return html`<div className="trace">
+    ${STEPS.map((s,i)=>{const st=i<at?'done':i===at?'run':'queued';return html`<div key=${i} className=${st}>
+      <button className="st" onClick=${()=>setOpen(open===i?-1:i)} aria-expanded=${open===i}>
+        <span className="ic"></span><span className="tool">${s.tool}</span><span className="arg">${s.arg}</span><span className="ms">${st==='queued'?'—':s.ms+' ms'}</span></button>
+      ${open===i&&html`<div className="out">→ ${st==='done'?s.out:'not finished yet'}</div>`}</div>`})}
+    <div className="tl"><i style=${{width:(doneMs/total*100)+'%'}}></i></div>
+    <div className="row" style=${{marginTop:'14px',justifyContent:'space-between'}}><span className="kick">${at>=STEPS.length?'Done in '+(total/1000).toFixed(2)+' s':'Step '+(at+1)+' of '+STEPS.length}</span><button className="btn" onClick=${()=>{setAt(0);setOpen(-1)}}>Replay</button></div>
+  </div>`;
+}
+function Composer(){
+  const [t,setT]=useState('Summarise the refund policy changes for the support team');
+  const [files,setFiles]=useState(['refund-policy.md','q3-tickets.csv']);
+  const [sent,setSent]=useState('');
+  const used=Math.min(1,(t.length*1.3+files.length*1800)/32000);
+  return html`<div><div className="composer">
+    <label className="kick" htmlFor="cmp" style=${{display:'block',padding:'10px 14px 0'}}>Prompt</label>
+    <textarea id="cmp" value=${t} onInput=${e=>{setT(e.target.value);setSent('')}} onKeyDown=${e=>{if(e.key==='Enter'&&(e.metaKey||e.ctrlKey)&&t.trim())setSent('Sent to '+document.getElementById('cmp-m').value)}}></textarea>
+    <div className="chips">${files.map(f=>html`<span className="chip" key=${f}>${f}<button aria-label=${'Remove '+f} onClick=${()=>setFiles(files.filter(x=>x!==f))}>×</button></span>`)}
+      ${files.length<3&&html`<button className="chip" style=${{cursor:'pointer',padding:'2px 8px'}} onClick=${()=>setFiles([...files,'notes-'+(files.length+1)+'.md'])}>+ Attach</button>`}</div>
+    <div className="cbar"><select id="cmp-m" aria-label="Model"><option>atlas-l</option><option>atlas-m</option><option>atlas-s</option></select>
+      <div className="meter"><span>${Math.round(used*100)}%</span><div><i style=${{width:used*100+'%'}}></i></div><span>of 32k</span></div>
+      <button className="send" disabled=${!t.trim()} onClick=${()=>setSent('Sent to '+document.getElementById('cmp-m').value)}>Send ⌘↵</button></div>
+  </div>${sent&&html`<div className="toast">${sent}</div>`}</div>`;
+}
+function Thinking(){
+  const msgs=['Reading 14 sources','Comparing policies','Checking dates','Drafting answer'];
+  const [i,setI]=useState(0);
+  useEffect(()=>{if(RM)return;const t=setInterval(()=>setI(x=>(x+1)%msgs.length),1600);return()=>clearInterval(t)},[]);
+  return html`<div className="think"><div className="wave" aria-hidden="true">${Array.from({length:14},(_,k)=>html`<i key=${k} style=${{animationDelay:(k*70)+'ms'}}></i>`)}</div>
+  <div><div className="kick">Working · ${i+1}/${msgs.length}</div><div className="msg" aria-live="polite">${msgs[i]}</div></div></div>`;
+}
+function Context(){
+  const parts=[['System',3200,'var(--ink)'],['Tools',9800,'var(--accent)'],['History',41200,'var(--mute)'],['Files',62400,'var(--wash)']];
+  const [p,setP]=useState(parts);const cap=200000;const used=p.reduce((a,x)=>a+x[1],0);
+  return html`<div className="ctx col">
+    <div className="row" style=${{justifyContent:'space-between',alignItems:'flex-end'}}><div><div className="kick">Context window</div><div style=${{fontFamily:'var(--f-display)',fontStretch:'62%',fontWeight:900,fontSize:'44px',lineHeight:1}}>${used.toLocaleString()} <span style=${{color:'var(--mute)',fontWeight:500,fontSize:'22px'}}>/ 200,000</span></div></div>
+      <button className="btn" onClick=${()=>setP(p.map(x=>x[0]==='History'?[x[0],Math.round(x[1]*.35),x[2]]:x))}>Compact history</button></div>
+    <div className="bar" role="img" aria-label=${'Used '+Math.round(used/cap*100)+' percent'}>${p.map(x=>html`<div key=${x[0]} style=${{width:(x[1]/cap*100)+'%',background:x[2]}} title=${x[0]}></div>`)}</div>
+    <div className="legend">${p.map(x=>html`<div key=${x[0]}><span><i style=${{background:x[2]}}></i>${x[0]}</span><b>${(x[1]/1000).toFixed(1)}k</b></div>`)}</div>
+  </div>`;
+}
+function Matrix(){
+  const models=['atlas-l','atlas-m','atlas-s','local/32b'];const tasks=['QA','Tools','Code','Extract','Safety'];
+  const data=[[.93,.96,.88,.91,.97],[.89,.93,.82,.9,.96],[.8,.84,.69,.86,.94],[.74,.62,.71,.78,.88]];
+  const shade=v=>`color-mix(in srgb, var(--accent) ${Math.round(Math.max(0,(v-.6)/.4)*100)}%, var(--wash))`;
+  return html`<div className="mx"><table><thead><tr><th></th>${tasks.map(t=>html`<th key=${t} style=${{textAlign:'right'}}>${t}</th>`)}</tr></thead>
+  <tbody>${models.map((m,i)=>html`<tr key=${m}><td className="mn">${m}</td>${data[i].map((v,j)=>html`<td key=${j} style=${{background:shade(v)}}><div style=${{color:v>.85?'var(--on-accent)':'var(--ink)'}}>${v.toFixed(2)}</div></td>`)}</tr>`)}</tbody></table></div>`;
+}
+
+/* ───────── SCREENS ───────── */
+const CMDS=[['Navigate','Go to runs','G R'],['Navigate','Go to datasets','G D'],['Navigate','Open settings','⌘ ,'],['Actions','New eval run','N'],['Actions','Compare two runs','C'],['Actions','Export table as CSV','⌘ E'],['Models','Switch to atlas-l',''],['Models','Switch to atlas-s','']];
+function CommandPalette(){
+  const [open,setOpen]=useState(false);const [q,setQ]=useState('');const [i,setI]=useState(0);const [last,setLast]=useState('');
+  const list=CMDS.filter(c=>c[1].toLowerCase().includes(q.toLowerCase()));
+  const inp=useRef();
+  useEffect(()=>{if(open){setQ('');setI(0);setTimeout(()=>inp.current&&inp.current.focus(),10)}},[open]);
+  const pick=c=>{setLast(c[1]);setOpen(false)};
+  const key=e=>{if(e.key==='ArrowDown'){e.preventDefault();setI(x=>Math.min(list.length-1,x+1))}else if(e.key==='ArrowUp'){e.preventDefault();setI(x=>Math.max(0,x-1))}else if(e.key==='Enter'&&list[i])pick(list[i]);else if(e.key==='Escape')setOpen(false)};
+  let g='';
+  return html`<div className="frame"><div className="chrome"><span><i></i><i></i><i></i></span><span>console / runs</span></div>
+    <div className="cmdk-stage"><div className="cmdk-hint col" style=${{alignItems:'center'}}>
+      <button className="btn ink" onClick=${()=>setOpen(true)}>Open palette <span className="kbd" style=${{marginLeft:'6px'}}>⌘K</span></button>
+      <span>${last?'Ran: '+last:'↑ ↓ to move, Enter to run, Esc to close'}</span></div></div>
+    ${open&&html`<div className="scrim" onClick=${e=>e.target===e.currentTarget&&setOpen(false)}><div className="cmdk" role="dialog" aria-label="Command palette" onKeyDown=${key}>
+      <input ref=${inp} value=${q} onInput=${e=>{setQ(e.target.value);setI(0)}} placeholder="Type a command" aria-label="Search commands"/>
+      <ul role="listbox">${list.length?list.map((c,j)=>{const head=c[0]!==g;g=c[0];return html`<${React.Fragment} key=${c[1]}>${head&&html`<li className="g">${c[0]}</li>`}
+        <li className="it" role="option" aria-selected=${j===i} onMouseEnter=${()=>setI(j)} onClick=${()=>pick(c)}><span>${c[1]}</span>${c[2]&&html`<span className="kbd">${c[2]}</span>`}</li><//>`}):html`<li className="empty">No command matches “${q}”.</li>`}</ul>
+    </div></div>`}
+  </div>`;
+}
+function ChatScreen(){
+  const threads=[['Refund policy summary','2 min ago'],['Q3 ticket clustering','Yesterday'],['Onboarding email draft','Mon'],['Churn reasons, EU','28 Oct']];
+  const [cur,setCur]=useState(0);const [log,setLog]=useState([['u','What changed in the refund policy this quarter?'],['a','Three things. Refunds past 30 days now need manager approval, split shipments can be refunded in parts, and store credit is instant.']]);
+  const [v,setV]=useState('');
+  const send=e=>{e.preventDefault();if(!v.trim())return;setLog(l=>[...l,['u',v],['a','Noted. I would pull the matching tickets from Q3 and tag them by reason. Want that as a table?']]);setV('')};
+  return html`<div className="frame"><div className="chrome"><span><i></i><i></i><i></i></span><span>assistant</span></div>
+   <div className="chat"><aside><button className="new">+ New chat</button>${threads.map((t,i)=>html`<button key=${i} className="th" aria-current=${i===cur} onClick=${()=>setCur(i)}>${t[0]}<small>${t[1]}</small></button>`)}</aside>
+   <div className="pane"><div className="log">${log.map((m,i)=>m[0]==='u'?html`<div key=${i} className="msgu">${m[1]}</div>`:html`<div key=${i} className="msga"><div className="who">Assistant</div>${m[1]}</div>`)}</div>
+   <form className="mini" onSubmit=${send}><input id="chat-in" value=${v} onInput=${e=>setV(e.target.value)} placeholder="Reply" aria-label="Reply"/><button>Send</button></form></div></div></div>`;
+}
+function spark(arr,w=160,h=34){const mx=Math.max(...arr),mn=Math.min(...arr);const pts=arr.map((v,i)=>[i/(arr.length-1)*w,h-3-(v-mn)/(mx-mn||1)*(h-6)]);return {d:pts.map((p,i)=>(i?'L':'M')+p[0].toFixed(1)+' '+p[1].toFixed(1)).join(' '),last:pts[pts.length-1],w,h}}
+function Dashboard(){
+  const k=[['Requests','48.2k','+12%','up',[30,34,33,38,41,40,44,48]],['p95 latency','1.31s','−8%','up',[1.6,1.55,1.5,1.48,1.42,1.4,1.35,1.31]],['Spend','$212','+4%','dn',[180,190,186,195,201,204,208,212]],['Error rate','0.42%','+0.1','dn',[.3,.28,.31,.33,.35,.38,.4,.42]]];
+  const series=[22,26,24,31,35,33,40,44,41,48,52,50,57,61];const W=520,H=170;const mx=70;
+  const pts=series.map((v,i)=>[30+i/(series.length-1)*(W-40),H-22-v/mx*(H-36)]);
+  const line=pts.map((p,i)=>(i?'L':'M')+p[0].toFixed(1)+' '+p[1].toFixed(1)).join(' ');
+  return html`<div className="frame dash"><div className="chrome"><span><i></i><i></i><i></i></span><span>overview · last 14 days</span></div>
+   <div className="kpis">${k.map(x=>{const s=spark(x[4]);return html`<div className="kpi" key=${x[0]}><span className="kick">${x[0]}</span><b>${x[1]}</b><span className=${'delta '+x[3]}>${x[2]} vs last week</span>
+     <svg viewBox=${'0 0 '+s.w+' '+s.h} preserveAspectRatio="none" aria-hidden="true"><path d=${s.d} fill="none" stroke="var(--ink)" stroke-width="1.6" vector-effect="non-scaling-stroke"/><rect x=${s.last[0]-3} y=${s.last[1]-3} width="6" height="6" fill="var(--accent)"/></svg></div>`})}</div>
+   <div className="split"><div className="chart"><span className="kick">Requests per day, thousands</span>
+     <svg viewBox=${'0 0 '+W+' '+H} role="img" aria-label="Requests rose from 22k to 61k over 14 days">
+      ${[0,20,40,60].map(v=>{const y=H-22-v/mx*(H-36);return html`<g key=${v}><line x1="30" x2=${W-10} y1=${y} y2=${y} stroke="var(--wash)" stroke-width="1"/><text x="24" y=${y+4} text-anchor="end" font-size="10" font-family="IBM Plex Mono, monospace" fill="var(--mute)">${v}</text></g>`})}
+      <path d=${line+` L${W-10} ${H-22} L30 ${H-22} Z`} fill="var(--accent)" opacity=".14"/>
+      <path d=${line} fill="none" stroke="var(--accent)" stroke-width="2.5"/>
+      <rect x=${pts[pts.length-1][0]-4} y=${pts[pts.length-1][1]-4} width="8" height="8" fill="var(--ink)"/>
+      <text x=${pts[pts.length-1][0]-8} y=${pts[pts.length-1][1]-10} text-anchor="end" font-size="11" font-family="IBM Plex Mono, monospace" fill="var(--ink)">61k</text>
+      <text x="30" y=${H-6} font-size="10" font-family="IBM Plex Mono, monospace" fill="var(--mute)">18 Oct</text>
+      <text x=${W-10} y=${H-6} text-anchor="end" font-size="10" font-family="IBM Plex Mono, monospace" fill="var(--mute)">31 Oct</text>
+     </svg></div>
+   <div className="feed"><span className="kick">Activity</span>${[['21:42','R-2041 passed, 0.912'],['21:10','Spend alert at 80% of cap'],['19:55','local/32b failed tool-use'],['18:03','Dataset support-qa updated']].map(f=>html`<div key=${f[0]}><span>${f[0]}</span>${f[1]}</div>`)}</div></div>
+  </div>`;
+}
+
+/* ───────── ENGINES ───────── */
+const MO=window.Motion, AN=window.anime, TH=window.THREE;
+const last=a=>Array.isArray(a)?a[a.length-1]:a;
+function move(el,props,mode='spring',o={}){
+  if(!el)return;
+  if(MO&&MO.animate){try{return MO.animate(el,props,(mode==='instant'||RM)?{duration:0}:mode==='tween'?{duration:o.duration??.3,ease:o.ease??'easeOut'}:{type:'spring',stiffness:o.stiffness??420,damping:o.damping??24,mass:o.mass??1,delay:o.delay??0})}catch(e){}}
+  const s=el.style,tr=[];
+  if('width'in props)s.width=last(props.width);
+  if('opacity'in props)s.opacity=last(props.opacity);
+  if(props.x!=null)tr.push(`translateX(${last(props.x)}px)`);if(props.y!=null)tr.push(`translateY(${last(props.y)}px)`);
+  if(props.scale!=null)tr.push(`scale(${last(props.scale)})`);if(props.rotate!=null)tr.push(`rotate(${last(props.rotate)}deg)`);
+  if(tr.length)s.transform=tr.join(' ');
+}
+function NoEngine({name}){return html`<p className="desc" style=${{padding:0}}>${name} did not load, so this demo is static.</p>`}
+function pal(el){const cs=getComputedStyle(el.closest('.app')||document.body);const g=k=>cs.getPropertyValue(k).trim();return{ink:g('--ink'),acc:g('--accent'),wash:g('--wash'),mute:g('--mute'),paper:g('--paper'),raise:g('--raise')}}
+
+/* ───────── SPRINGS · motion.dev ───────── */
+function Magnetic({variant,children}){
+  const btn=useRef(),lab=useRef();
+  const onMove=e=>{const r=btn.current.getBoundingClientRect();const dx=e.clientX-(r.left+r.width/2),dy=e.clientY-(r.top+r.height/2);
+    move(btn.current,{x:dx*.32,y:dy*.32},'spring',{stiffness:260,damping:17});move(lab.current,{x:dx*.12,y:dy*.12},'spring',{stiffness:260,damping:17})};
+  const onLeave=()=>{move(btn.current,{x:0,y:0},'spring',{stiffness:170,damping:8});move(lab.current,{x:0,y:0},'spring',{stiffness:170,damping:8})};
+  return html`<div className="mag-zone" onPointerMove=${onMove} onPointerLeave=${onLeave}>
+    <button ref=${btn} className=${'btn mag '+(variant||'')} onPointerDown=${()=>move(btn.current,{scale:.88},'spring',{stiffness:700,damping:22})} onPointerUp=${()=>move(btn.current,{scale:1},'spring',{stiffness:500,damping:9})}>
+      <span ref=${lab} style=${{display:'inline-block'}}>${children}</span></button></div>`;
+}
+function MagneticDemo(){return html`<div className="mag-row"><${Magnetic} variant="ink">Start a run<//><${Magnetic} variant="acc">Deploy ↗<//></div>`}
+
+const TEMP_ZONES=[[0,.4,'Deterministic'],[.6,1.2,'Balanced'],[1.4,2,'Creative']];
+function DetentSlider(){
+  const N=11;const track=useRef(),thumb=useRef(),fill=useRef(),W=useRef(0),drag=useRef(null);
+  const [i,setI]=useState(4);const [live,setLive]=useState(4);
+  const pos=k=>k/(N-1)*W.current;
+  const place=(px,mode,o)=>{move(thumb.current,{x:px},mode,o);move(fill.current,{width:px+'px'},mode,o)};
+  useLayoutEffect(()=>{const m=()=>{W.current=track.current.clientWidth;place(pos(i),'instant')};m();const ro=new ResizeObserver(m);ro.observe(track.current);return()=>ro.disconnect()},[]);
+  const down=e=>{e.currentTarget.setPointerCapture(e.pointerId);const r=track.current.getBoundingClientRect();drag.current={left:r.left};const px=Math.max(0,Math.min(W.current,e.clientX-r.left));place(px,'spring',{stiffness:900,damping:40});setLive(px/W.current*(N-1));move(thumb.current.firstChild,{scale:1.25,rotate:45},'spring',{stiffness:500,damping:18})};
+  const mv=e=>{if(!drag.current)return;const px=Math.max(0,Math.min(W.current,e.clientX-drag.current.left));place(px,'instant');setLive(px/W.current*(N-1))};
+  const up=()=>{if(!drag.current)return;drag.current=null;const k=Math.round(live);setI(k);setLive(k);place(pos(k),'spring',{stiffness:380,damping:12});move(thumb.current.firstChild,{scale:1,rotate:0},'spring',{stiffness:400,damping:10})};
+  const key=e=>{let k=i;if(e.key==='ArrowRight'||e.key==='ArrowUp')k=Math.min(N-1,i+1);else if(e.key==='ArrowLeft'||e.key==='ArrowDown')k=Math.max(0,i-1);else if(e.key==='Home')k=0;else if(e.key==='End')k=N-1;else return;e.preventDefault();setI(k);setLive(k);place(pos(k),'spring',{stiffness:380,damping:12})};
+  const v=(live*.2);const zone=TEMP_ZONES.find(z=>v>=z[0]-.1&&v<=z[1]+.1)||TEMP_ZONES[1];
+  return html`<div className="col">
+    <div className="row" style=${{justifyContent:'space-between',alignItems:'flex-end'}}><div><div className="kick">Temperature</div><div className="dval">${v.toFixed(2)}</div></div><div className="zone">${zone[2]}</div></div>
+    <div className="dslider" ref=${track} role="slider" tabIndex="0" aria-label="Temperature" aria-valuemin="0" aria-valuemax="2" aria-valuenow=${(i*.2).toFixed(1)} aria-valuetext=${(i*.2).toFixed(1)+', '+zone[2]}
+      onPointerDown=${down} onPointerMove=${mv} onPointerUp=${up} onPointerCancel=${up} onKeyDown=${key}>
+      <div className="dfill" ref=${fill}></div>
+      ${Array.from({length:N},(_,k)=>html`<i key=${k} className=${k<=Math.round(live)?'on':''} style=${{left:(k/(N-1)*100)+'%'}}></i>`)}
+      <div className="dthumb" ref=${thumb}><span></span></div>
+    </div>
+    <div className="dlabels">${['0.0','0.4','0.8','1.2','1.6','2.0'].map(t=>html`<span key=${t}>${t}</span>`)}</div>
+  </div>`;
+}
+
+function StampApproval(){
+  const card=useRef(),stamp=useRef();const [st,setSt]=useState('pending');
+  const decide=d=>{setSt(d);requestAnimationFrame(()=>{move(stamp.current,{opacity:[0,1],scale:[2.6,1],rotate:[d==='approved'?-26:18,d==='approved'?-8:6]},'spring',{stiffness:520,damping:19});
+    setTimeout(()=>{if(MO&&!RM)try{MO.animate(card.current,{y:[0,5,0],scale:[1,.985,1]},{duration:.22})}catch(e){}},140)})};
+  return html`<div className="col"><div className="ticket" ref=${card}>
+    <div className="t-h"><span className="kick">Agent request · needs approval</span><span className="kick">14:02:11</span></div>
+    <div className="t-call">send_email<span>(</span></div>
+    <table className="t-args"><tbody>
+      <tr><td>to</td><td>finance@northwind.in</td></tr><tr><td>subject</td><td>Q3 refund summary</td></tr><tr><td>attach</td><td>refunds-q3.csv · 41 rows</td></tr></tbody></table>
+    <div className="t-call">)</div>
+    ${st!=='pending'&&html`<div ref=${stamp} className=${'stamp '+st}>${st}</div>`}
+  </div>
+  <div className="row">${st==='pending'?html`<button className="btn acc" onClick=${()=>decide('approved')}>Approve</button><button className="btn" onClick=${()=>decide('denied')}>Deny</button>`:html`<button className="btn ghost" onClick=${()=>setSt('pending')}>Reset</button><span className="kick">${st==='approved'?'Tool call released to the agent':'Agent told to stop and ask why'}</span>`}</div></div>`;
+}
+
+/* ───────── TIMELINES · anime.js ───────── */
+const FLAP_W=22;
+const BOARDS=[
+ ['EMBED   SUPPORT-QA  OK','RERANK  TOP-14      OK','EVAL    TOOL-USE   RUN','DEPLOY  ATLAS-M    HLD'],
+ ['INGEST  INVOICES   RUN','CHUNK   812 DOCS    OK','EVAL    SUPPORT-QA  OK','ROLLBK  ATLAS-S    ERR'],
+ ['SYNC    CRM-LEADS   OK','EMBED   PRICING    RUN','JUDGE   200 PAIRS  RUN','DEPLOY  ATLAS-L     OK'],
+].map(b=>b.map(r=>r.padEnd(FLAP_W).slice(0,FLAP_W)));
+const FLAP_CH='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-';
+function SplitFlap(){
+  const cells=useRef([]);const [b,setB]=useState(0);const cur=useRef(BOARDS[0]);
+  const flipTo=nb=>{const target=BOARDS[nb];
+    target.forEach((row,ri)=>row.split('').forEach((ch,ci)=>{const el=cells.current[ri*FLAP_W+ci];if(!el)return;const from=cur.current[ri][ci];if(from===ch)return;
+      if(!AN||RM){el.textContent=ch;return}
+      const spins=1+((ci+ri)%4);let n=0;
+      AN.animate(el,{rotateX:[0,-90],duration:65,ease:'inQuad',loop:spins*2+1,alternate:true,delay:ci*22+ri*60,
+        onLoop:()=>{n++;el.textContent=n>=spins*2?ch:FLAP_CH[(Math.random()*FLAP_CH.length)|0]},onComplete:()=>{el.textContent=ch}})}));
+    cur.current=target;setB(nb)};
+  useEffect(()=>{if(RM)return;const t=setInterval(()=>flipTo((cur.current===BOARDS[0]?1:cur.current===BOARDS[1]?2:0)),5200);return()=>clearInterval(t)},[]);
+  return html`<div className="col"><div className="flap" aria-label=${BOARDS[b].join('. ')}>
+    <div className="flap-h kick"><span>Job</span><span>Target</span><span>State</span></div>
+    ${BOARDS[0].map((row,ri)=>html`<div className="flap-r" key=${ri} aria-hidden="true">${row.split('').map((c,ci)=>html`<span key=${ci} ref=${el=>cells.current[ri*FLAP_W+ci]=el}>${c}</span>`)}</div>`)}
+  </div><div className="row"><button className="btn" onClick=${()=>flipTo((b+1)%BOARDS.length)}>Next board</button><span className="kick">Flips every 5 s</span></div></div>`;
+}
+
+const HOURS=24,DAYS=7;
+const HEAT=Array.from({length:HOURS*DAYS},(_,i)=>{const h=i%HOURS,d=(i/HOURS)|0;const work=d<5?1:.45;const curve=Math.exp(-Math.pow((h-14)/4.2,2))*.9+Math.exp(-Math.pow((h-10)/2.5,2))*.4;return Math.max(.04,Math.min(1,curve*work+((i*37)%11)/80))});
+function RippleGrid(){
+  const host=useRef();const [pick,setPick]=useState(null);
+  const ripple=i=>{const r=Math.round(HEAT[i]*4200);setPick({i,r});if(!AN||RM)return;
+    const cells=host.current.querySelectorAll('.hc');
+    AN.animate(cells,{scale:[{to:.25,duration:180,ease:'outSine'},{to:1,duration:700,ease:'outElastic(1, .55)'}],delay:AN.stagger(26,{grid:[HOURS,DAYS],from:i})})};
+  useEffect(()=>{const t=setTimeout(()=>ripple(2*HOURS+14),500);return()=>clearTimeout(t)},[]);
+  const days=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  return html`<div className="col"><div className="heat-wrap"><div className="heat-days kick">${days.map(d=>html`<span key=${d}>${d}</span>`)}</div>
+    <div className="heat" ref=${host}>${HEAT.map((v,i)=>html`<button key=${i} className=${'hc'+(pick&&pick.i===i?' sel':'')} aria-label=${days[(i/HOURS)|0]+' '+(i%HOURS)+':00'} onClick=${()=>ripple(i)}
+      style=${{background:`color-mix(in srgb, var(--accent) ${Math.round(v*100)}%, var(--wash))`}}></button>`)}</div></div>
+    <div className="row" style=${{justifyContent:'space-between'}}><span className="kick">00:00 → 23:00 · requests per hour</span>${pick&&html`<span className="kick" style=${{color:'var(--ink)'}}>${days[(pick.i/HOURS)|0]} ${String(pick.i%HOURS).padStart(2,'0')}:00 · ${pick.r.toLocaleString()} requests</span>`}</div></div>`;
+}
+
+const SPARK=[38,41,40,47,44,52,58,55,63,61,70,76,74,83];
+function DrawChart(){
+  const path=useRef(),dots=useRef(),num=useRef();const W=520,H=180;const mx=90;
+  const pts=SPARK.map((v,i)=>[24+i/(SPARK.length-1)*(W-48),H-24-v/mx*(H-44)]);
+  const d=pts.map((p,i)=>(i?'L':'M')+p[0].toFixed(1)+' '+p[1].toFixed(1)).join(' ');
+  const play=useCallback(()=>{const target=SPARK[SPARK.length-1];
+    if(!AN||RM||!AN.svg){num.current.textContent=target+'%';return}
+    const [dr]=AN.svg.createDrawable(path.current);const cs=dots.current.querySelectorAll('rect');const o={v:0};
+    AN.createTimeline({defaults:{ease:'inOutQuad'}})
+      .add(dr,{draw:['0 0','0 1'],duration:1300})
+      .add(cs,{opacity:[0,1],translateY:[8,0],duration:300,delay:AN.stagger(55),ease:'outBack(2)'},'-=1100')
+      .add(o,{v:target,duration:1300,ease:'outExpo',onUpdate:()=>{num.current.textContent=Math.round(o.v)+'%'}},0)},[]);
+  useEffect(()=>{play()},[]);
+  return html`<div className="col"><div className="row" style=${{justifyContent:'space-between',alignItems:'flex-end'}}>
+      <div><div className="kick">Answer accuracy, 14 weeks</div><div className="dval" ref=${num}>83%</div></div><button className="btn" onClick=${play}>Redraw</button></div>
+    <svg viewBox=${'0 0 '+W+' '+H} className="drawsvg" role="img" aria-label="Accuracy rose from 38% to 83% over 14 weeks">
+      ${[0,30,60,90].map(v=>{const y=H-24-v/mx*(H-44);return html`<g key=${v}><line x1="24" x2=${W-24} y1=${y} y2=${y} stroke="var(--wash)" stroke-width="1"/><text x="18" y=${y+4} textAnchor="end" fontSize="10" fontFamily="IBM Plex Mono, monospace" fill="var(--mute)">${v}</text></g>`})}
+      <path ref=${path} d=${d} fill="none" stroke="var(--accent)" strokeWidth="3" strokeLinejoin="round"/>
+      <g ref=${dots}>${pts.map((p,i)=>html`<rect key=${i} x=${p[0]-3.5} y=${p[1]-3.5} width="7" height="7" fill="var(--ink)"/>`)}</g>
+    </svg></div>`;
+}
+
+const REVIEW=[
+ {q:'Can I get GST invoices for last year?',a:'Yes. Go to Billing, then Invoices, choose the year and download the PDF bundle. GSTIN appears on each invoice.',m:'atlas-m · 0.82'},
+ {q:'Why did my card fail?',a:'Your card was declined by the bank. Please try again later or contact our support team.',m:'atlas-s · 0.41'},
+ {q:'Do you ship to Colombo?',a:'We ship to Sri Lanka in 6 to 9 working days. Customs duty is collected on delivery.',m:'atlas-l · 0.91'},
+ {q:'How do I cancel?',a:'Settings, then Plan, then Cancel plan. You keep access until the end of the paid period.',m:'atlas-m · 0.88'},
+];
+function SwipeReview(){
+  const [q,setQ]=useState(REVIEW);const [tally,setTally]=useState({ok:0,no:0});const top=useRef();const drag=useRef(null);const [dx,setDx]=useState(0);
+  const set=(x,r)=>{if(AN&&AN.utils)AN.utils.set(top.current,{x,rotate:r});else top.current.style.transform=`translateX(${x}px) rotate(${r}deg)`};
+  const fling=dir=>{const el=top.current;const done=()=>{setQ(l=>l.slice(1));setTally(t=>dir>0?{...t,ok:t.ok+1}:{...t,no:t.no+1});setDx(0)};
+    if(AN&&!RM){AN.animate(el,{x:dir*640,rotate:dir*28,opacity:0,duration:420,ease:'inQuad',onComplete:done})}else done()};
+  const down=e=>{if(!top.current)return;e.currentTarget.setPointerCapture(e.pointerId);drag.current={x:e.clientX}};
+  const mv=e=>{if(!drag.current)return;const d=e.clientX-drag.current.x;setDx(d);set(d,d/18)};
+  const up=()=>{if(!drag.current)return;drag.current=null;if(Math.abs(dx)>110)return fling(Math.sign(dx));
+    if(AN&&!RM&&AN.createSpring)AN.animate(top.current,{x:0,rotate:0,ease:AN.createSpring({stiffness:220,damping:11})});else set(0,0);setDx(0)};
+  return html`<div className="col"><div className="swipe">
+    ${q.length===0&&html`<div className="swipe-empty"><b>Queue clear</b><span className="kick">${tally.ok} accepted · ${tally.no} rejected</span><button className="btn" onClick=${()=>{setQ(REVIEW);setTally({ok:0,no:0})}}>Load again</button></div>`}
+    ${q.slice(0,3).reverse().map((it,ri,arr)=>{const depth=arr.length-1-ri;const isTop=depth===0;return html`<div key=${it.q} className="rcard" ref=${isTop?top:null}
+      style=${isTop?{touchAction:'none',cursor:'grab'}:{transform:`translateY(${depth*10}px) scale(${1-depth*.04})`,zIndex:-depth}}
+      onPointerDown=${isTop?down:null} onPointerMove=${isTop?mv:null} onPointerUp=${isTop?up:null} onPointerCancel=${isTop?up:null}>
+      ${isTop&&html`<span className="verdict ok" style=${{opacity:Math.max(0,Math.min(1,dx/110))}}>Accept</span><span className="verdict no" style=${{opacity:Math.max(0,Math.min(1,-dx/110))}}>Reject</span>`}
+      <div className="kick">User asked</div><div className="rq">${it.q}</div><div className="kick" style=${{marginTop:'10px'}}>Model answered</div><p className="ra">${it.a}</p><div className="kick">${it.m} confidence</div></div>`})}
+  </div><div className="row"><button className="btn" disabled=${!q.length} onClick=${()=>fling(-1)}>← Reject</button><button className="btn acc" disabled=${!q.length} onClick=${()=>fling(1)}>Accept →</button><span className="kick">${tally.ok} ✓ · ${tally.no} ✕</span></div></div>`;
+}
+
+/* ───────── WEBGL · three.js ───────── */
+function useGL(host,setup,deps=[]){
+  useEffect(()=>{const el=host.current;if(!TH||!el)return;let r;try{r=new TH.WebGLRenderer({antialias:true,alpha:true})}catch(e){return}
+    r.setPixelRatio(Math.min(2,devicePixelRatio));el.appendChild(r.domElement);
+    const api=setup(r,el);let run=true,vis=true,raf,f=0;
+    const size=()=>{const w=el.clientWidth,h=el.clientHeight;r.setSize(w,h,false);api.resize(w,h)};size();
+    const ro=new ResizeObserver(size);ro.observe(el);
+    const io=new IntersectionObserver(es=>{vis=es[0].isIntersecting;if(vis&&!raf)loop(performance.now())});io.observe(el);
+    const loop=t=>{raf=null;if(!run)return;if(f++%40===0)api.palette(pal(el));api.frame(t/1000);r.render(api.scene,api.cam);if(vis&&!RM)raf=requestAnimationFrame(loop)};
+    api.palette(pal(el));loop(performance.now());
+    return()=>{run=false;cancelAnimationFrame(raf);ro.disconnect();io.disconnect();api.dispose&&api.dispose();r.dispose();r.domElement.remove()}},deps);
+}
+function Terrain(){
+  const host=useRef();
+  useGL(host,(r,el)=>{
+    const scene=new TH.Scene(),cam=new TH.PerspectiveCamera(26,1,.1,200);cam.position.set(12.5,11,13.5);cam.lookAt(0,.9,0);
+    scene.add(new TH.HemisphereLight(0xffffff,0x555555,1.2));const dl=new TH.DirectionalLight(0xffffff,1.3);dl.position.set(-5,12,6);scene.add(dl);
+    const NX=30,NZ=16,S=.6;const geo=new TH.BoxGeometry(S*.82,1,S*.82);geo.translate(0,.5,0);
+    const mat=new TH.MeshLambertMaterial({color:0xffffff});const mesh=new TH.InstancedMesh(geo,mat,NX*NZ);scene.add(mesh);
+    const dm=new TH.Object3D(),col=new TH.Color(),ink=new TH.Color(),acc=new TH.Color(),lo=new TH.Color();
+    const ray=new TH.Raycaster(),plane=new TH.Plane(new TH.Vector3(0,1,0),0),hit=new TH.Vector3(),ndc=new TH.Vector2();
+    let tx=99,tz=99,mx=99,mz=99,amp=0,tamp=0;
+    const pm=e=>{const b=el.getBoundingClientRect();ndc.set((e.clientX-b.left)/b.width*2-1,-(e.clientY-b.top)/b.height*2+1);ray.setFromCamera(ndc,cam);if(ray.ray.intersectPlane(plane,hit)){tx=hit.x;tz=hit.z;tamp=1;if(mx>90){mx=tx;mz=tz}}};
+    const pl=()=>{tamp=0};el.addEventListener('pointermove',pm);el.addEventListener('pointerleave',pl);
+    return{scene,cam,resize:(w,h)=>{cam.aspect=w/h;cam.updateProjectionMatrix()},
+      palette:p=>{ink.set(p.ink);acc.set(p.acc);lo.set(p.wash)},
+      frame:t=>{mx+=(tx-mx)*.1;mz+=(tz-mz)*.1;amp+=(tamp-amp)*.06;let k=0;
+        for(let ix=0;ix<NX;ix++)for(let iz=0;iz<NZ;iz++,k++){const x=(ix-(NX-1)/2)*S,z=(iz-(NZ-1)/2)*S;
+          const w=.12+1.7*Math.pow(.5+.5*Math.sin(ix*.36+t*.8)*Math.cos(iz*.47-t*.55),2.4);
+          const d2=(x-mx)*(x-mx)+(z-mz)*(z-mz);const bump=Math.exp(-d2/1.6)*3.2*amp;
+          dm.position.set(x,0,z);dm.scale.set(1,w+bump,1);dm.updateMatrix();mesh.setMatrixAt(k,dm.matrix);
+          col.copy(lo).lerp(ink,Math.min(1,w/1.5));if(bump>.25)col.lerp(acc,Math.min(1,bump/1.8));mesh.setColorAt(k,col)}
+        mesh.instanceMatrix.needsUpdate=true;mesh.instanceColor.needsUpdate=true},
+      dispose:()=>{el.removeEventListener('pointermove',pm);el.removeEventListener('pointerleave',pl);geo.dispose();mat.dispose()}};
+  });
+  return html`<div className="terrain" ref=${host} aria-label="3D bar field that rises under the pointer" role="img">${!TH&&html`<${NoEngine} name="three.js"/>`}<span className="cap">three.js · move the pointer over the field</span></div>`;
+}
+
+const CLUSTERS=[
+ {n:'Billing',c:[-3.2,.8,.4],t:['Invoice due dates','GST on subscriptions','Card declined retries','Proration rules','Duplicate charges','Refund to wallet']},
+ {n:'Shipping',c:[3,.2,-1],t:['Courier partners','Delivery to Sri Lanka','Tracking delays','Customs duty','Split shipments','Address changes']},
+ {n:'Account',c:[.2,-1.9,2.9],t:['Password reset','Two-factor login','Team seats','SSO setup','Email change','Delete account']},
+ {n:'Returns',c:[.6,2.6,-3],t:['Return window','Opened items','Exchange flow','Pickup scheduling','Damaged on arrival','Return labels']},
+];
+const QUERIES=[['Why was I charged twice?',0],['Where is my parcel?',1],['I forgot my password',2],['Can I return an opened box?',3]];
+function rng(s){return()=>{s=(s*16807)%2147483647;return(s-1)/2147483646}}
+const EMB=(()=>{const R=rng(7),out=[];const g=()=>{let u=0,v=0;while(!u)u=R();while(!v)v=R();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v)};
+  CLUSTERS.forEach((c,ci)=>{for(let k=0;k<80;k++)out.push({p:[c.c[0]+g()*.85,c.c[1]+g()*.85,c.c[2]+g()*.85],ci,label:c.t[k%6]+' · '+String(k+1).padStart(2,'0')})});return out})();
+function EmbedSpace(){
+  const host=useRef();const api=useRef({});const [qi,setQi]=useState(0);const [hits,setHits]=useState([]);
+  useGL(host,(r,el)=>{
+    const scene=new TH.Scene(),cam=new TH.PerspectiveCamera(42,1,.1,100);cam.position.set(0,1.5,11.5);cam.lookAt(0,0,0);
+    const grp=new TH.Group();scene.add(grp);
+    const pos=new Float32Array(EMB.length*3);EMB.forEach((e,i)=>pos.set(e.p,i*3));
+    const g=new TH.BufferGeometry();g.setAttribute('position',new TH.BufferAttribute(pos,3));
+    const pmat=new TH.PointsMaterial({size:.11,sizeAttenuation:true});grp.add(new TH.Points(g,pmat));
+    const hg=new TH.BufferGeometry();hg.setAttribute('position',new TH.BufferAttribute(new Float32Array(6*3),3));
+    const hmat=new TH.PointsMaterial({size:.34,sizeAttenuation:true});grp.add(new TH.Points(hg,hmat));
+    const lg=new TH.BufferGeometry();lg.setAttribute('position',new TH.BufferAttribute(new Float32Array(12*3),3));
+    const lmat=new TH.LineBasicMaterial({transparent:true});grp.add(new TH.LineSegments(lg,lmat));
+    const box=new TH.Mesh(new TH.BoxGeometry(.32,.32,.32),new TH.MeshBasicMaterial());grp.add(box);
+    const frameG=new TH.EdgesGeometry(new TH.BoxGeometry(9,9,9));const fmat=new TH.LineBasicMaterial({transparent:true,opacity:.35});grp.add(new TH.LineSegments(frameG,fmat));
+    const qp=new TH.Vector3(0,0,0),qt=new TH.Vector3(0,0,0);let near=[],grow=0;let rotY=.5,rotX=.12,vy=.0025,dragging=null;
+    const pd=e=>{dragging={x:e.clientX,y:e.clientY,ry:rotY,rx:rotX};el.setPointerCapture(e.pointerId);el.style.cursor='grabbing'};
+    const pmv=e=>{if(!dragging)return;rotY=dragging.ry+(e.clientX-dragging.x)*.008;rotX=Math.max(-.9,Math.min(.9,dragging.rx+(e.clientY-dragging.y)*.006))};
+    const pu=()=>{dragging=null;el.style.cursor=''};
+    el.addEventListener('pointerdown',pd);el.addEventListener('pointermove',pmv);el.addEventListener('pointerup',pu);el.addEventListener('pointercancel',pu);
+    api.current.query=(target,ids)=>{qt.set(...target);near=ids;grow=0;const hp=hg.attributes.position;ids.forEach((id,i)=>hp.setXYZ(i,...EMB[id].p));hp.needsUpdate=true};
+    return{scene,cam,resize:(w,h)=>{cam.aspect=w/h;cam.updateProjectionMatrix()},
+      palette:p=>{pmat.color.set(p.mute);hmat.color.set(p.acc);lmat.color.set(p.acc);box.material.color.set(p.acc);fmat.color.set(p.mute)},
+      frame:t=>{if(!dragging)rotY+=vy;grp.rotation.set(rotX,rotY,0);qp.lerp(qt,.08);box.position.copy(qp);box.rotation.set(t*.7,t*.9,0);grow=Math.min(1,grow+.035);
+        const lp=lg.attributes.position;near.forEach((id,i)=>{const e=EMB[id].p;lp.setXYZ(i*2,qp.x,qp.y,qp.z);lp.setXYZ(i*2+1,qp.x+(e[0]-qp.x)*grow,qp.y+(e[1]-qp.y)*grow,qp.z+(e[2]-qp.z)*grow)});lp.needsUpdate=true;lmat.opacity=.9},
+      dispose:()=>{['pointerdown','pointermove','pointerup','pointercancel'].forEach((ev,i)=>el.removeEventListener(ev,[pd,pmv,pu,pu][i]));g.dispose();hg.dispose();lg.dispose();frameG.dispose()}};
+  });
+  const run=useCallback(k=>{const [text,ci]=QUERIES[k];const c=CLUSTERS[ci].c;const R=rng(k*91+3);const target=[c[0]+(R()-.5)*.9,c[1]+(R()-.5)*.9,c[2]+(R()-.5)*.9];
+    const ranked=EMB.map((e,id)=>({id,d:Math.hypot(e.p[0]-target[0],e.p[1]-target[1],e.p[2]-target[2])})).sort((a,b)=>a.d-b.d).slice(0,6);
+    api.current.query&&api.current.query(target,ranked.map(x=>x.id));setHits(ranked.map(x=>({label:EMB[x.id].label,cl:CLUSTERS[EMB[x.id].ci].n,s:(1-x.d/9).toFixed(3)})));setQi(k)},[]);
+  useEffect(()=>{const t=setTimeout(()=>run(0),300);return()=>clearTimeout(t)},[]);
+  return html`<div className="embed">
+    <div className="gl" ref=${host} role="img" aria-label="Point cloud of 320 document chunks in four clusters; drag to rotate">${!TH&&html`<${NoEngine} name="three.js"/>`}<span className="cap">320 chunks · drag to rotate</span></div>
+    <div className="embed-side">
+      <div className="kick">Query</div>
+      <div className="qlist">${QUERIES.map((q,k)=>html`<button key=${k} aria-pressed=${qi===k} onClick=${()=>run(k)}>${q[0]}</button>`)}</div>
+      <div className="kick" style=${{marginTop:'12px'}}>Top 6 neighbours</div>
+      <ol className="hits">${hits.map((h,i)=>html`<li key=${i}><span>${h.label}</span><span>${h.s}</span></li>`)}</ol>
+    </div></div>`;
+}
+
+/* ───────── LANDSCAPE ───────── */
+const LAND=[
+ {lib:'shadcn/ui',focus:'Accessible app primitives, copy-in CLI',stack:'Radix, little motion',lic:'MIT',take:'API shape and the registry model'},
+ {lib:'Origin UI',focus:'More shadcn variants plus hooks',stack:'Little motion',lic:'Check repo',take:'Variant coverage for real app screens'},
+ {lib:'Magic UI',focus:'Marketing effects, 150+ parts',stack:'Motion',lic:'MIT',take:'Marquees and text effects, as patterns'},
+ {lib:'Aceternity UI',focus:'Hero effects, 3D cards, spotlights',stack:'Motion',lic:'Own licence, no source redistribution',take:'Ideas only. Do not copy code'},
+ {lib:'React Bits',focus:'216 text, background and animated parts',stack:'Not stated per part',lic:'MIT + Commons Clause',take:'Text-animation ideas; no resale'},
+ {lib:'Cult UI',focus:'150+ polished Motion parts for shadcn',stack:'Motion',lic:'MIT',take:'Finish level to match'},
+ {lib:'21st.dev',focus:'Registry and marketplace of all of the above',stack:'Varies',lic:'Per author',take:'Distribution channel for Ledger'},
+];
+
+/* ───────── DEPTH ───────── */
+function useSpring(init,apply,o={}){
+  const v=useRef(init),c=useRef(),fn=useRef(apply);fn.current=apply;
+  const set=useCallback((to,x={})=>{if(c.current&&c.current.stop)c.current.stop();
+    if(x.instant||!MO||RM){v.current=to;fn.current(to);return}
+    try{c.current=MO.animate(v.current,to,{type:'spring',stiffness:x.stiffness??o.stiffness??300,damping:x.damping??o.damping??26,mass:o.mass??1,velocity:x.velocity??0,restDelta:.0005,restSpeed:.001,onUpdate:n=>{v.current=n;fn.current(n)}})}
+    catch(e){v.current=to;fn.current(to)}},[]);
+  return useMemo(()=>({set,get:()=>v.current}),[set]);
+}
+function tapIndex(e,sel){const el=document.elementFromPoint(e.clientX,e.clientY);const t=el&&el.closest(sel);return t?Number(t.dataset.i):-1}
+
+/* D · Tilt card */
+function TiltCard(){
+  const stage=useRef(),card=useRef(),glare=useRef(),r=useRef({x:0,y:0});const [yearly,setYearly]=useState(false);
+  const paint=()=>{if(!card.current)return;card.current.style.transform=`rotateX(${r.current.x}deg) rotateY(${r.current.y}deg)`;glare.current.style.opacity=String(Math.min(.9,(Math.abs(r.current.x)+Math.abs(r.current.y))/14))};
+  const sx=useSpring(0,v=>{r.current.x=v;paint()},{stiffness:200,damping:16});
+  const sy=useSpring(0,v=>{r.current.y=v;paint()},{stiffness:200,damping:16});
+  const mv=e=>{if(e.pointerType==='touch')return;const b=stage.current.getBoundingClientRect();const px=(e.clientX-b.left)/b.width-.5,py=(e.clientY-b.top)/b.height-.5;
+    sx.set(-py*18);sy.set(px*22);glare.current.style.setProperty('--gx',((px+.5)*100)+'%');glare.current.style.setProperty('--gy',((py+.5)*100)+'%')};
+  const lv=()=>{sx.set(0,{damping:8});sy.set(0,{damping:8})};
+  return html`<div className="tilt-wrap">
+    <div className="tilt-stage" ref=${stage} onPointerMove=${mv} onPointerLeave=${lv}>
+      <div className="tilt" ref=${card}>
+        <div className="z" style=${{transform:'translateZ(26px)'}}><span className="kick">Plan · billed ${yearly?'yearly':'monthly'}</span><div className="tilt-name">Team</div></div>
+        <div className="z" style=${{transform:'translateZ(64px)'}}><${Roll} text=${yearly?'₹1,990':'₹2,400'}/><div className="kick">per seat / month</div></div>
+        <ul className="z tilt-list" style=${{transform:'translateZ(36px)'}}>${['Unlimited eval runs','Shared datasets','Agent traces kept 30 days','SSO and audit log'].map(f=>html`<li key=${f}>${f}</li>`)}</ul>
+        <div className="z" style=${{transform:'translateZ(48px)'}}><button className="btn acc">Choose Team</button></div>
+        <span className="tilt-badge" style=${{transform:'translateZ(90px) rotate(6deg)'}}>Most picked</span>
+        <div className="glare" ref=${glare}></div>
+      </div></div>
+    <button className="switch" role="switch" aria-checked=${yearly} onClick=${()=>setYearly(!yearly)}><span className="trk"><span className="knb"></span></span>Bill yearly · save 17%</button>
+  </div>`;
+}
+
+/* D · Voice orb */
+const SAY='Book two seats to Colombo on the thirteenth, window side, under twenty-five thousand rupees.'.split(' ');
+function VoiceOrb(){
+  const host=useRef(),amp=useRef(.06),sc=useRef(1),listen=useRef(false),jt=useRef(),wt=useRef(),t0=useRef(0);
+  const [on,setOn]=useState(false),[words,setWords]=useState(0),[state,setState]=useState('idle'),[secs,setSecs]=useState(0);
+  const sA=useSpring(.06,v=>{amp.current=v},{stiffness:120,damping:12});
+  const sS=useSpring(1,v=>{sc.current=v},{stiffness:420,damping:11});
+  useGL(host,()=>{
+    const scene=new TH.Scene(),cam=new TH.PerspectiveCamera(35,1,.1,50);cam.position.set(0,0,6);
+    const geo=new TH.IcosahedronGeometry(1.35,7);const base=geo.attributes.position.array.slice();
+    const mat=new TH.MeshBasicMaterial({wireframe:true});const m=new TH.Mesh(geo,mat);scene.add(m);
+    const core=new TH.Mesh(new TH.IcosahedronGeometry(1,4),new TH.MeshBasicMaterial());scene.add(core);
+    const ink=new TH.Color(),acc=new TH.Color();
+    return{scene,cam,resize:(w,h)=>{cam.aspect=w/h;cam.updateProjectionMatrix()},
+      palette:p=>{ink.set(p.ink);acc.set(p.acc);core.material.color.set(p.raise||p.paper)},
+      frame:t=>{const a=amp.current,arr=geo.attributes.position.array;
+        for(let i=0;i<arr.length;i+=3){const x=base[i],y=base[i+1],z=base[i+2];
+          const d=1+a*(.2*Math.sin(x*2.6+t*2.1)*Math.sin(y*3.1+t*1.6)+.14*Math.sin(z*4.2-t*2.7)+.06*Math.sin((x+y)*7+t*5));arr[i]=x*d;arr[i+1]=y*d;arr[i+2]=z*d}
+        geo.attributes.position.needsUpdate=true;m.rotation.y=t*.15;m.rotation.x=Math.sin(t*.2)*.25;
+        const s=sc.current;m.scale.setScalar(s);core.scale.setScalar(s*1.35*Math.max(.4,1-a*.42));mat.color.copy(listen.current?acc:ink)},
+      dispose:()=>{geo.dispose()}};
+  });
+  const start=()=>{if(listen.current)return;listen.current=true;setOn(true);setState('listening');setWords(0);setSecs(0);t0.current=performance.now();sS.set(1.12);
+    const jit=()=>{if(!listen.current)return;sA.set(.35+Math.random()*.45);jt.current=setTimeout(jit,110+Math.random()*130)};jit();
+    let w=0;const step=()=>{if(!listen.current)return;w=Math.min(SAY.length,w+1);setWords(w);setSecs((performance.now()-t0.current)/1000);if(w<SAY.length)wt.current=setTimeout(step,230+Math.random()*120)};wt.current=setTimeout(step,320)};
+  const stop=()=>{if(!listen.current)return;listen.current=false;clearTimeout(jt.current);clearTimeout(wt.current);setOn(false);sA.set(.06);sS.set(1);setSecs((performance.now()-t0.current)/1000);setState('sent')};
+  useEffect(()=>()=>{clearTimeout(jt.current);clearTimeout(wt.current)},[]);
+  const status=state==='listening'?'Listening · '+secs.toFixed(1)+' s':state==='sent'?'Sent to agent · '+secs.toFixed(1)+' s · '+words+' words':'Hold the button, or hold Space';
+  return html`<div className="orb">
+    <div className="gl orb-gl" ref=${host} role="img" aria-label="Wireframe orb that ripples with voice level">${!TH&&html`<${NoEngine} name="three.js"/>`}</div>
+    <div className="orb-side">
+      <div className="kick" aria-live="polite">${status}</div>
+      <p className="orb-text">${words?SAY.slice(0,words).join(' '):html`<span style=${{color:'var(--mute)'}}>Your words appear here as you speak.</span>`}${on&&html`<span className="caret"></span>`}</p>
+      <button className=${'btn '+(on?'acc':'ink')} style=${{touchAction:'none'}} onPointerDown=${e=>{e.preventDefault();start()}} onPointerUp=${stop} onPointerLeave=${stop} onPointerCancel=${stop}
+        onKeyDown=${e=>{if((e.key===' '||e.key==='Enter')&&!e.repeat){e.preventDefault();start()}}} onKeyUp=${e=>{if(e.key===' '||e.key==='Enter')stop()}}>${on?'Release to send':'Hold to talk'}</button>
+    </div></div>`;
+}
+
+/* D · Gate configurator */
+const SEC={frame:['40×40×2 SHS',2.39],bars:['25×25×1.6 SHS',1.18],slats:['75×25×1.6 RHS',2.43],mesh:['25×3 flat',.59]};
+function gateMembers(W,H,inf,leaves){
+  const out=[],lw=W/leaves,f=.04,iw=lw-2*f,ih=H-2*f;
+  for(let L=0;L<leaves;L++){const dir=L===0?1:-1;const m=(x,y,sx,sy,sz,kind,len,axis)=>out.push({L,x:dir*x,y,sx,sy,sz,kind,len,axis});
+    m(lw/2,H-f/2,lw,f,f,'frame',lw,'x');m(lw/2,f/2,lw,f,f,'frame',lw,'x');m(f/2,H/2,f,ih,f,'frame',ih,'y');m(lw-f/2,H/2,f,ih,f,'frame',ih,'y');
+    if(inf==='bars'){const n=Math.max(1,Math.floor(iw/.125)),p=iw/(n+1);for(let k=1;k<=n;k++)m(f+k*p,H/2,.025,ih,.025,'bars',ih,'y')}
+    else if(inf==='slats'){const n=Math.max(1,Math.floor(ih/.11)),p=ih/n;for(let k=0;k<n;k++)m(lw/2,f+p*(k+.5),iw,.075,.025,'slats',iw,'x')}
+    else{const nx=Math.max(1,Math.floor(iw/.3)),ny=Math.max(1,Math.floor(ih/.3));for(let k=1;k<=nx;k++)m(f+k*iw/(nx+1),H/2,.025,ih,.006,'mesh',ih,'y');for(let k=1;k<=ny;k++)m(lw/2,f+k*ih/(ny+1),iw,.025,.006,'mesh',iw,'x')}}
+  return out;
+}
+function GateConfigurator(){
+  const host=useRef(),api=useRef({}),grow=useRef(true);
+  const [W,setW]=useState(4200),[H,setH]=useState(1800),[inf,setInf]=useState('bars'),[lv,setLv]=useState(2),[fin,setFin]=useState('ink'),[open,setOpen]=useState(false);
+  const mem=useMemo(()=>gateMembers(W/1000,H/1000,inf,lv),[W,H,inf,lv]);
+  const bom=useMemo(()=>{const t={};mem.forEach(m=>{t[m.kind]=(t[m.kind]||0)+m.len});return{t,kg:Object.entries(t).reduce((a,[k,v])=>a+v*SEC[k][1],0),n:mem.length}},[mem]);
+  useGL(host,(r,el)=>{
+    const scene=new TH.Scene(),cam=new TH.PerspectiveCamera(32,1,.1,100);
+    scene.add(new TH.HemisphereLight(0xffffff,0x666666,1.3));const dl=new TH.DirectionalLight(0xffffff,1.1);dl.position.set(-4,6,5);scene.add(dl);
+    const unit=new TH.BoxGeometry(1,1,1),fmat=new TH.MeshLambertMaterial(),pmat=new TH.MeshLambertMaterial(),gmat=new TH.MeshLambertMaterial();
+    const root=new TH.Group();scene.add(root);const leaves=[new TH.Group(),new TH.Group()];leaves.forEach(g=>root.add(g));
+    const posts=[new TH.Mesh(unit,pmat),new TH.Mesh(unit,pmat)];posts.forEach(p=>root.add(p));const ground=new TH.Mesh(unit,gmat);root.add(ground);
+    const C={ink:new TH.Color(),acc:new TH.Color(),zinc:new TH.Color('#9aa3ac')};let finKey='ink',curH=1.8,dist=9,tdist=9,yaw=-.5,drag=null,n=2;const openAmt={v:0};let openAnim=null;
+    const applyOpen=()=>{const a=openAmt.v*(n===2?1.2:1.4);leaves[0].rotation.y=-a;leaves[1].rotation.y=a};
+    api.current.build=(members,Wm,Hm,nl,animate)=>{leaves.forEach(g=>{while(g.children.length)g.remove(g.children[0])});curH=Hm;n=nl;
+      leaves[0].position.set(-Wm/2,0,0);leaves[1].position.set(Wm/2,0,0);leaves[1].visible=nl===2;
+      posts.forEach((p,i)=>{p.scale.set(.23,Hm+.35,.23);p.position.set((i?1:-1)*(Wm/2+.135),(Hm+.35)/2,0)});
+      ground.scale.set(Wm+3,.02,3.2);ground.position.set(0,-.012,.6);tdist=Math.max(Wm,Hm*1.7)*1.3+2.4;
+      const made=members.map(m=>{const mesh=new TH.Mesh(unit,fmat);mesh.position.set(m.x,m.y+.012,0);mesh.scale.set(m.sx,m.sy,m.sz);leaves[m.L].add(mesh);return{mesh,m}});
+      applyOpen();
+      if(animate&&AN&&!RM)made.forEach((o,k)=>{const ax=o.m.axis,full=o.mesh.scale[ax];o.mesh.scale[ax]=.0001;AN.animate(o.mesh.scale,{[ax]:full,duration:560,delay:(o.m.kind==='frame'?0:220)+k*9,ease:'outQuart'})})};
+    api.current.finish=k=>{finKey=k};
+    api.current.open=o=>{if(openAnim&&openAnim.cancel)openAnim.cancel();if(!AN||RM){openAmt.v=o?1:0;applyOpen();return}openAnim=AN.animate(openAmt,{v:o?1:0,duration:1700,ease:'inOutSine',onUpdate:applyOpen})};
+    const pd=e=>{drag={x:e.clientX,y:yaw};el.setPointerCapture(e.pointerId)},pm=e=>{if(drag)yaw=drag.y+(e.clientX-drag.x)*.008},pu=()=>{drag=null};
+    el.addEventListener('pointerdown',pd);el.addEventListener('pointermove',pm);el.addEventListener('pointerup',pu);el.addEventListener('pointercancel',pu);
+    return{scene,cam,resize:(w,h)=>{cam.aspect=w/h;cam.updateProjectionMatrix()},
+      palette:p=>{C.ink.set(p.ink);C.acc.set(p.acc);pmat.color.set(p.mute);gmat.color.set(p.wash)},
+      frame:t=>{fmat.color.copy(C[finKey]);dist+=(tdist-dist)*.08;const y=yaw+(drag?0:Math.sin(t*.35)*.12);
+        cam.position.set(Math.sin(y)*dist,curH*.55+dist*.16,Math.cos(y)*dist);cam.lookAt(0,curH*.45,0)},
+      dispose:()=>{['pointerdown','pointermove','pointerup','pointercancel'].forEach((ev,i)=>el.removeEventListener(ev,[pd,pm,pu,pu][i]));unit.dispose()}};
+  });
+  useEffect(()=>{api.current.build&&api.current.build(mem,W/1000,H/1000,lv,grow.current);grow.current=false},[mem]);
+  useEffect(()=>{api.current.finish&&api.current.finish(fin)},[fin]);
+  useEffect(()=>{api.current.open&&api.current.open(open)},[open]);
+  const setGrow=f=>v=>{grow.current=true;f(v)};
+  return html`<div className="cfg">
+    <div className="gl cfg-gl" ref=${host} role="img" aria-label=${`Gate ${W} by ${H} mm, ${lv===2?'double':'single'} leaf, ${inf} infill`}>${!TH&&html`<${NoEngine} name="three.js"/>`}<span className="cap">Drag to orbit</span></div>
+    <div className="cfg-side">
+      <div className="field"><label htmlFor="g-w"><span>Width</span><span>${W.toLocaleString()} mm</span></label><input id="g-w" className="rng" type="range" min="2400" max="6000" step="100" value=${W} onInput=${e=>setW(+e.target.value)}/></div>
+      <div className="field"><label htmlFor="g-h"><span>Height</span><span>${H.toLocaleString()} mm</span></label><input id="g-h" className="rng" type="range" min="1200" max="2400" step="100" value=${H} onInput=${e=>setH(+e.target.value)}/></div>
+      <div className="cfg-row"><span className="kick">Infill</span><div className="seg">${[['bars','Bars'],['slats','Slats'],['mesh','Mesh']].map(x=>html`<button key=${x[0]} aria-pressed=${inf===x[0]} onClick=${()=>setGrow(setInf)(x[0])}>${x[1]}</button>`)}</div></div>
+      <div className="cfg-row"><span className="kick">Finish</span><div className="seg">${[['ink','Ink'],['zinc','Zinc'],['acc','Accent']].map(x=>html`<button key=${x[0]} aria-pressed=${fin===x[0]} onClick=${()=>setFin(x[0])}>${x[1]}</button>`)}</div></div>
+      <div className="cfg-row"><button className="switch" role="switch" aria-checked=${lv===2} onClick=${()=>setGrow(setLv)(lv===2?1:2)}><span className="trk"><span className="knb"></span></span>Double leaf</button>
+        <button className="btn ink" onClick=${()=>setOpen(!open)}>${open?'Close gate':'Open gate'}</button></div>
+      <div className="bom">
+        <div className="kv"><span>Members</span><b>${bom.n}</b></div>
+        ${Object.entries(bom.t).map(([k,v])=>html`<div className="kv" key=${k}><span>${SEC[k][0]}</span><b>${v.toFixed(1)} m</b></div>`)}
+        <div className="kv big"><span>Steel, est.</span><span><${Roll} text=${bom.kg.toFixed(1)}/> kg</span></div>
+      </div>
+    </div></div>`;
+}
+
+/* D · Coverflow */
+const DS=[['support-qa','2,400','0.912','31 Oct'],['tool-use','1,180','0.957','30 Oct'],['invoices-ocr','6,050','0.884','28 Oct'],['refund-intents','920','0.931','27 Oct'],['pricing-faq','410','0.968','25 Oct'],['legal-clauses','3,300','0.801','22 Oct'],['hindi-support','1,740','0.846','20 Oct'],['code-review','2,050','0.879','18 Oct']];
+function Coverflow(){
+  const stage=useRef(),cards=useRef([]),W=useRef(200),g=useRef(null);const [sel,setSel]=useState(2);const N=DS.length;
+  const paint=p=>{const w=W.current;cards.current.forEach((el,i)=>{if(!el)return;const d=i-p,ad=Math.abs(d),s=Math.sign(d),c=Math.min(ad,1);
+    const x=s*(c*w*.62+Math.max(0,ad-1)*w*.3),z=-c*150-Math.max(0,ad-1)*40,ry=-Math.max(-1,Math.min(1,d))*55;
+    el.style.transform=`translate(-50%,-50%) translateX(${x}px) translateZ(${z}px) rotateY(${ry}deg)`;el.style.zIndex=String(100-Math.round(ad*10));el.style.opacity=ad>3.6?'0':'1'})};
+  const sp=useSpring(2,paint,{stiffness:220,damping:26});
+  useLayoutEffect(()=>{const m=()=>{W.current=Math.min(220,stage.current.clientWidth*.5);sp.set(sp.get(),{instant:true})};m();const ro=new ResizeObserver(m);ro.observe(stage.current);return()=>ro.disconnect()},[]);
+  const settle=(to,v=0)=>{const k=Math.max(0,Math.min(N-1,Math.round(to)));sp.set(k,{velocity:v});setSel(k)};
+  const rub=v=>v<0?v*.3:v>N-1?N-1+(v-N+1)*.3:v;
+  const down=e=>{e.currentTarget.setPointerCapture(e.pointerId);const p=sp.get();sp.set(p,{instant:true});g.current={x:e.clientX,p,lx:e.clientX,t:performance.now(),v:0,moved:0}};
+  const mv=e=>{const s=g.current;if(!s)return;const k=W.current*.62,now=performance.now();s.moved=Math.max(s.moved,Math.abs(e.clientX-s.x));
+    s.v=((s.lx-e.clientX)/k)/(Math.max(1,now-s.t)/1000)*.6+s.v*.4;s.lx=e.clientX;s.t=now;sp.set(rub(s.p+(s.x-e.clientX)/k),{instant:true})};
+  const up=e=>{const s=g.current;if(!s)return;g.current=null;if(s.moved<5){const i=tapIndex(e,'.cf-card');return settle(i>=0?i:s.p)}{const v=Math.max(-8,Math.min(8,s.v));settle(sp.get()+v*.09,v)}};
+  const key=e=>{if(e.key==='ArrowRight'){e.preventDefault();settle(sel+1)}else if(e.key==='ArrowLeft'){e.preventDefault();settle(sel-1)}};
+  const d=DS[sel];
+  return html`<div className="col">
+    <div className="cf" ref=${stage} tabIndex="0" role="listbox" aria-label="Datasets" aria-activedescendant=${'cf-'+sel} onPointerDown=${down} onPointerMove=${mv} onPointerUp=${up} onPointerCancel=${up} onKeyDown=${key}>
+      ${DS.map((x,i)=>html`<div key=${x[0]} id=${'cf-'+i} role="option" aria-selected=${i===sel} data-i=${i} className=${'cf-card'+(i===sel?' on':'')} ref=${el=>cards.current[i]=el}>
+        <div className="row" style=${{justifyContent:'space-between'}}><span className="kick">Dataset</span><span className="kick">${String(i+1).padStart(2,'0')}/${String(N).padStart(2,'0')}</span></div>
+        <div className="cf-name">${x[0]}</div><div style=${{marginTop:'auto'}}><div className="cf-num">${x[1]}</div><div className="kick">graded pairs</div></div>
+        <div className="cf-bar"><i style=${{width:((+x[2]-.7)/.3*100)+'%'}}></i></div><div className="kick">last score ${x[2]}</div></div>`)}
+    </div>
+    <div className="row" style=${{justifyContent:'space-between'}}>
+      <div className="row"><button className="btn" onClick=${()=>settle(sel-1)} disabled=${sel===0}>←</button><button className="btn" onClick=${()=>settle(sel+1)} disabled=${sel===N-1}>→</button></div>
+      <span className="kick" style=${{color:'var(--ink)'}}>${d[0]} · ${d[1]} pairs · ${d[2]} · updated ${d[3]}</span></div>
+  </div>`;
+}
+
+/* D · Cube tabs */
+const FACES=[
+ {t:'Latency',v:'840',u:'ms p50',bars:[62,58,66,71,64,55,52,49],note:'Down 12% since the reranker moved in-region.'},
+ {t:'Cost',v:'$212',u:'this week',bars:[40,44,47,52,55,61,66,70],note:'Embeddings are 61% of spend.'},
+ {t:'Quality',v:'0.912',u:'eval score',bars:[70,72,71,78,80,83,85,91],note:'support-qa, 2,400 graded pairs.'},
+ {t:'Volume',v:'48.2k',u:'requests / day',bars:[30,34,33,38,41,40,44,48],note:'Peaks 14:00 to 16:00 IST.'},
+];
+function CubeTabs(){
+  const box=useRef(),cube=useRef(),tabs=useRef([]),rot=useRef(0),disp=useRef(0),wR=useRef(360),anim=useRef();
+  const [i,setI]=useState(0),[w,setW]=useState(360),[bar,setBar]=useState({left:0,width:0});
+  const paint=(r,pull=0)=>{disp.current=r;if(cube.current)cube.current.style.transform=`translateZ(${-wR.current/2-pull}px) rotateY(${r}deg)`};
+  useLayoutEffect(()=>{const m=()=>{wR.current=box.current.clientWidth;setW(wR.current);paint(disp.current)};m();const ro=new ResizeObserver(m);ro.observe(box.current);return()=>ro.disconnect()},[]);
+  useLayoutEffect(()=>{const b=tabs.current[i];if(b)setBar({left:b.offsetLeft,width:b.offsetWidth})},[i,w]);
+  const go=j=>{if(j===i)return;let d=((j-i)%4+4)%4;if(d===3)d=-1;const from=disp.current,to=rot.current-d*90;rot.current=to;setI(j);
+    if(anim.current&&anim.current.cancel)anim.current.cancel();
+    if(!AN||RM)return paint(to);const o={r:from};
+    anim.current=AN.animate(o,{r:to,duration:1100,ease:'outElastic(1, .8)',onUpdate:()=>{const p=Math.min(1,Math.abs((o.r-from)/((to-from)||1)));paint(o.r,Math.sin(p*Math.PI)*wR.current*.22)}})};
+  return html`<div className="col">
+    <div className="tabs" role="tablist">${FACES.map((f,j)=>html`<button key=${f.t} role="tab" aria-selected=${i===j} ref=${el=>tabs.current[j]=el} onClick=${()=>go(j)}>${f.t}</button>`)}<span className="bar" style=${bar}></span></div>
+    <div className="cube-box" ref=${box}><div className="cube" ref=${cube}>
+      ${FACES.map((f,k)=>html`<div key=${f.t} className="face" aria-hidden=${k!==i} style=${{transform:`rotateY(${k*90}deg) translateZ(${w/2}px)`}}>
+        <div className="row" style=${{justifyContent:'space-between'}}><span className="kick">${f.t}</span><span className="kick">8 weeks</span></div>
+        <div className="face-v">${f.v}</div><div className="kick">${f.u}</div>
+        <div className="fbars">${f.bars.map((b,n)=>html`<i key=${n} style=${{height:b+'%',background:n===f.bars.length-1?'var(--accent)':'var(--ink)'}}></i>`)}</div>
+        <div className="face-n">${f.note}</div></div>`)}
+    </div></div></div>`;
+}
+
+/* D · Paper fold */
+const INC=[
+ {h:'Timeline',rows:[['09:12','p95 on /chat crosses 2.4 s'],['09:15','Pager fires, on-call acknowledges'],['09:31','Reranker pods at 100% CPU'],['09:48','Traffic shifted to Mumbai'],['10:05','p95 back under 900 ms']]},
+ {h:'Root cause',rows:[['1','A dataset sync re-embedded 812 docs at peak'],['2','Reranker shared nodes with the embed job'],['3','No CPU limit on the batch queue']]},
+ {h:'Fix',rows:[['Done','Batch embeds moved to their own node pool'],['Done','CPU limits on every queue worker'],['Done','Syncs scheduled for 02:00 IST']]},
+ {h:'Follow-ups',rows:[['Infra','Alert on reranker queue depth'],['Platform','Load test at 2× peak'],['Ops','Runbook for regional failover']]},
+];
+function FoldReport(){
+  const [open,setOpen]=useState(0);const bodies=useRef([]);
+  useLayoutEffect(()=>{bodies.current.forEach((b,k)=>{if(b)b.style.height=k===0?'auto':'0px'})},[]);
+  const fold=(k,opening)=>{const b=bodies.current[k];if(!b)return;const rows=b.querySelectorAll('.frow'),h=b.firstChild.offsetHeight;
+    if(!AN||RM){b.style.height=opening?'auto':'0px';rows.forEach(r=>{r.style.opacity='';r.style.transform=''});return}
+    if(opening){AN.animate(b,{height:[0,h],duration:520,ease:'outQuart',onComplete:()=>{b.style.height='auto'}});AN.animate(rows,{rotateX:[-100,0],opacity:[0,1],duration:720,delay:AN.stagger(75),ease:'outBack(1.2)'})}
+    else{const cur=b.offsetHeight;AN.animate(rows,{rotateX:[0,80],opacity:[1,0],duration:260,delay:AN.stagger(30,{from:'last'}),ease:'inQuad'});AN.animate(b,{height:[cur,0],duration:420,delay:120,ease:'inOutQuart'})}};
+  const toggle=k=>{const nx=open===k?-1:k;if(open>=0)fold(open,false);if(nx>=0)fold(nx,true);setOpen(nx)};
+  return html`<div className="fold">
+    <div className="fold-h"><span className="kick">INC-0921 · Sev 2 · 31 Oct</span><div className="fold-t">Retrieval latency spike</div></div>
+    ${INC.map((s,k)=>html`<div key=${s.h} className=${'fitem'+(open===k?' open':'')}>
+      <button className="fhead" aria-expanded=${open===k} onClick=${()=>toggle(k)}><span className="kick">${String(k+1).padStart(2,'0')}</span><b>${s.h}</b><span className="kick">${s.rows.length} entries</span><i aria-hidden="true">+</i></button>
+      <div className="fbody" ref=${el=>bodies.current[k]=el}><div className="finner">${s.rows.map((r,j)=>html`<div className="frow" key=${j}><span>${r[0]}</span><span>${r[1]}</span></div>`)}</div></div>
+    </div>`)}</div>`;
+}
+
+/* D · Drum picker */
+const MODELS=[['atlas-l','200k','$3.00','840'],['atlas-m','200k','$0.80','410'],['atlas-s','128k','$0.25','160'],['atlas-mini','64k','$0.08','90'],['coder-l','256k','$2.40','910'],['vision-m','128k','$1.10','700'],['judge-xl','32k','$1.20','620'],['embed-v3','8k','$0.02','40'],['local/32b','32k','$0.00','1,290'],['local/8b','16k','$0.00','380']];
+const DSTEP=22,DIH=42,DR=Math.round(DIH/2/Math.tan(DSTEP/2*Math.PI/180));
+function DrumPicker(){
+  const drum=useRef(),wheel=useRef(),items=useRef([]),g=useRef(null),selR=useRef(1),acc=useRef(0);const [sel,setSel]=useState(1);const N=MODELS.length;
+  const paint=p=>{if(!wheel.current)return;wheel.current.style.transform=`rotateX(${p*DSTEP}deg)`;items.current.forEach((el,i)=>{if(!el)return;const d=Math.abs(p-i);el.style.opacity=d>4?'0':String(Math.max(.1,1-d*.26))})};
+  const sp=useSpring(1,paint,{stiffness:260,damping:26});
+  useLayoutEffect(()=>{sp.set(1,{instant:true})},[]);
+  const settle=(to,v=0)=>{const k=Math.max(0,Math.min(N-1,Math.round(to)));selR.current=k;sp.set(k,{velocity:v});setSel(k)};
+  const rub=v=>v<0?v*.3:v>N-1?N-1+(v-N+1)*.3:v;
+  const down=e=>{e.currentTarget.setPointerCapture(e.pointerId);const p=sp.get();sp.set(p,{instant:true});g.current={y:e.clientY,p,ly:e.clientY,t:performance.now(),v:0,moved:0}};
+  const mv=e=>{const s=g.current;if(!s)return;const now=performance.now();s.moved=Math.max(s.moved,Math.abs(e.clientY-s.y));s.v=((s.ly-e.clientY)/DIH)/(Math.max(1,now-s.t)/1000)*.6+s.v*.4;s.ly=e.clientY;s.t=now;sp.set(rub(s.p+(s.y-e.clientY)/DIH),{instant:true})};
+  const up=e=>{const s=g.current;if(!s)return;g.current=null;if(s.moved<5){const b=drum.current.getBoundingClientRect();return settle(s.p+(e.clientY-(b.top+b.height/2))/DIH)}{const v=Math.max(-12,Math.min(12,s.v));settle(sp.get()+v*.1,v)}};
+  useEffect(()=>{const el=drum.current;const wh=e=>{e.preventDefault();acc.current+=e.deltaY;if(Math.abs(acc.current)>36){settle(selR.current+Math.sign(acc.current));acc.current=0}};el.addEventListener('wheel',wh,{passive:false});return()=>el.removeEventListener('wheel',wh)},[]);
+  const key=e=>{const m={ArrowDown:1,ArrowUp:-1}[e.key];if(m){e.preventDefault();settle(sel+m)}else if(e.key==='Home'){e.preventDefault();settle(0)}else if(e.key==='End'){e.preventDefault();settle(N-1)}};
+  const m=MODELS[sel];
+  return html`<div className="drum-wrap">
+    <div className="drum" ref=${drum} tabIndex="0" role="listbox" aria-label="Model" aria-activedescendant=${'dm-'+sel} onPointerDown=${down} onPointerMove=${mv} onPointerUp=${up} onPointerCancel=${up} onKeyDown=${key}>
+      <div className="drum-band"></div>
+      <div className="drum-wheel" ref=${wheel}>${MODELS.map((x,i)=>html`<div key=${x[0]} id=${'dm-'+i} role="option" aria-selected=${i===sel} className=${'drum-it'+(i===sel?' on':'')} ref=${el=>items.current[i]=el} style=${{transform:`rotateX(${-i*DSTEP}deg) translateZ(${DR}px)`}}>${x[0]}</div>`)}</div>
+    </div>
+    <div className="drum-side">
+      <div className="kick">Selected model</div><div className="drum-name">${m[0]}</div>
+      <div className="kv"><span>Context</span><${Roll} text=${m[1]}/></div>
+      <div className="kv"><span>Input / 1M tokens</span><${Roll} text=${m[2]}/></div>
+      <div className="kv"><span>p50 latency, ms</span><${Roll} text=${m[3]}/></div>
+      <div className="kick">Drag, scroll, or use ↑ ↓</div>
+    </div></div>`;
+}
+
+/* D · Linked 3D bars */
+const LB_REG=['Mumbai','Hyderabad','Singapore','Frankfurt','Virginia','Oregon'];
+const LB=LB_REG.map((n,r)=>Array.from({length:8},(_,c)=>Math.round((14+r*3.4+Math.sin(c*.8+r)*5+c*(r%2?1.3:2.1)+((r*13+c*7)%5))*10)/10));
+function LinkedBars(){
+  const host=useRef(),hl=useRef(-1);const [row,setRow]=useState(-1),[tip,setTip]=useState(null);
+  const pick=r=>{hl.current=r;setRow(r)};
+  useGL(host,(r,el)=>{
+    const scene=new TH.Scene(),cam=new TH.PerspectiveCamera(30,1,.1,100);cam.position.set(8.5,8,10);cam.lookAt(0,.9,0);
+    scene.add(new TH.HemisphereLight(0xffffff,0x666666,1.25));const dl=new TH.DirectionalLight(0xffffff,1.2);dl.position.set(-4,9,5);scene.add(dl);
+    const R=6,Cc=8,S=.9,mx=Math.max(...LB.flat());
+    const geo=new TH.BoxGeometry(S*.7,1,S*.7);geo.translate(0,.5,0);const mat=new TH.MeshLambertMaterial();const mesh=new TH.InstancedMesh(geo,mat,R*Cc);scene.add(mesh);
+    const floor=new TH.Mesh(new TH.BoxGeometry(Cc*S+.4,.04,R*S+.4),new TH.MeshLambertMaterial());floor.position.y=-.03;scene.add(floor);
+    const cur=new Float32Array(R*Cc),dm=new TH.Object3D(),col=new TH.Color(),ink=new TH.Color(),acc=new TH.Color(),lo=new TH.Color();
+    const ray=new TH.Raycaster(),ndc=new TH.Vector2();
+    const pm=e=>{const b=el.getBoundingClientRect();ndc.set((e.clientX-b.left)/b.width*2-1,-(e.clientY-b.top)/b.height*2+1);ray.setFromCamera(ndc,cam);mesh.computeBoundingSphere();const h=ray.intersectObject(mesh)[0];
+      if(h&&h.instanceId!=null){const rr=(h.instanceId/Cc)|0,cc=h.instanceId%Cc;if(hl.current!==rr)pick(rr);setTip({r:rr,c:cc,x:e.clientX-b.left,y:e.clientY-b.top})}else{setTip(null);if(hl.current!==-1)pick(-1)}};
+    const pl=()=>{setTip(null);pick(-1)};el.addEventListener('pointermove',pm);el.addEventListener('pointerleave',pl);
+    return{scene,cam,resize:(w,h)=>{cam.aspect=w/h;cam.updateProjectionMatrix()},
+      palette:p=>{ink.set(p.ink);acc.set(p.acc);lo.set(p.wash);floor.material.color.set(p.wash)},
+      frame:()=>{const h=hl.current;let k=0;for(let rr=0;rr<R;rr++)for(let cc=0;cc<Cc;cc++,k++){const v=LB[rr][cc]/mx;const tgt=v*3.1*(h>=0&&rr!==h?.45:1);cur[k]+=(tgt-cur[k])*.12;
+        dm.position.set((cc-(Cc-1)/2)*S,0,(rr-(R-1)/2)*S);dm.scale.set(1,Math.max(.01,cur[k]),1);dm.updateMatrix();mesh.setMatrixAt(k,dm.matrix);
+        col.copy(lo).lerp(ink,.35+v*.65);if(rr===h)col.copy(acc);else if(h>=0)col.lerp(lo,.6);mesh.setColorAt(k,col)}
+        mesh.instanceMatrix.needsUpdate=true;mesh.instanceColor.needsUpdate=true},
+      dispose:()=>{el.removeEventListener('pointermove',pm);el.removeEventListener('pointerleave',pl);geo.dispose()}};
+  });
+  return html`<div className="lb">
+    <div className="lb-t" onMouseLeave=${()=>pick(-1)}>
+      <div className="lb-r lb-hd kick"><span>Region</span><span>8 wk</span><span>Last wk</span><span>Δ</span></div>
+      ${LB_REG.map((n,i)=>{const s=LB[i].reduce((a,b)=>a+b,0),l=LB[i][7],d=(l-LB[i][6])/LB[i][6]*100;return html`<button key=${n} className=${'lb-r'+(row===i?' on':'')} onMouseEnter=${()=>pick(i)} onFocus=${()=>pick(i)} onBlur=${()=>pick(-1)}>
+        <b>${n}</b><span>${s.toFixed(0)}k</span><span>${l.toFixed(1)}k</span><span className=${d>=0?'up':'dn'}>${d>=0?'+':''}${d.toFixed(1)}%</span></button>`})}
+      <div className="kick" style=${{padding:'10px 12px'}}>Hover a row or a bar. Weeks run back to front.</div>
+    </div>
+    <div className="gl lb-gl" ref=${host} role="img" aria-label="3D bar chart of weekly requests for six regions">${!TH&&html`<${NoEngine} name="three.js"/>`}
+      ${tip&&html`<div className="gtip" style=${{left:tip.x+12+'px',top:tip.y-10+'px'}}>${LB_REG[tip.r]} · W${tip.c+1} · ${LB[tip.r][tip.c]}k</div>`}</div>
+  </div>`;
+}
+
+/* D · Region globe */
+const GEO=[['Hyderabad','ap-south-2',17.39,78.49,6,'52.4k'],['Mumbai','ap-south-1',19.08,72.88,18,'41.2k'],['Singapore','ap-southeast-1',1.35,103.82,52,'22.8k'],['Tokyo','ap-northeast-1',35.68,139.69,118,'9.1k'],['Frankfurt','eu-central-1',50.11,8.68,142,'14.6k'],['London','eu-west-2',51.51,-.13,151,'11.3k'],['Virginia','us-east-1',38.9,-77.04,228,'31.7k'],['Oregon','us-west-2',45.52,-122.68,246,'12.9k'],['São Paulo','sa-east-1',-23.55,-46.63,312,'3.4k']];
+function RegionGlobe(){
+  const host=useRef(),api=useRef({});const [sel,setSel]=useState(4);
+  useGL(host,(r,el)=>{
+    const ll=(lat,lon,rad)=>{const p=lat*Math.PI/180,l=lon*Math.PI/180;return new TH.Vector3(rad*Math.cos(p)*Math.cos(l),rad*Math.sin(p),-rad*Math.cos(p)*Math.sin(l))};
+    const scene=new TH.Scene(),cam=new TH.PerspectiveCamera(34,1,.1,100);cam.position.set(0,0,8.4);cam.lookAt(0,0,0);
+    const R=2,g=new TH.Group();scene.add(g);
+    const N=1700,pos=new Float32Array(N*3);for(let i=0;i<N;i++){const y=1-2*(i+.5)/N,rr=Math.sqrt(1-y*y),th=i*2.399963;pos.set([Math.cos(th)*rr*R,y*R,Math.sin(th)*rr*R],i*3)}
+    const dg=new TH.BufferGeometry();dg.setAttribute('position',new TH.BufferAttribute(pos,3));const dmat=new TH.PointsMaterial({size:.04});g.add(new TH.Points(dg,dmat));
+    const occ=new TH.Mesh(new TH.SphereGeometry(R*.985,48,32),new TH.MeshBasicMaterial());g.add(occ);
+    const ringMat=new TH.LineBasicMaterial({transparent:true,opacity:.4});[-60,-30,0,30,60].forEach(lat=>{const pts=[];for(let k=0;k<=96;k++)pts.push(ll(lat,k/96*360,R*1.002));g.add(new TH.Line(new TH.BufferGeometry().setFromPoints(pts),ringMat))});
+    const mk=GEO.map(c=>{const m=new TH.Mesh(new TH.BoxGeometry(.08,.08,.24),new TH.MeshBasicMaterial());const p=ll(c[2],c[3],R*1.05);m.position.copy(p);m.lookAt(p.clone().multiplyScalar(2));g.add(m);return m});
+    const ring=new TH.Mesh(new TH.RingGeometry(.13,.18,40),new TH.MeshBasicMaterial({side:TH.DoubleSide,transparent:true}));g.add(ring);
+    const NP=72,ag=new TH.BufferGeometry();ag.setAttribute('position',new TH.BufferAttribute(new Float32Array(NP*3),3));ag.setDrawRange(0,0);const amat=new TH.LineBasicMaterial();g.add(new TH.Line(ag,amat));
+    const rot={x:.3,y:-1.6};let si=-1,drag=null,ra=null,da=null;const ink=new TH.Color(),acc=new TH.Color();
+    api.current.select=i=>{si=i;const c=GEO[i],p=ll(c[2],c[3],R*1.06);ring.position.copy(p);ring.lookAt(p.clone().multiplyScalar(2));
+      const a=ll(GEO[0][2],GEO[0][3],1),b=ll(c[2],c[3],1),om=Math.acos(Math.max(-1,Math.min(1,a.dot(b)))),arr=ag.attributes.position;
+      for(let k=0;k<NP;k++){const t=k/(NP-1);const v=om<1e-4?a.clone():a.clone().multiplyScalar(Math.sin((1-t)*om)/Math.sin(om)).add(b.clone().multiplyScalar(Math.sin(t*om)/Math.sin(om)));v.multiplyScalar(R*(1.03+Math.sin(Math.PI*t)*(.06+om*.2)));arr.setXYZ(k,v.x,v.y,v.z)}arr.needsUpdate=true;
+      const m=a.clone().add(b);if(m.lengthSq()<1e-6)m.copy(b);m.normalize();const lat=Math.asin(m.y),lon=Math.atan2(-m.z,m.x);
+      const tx=lat*.85;let ty=-Math.PI/2-lon;ty=rot.y+(((ty-rot.y)%(2*Math.PI))+3*Math.PI)%(2*Math.PI)-Math.PI;
+      if(ra&&ra.cancel)ra.cancel();if(da&&da.cancel)da.cancel();
+      if(AN&&!RM){ra=AN.animate(rot,{x:tx,y:ty,duration:1400,ease:'inOutQuart'});ag.setDrawRange(0,0);const dr={n:0};da=AN.animate(dr,{n:NP,duration:1000,delay:600,ease:'outQuad',onUpdate:()=>ag.setDrawRange(0,Math.round(dr.n))})}
+      else{rot.x=tx;rot.y=ty;ag.setDrawRange(0,NP)}};
+    const pd=e=>{if(ra&&ra.cancel)ra.cancel();drag={x:e.clientX,y:e.clientY,rx:rot.x,ry:rot.y};el.setPointerCapture(e.pointerId)};
+    const pm=e=>{if(!drag)return;rot.y=drag.ry+(e.clientX-drag.x)*.007;rot.x=Math.max(-1.1,Math.min(1.1,drag.rx+(e.clientY-drag.y)*.005))};const pu=()=>{drag=null};
+    el.addEventListener('pointerdown',pd);el.addEventListener('pointermove',pm);el.addEventListener('pointerup',pu);el.addEventListener('pointercancel',pu);
+    return{scene,cam,resize:(w,h)=>{cam.aspect=w/h;cam.updateProjectionMatrix()},
+      palette:p=>{dmat.color.set(p.mute);occ.material.color.set(p.raise||p.paper);ringMat.color.set(p.mute);amat.color.set(p.acc);ring.material.color.set(p.acc);ink.set(p.ink);acc.set(p.acc)},
+      frame:t=>{g.rotation.set(rot.x,rot.y,0);mk.forEach((m,i)=>{m.material.color.copy(i===si?acc:ink);m.scale.setScalar(i===0?1.5:1)});const s=1+.35*(.5+.5*Math.sin(t*4));ring.scale.setScalar(s);ring.material.opacity=1.2-s*.7},
+      dispose:()=>{['pointerdown','pointermove','pointerup','pointercancel'].forEach((ev,i)=>el.removeEventListener(ev,[pd,pm,pu,pu][i]));dg.dispose();ag.dispose()}};
+  });
+  useEffect(()=>{api.current.select&&api.current.select(sel)},[sel]);
+  return html`<div className="globe">
+    <div className="gl globe-gl" ref=${host} role="img" aria-label=${'Globe showing route from Hyderabad to '+GEO[sel][0]}>${!TH&&html`<${NoEngine} name="three.js"/>`}<span className="cap">Drag to spin · origin Hyderabad</span></div>
+    <div className="globe-side"><div className="lb-r lb-hd kick"><span>Region</span><span>RTT</span><span></span><span>Req/day</span></div>
+      ${GEO.map((c,i)=>html`<button key=${c[1]} className=${'lb-r'+(sel===i?' on':'')} aria-pressed=${sel===i} onClick=${()=>setSel(i)}>
+        <b>${c[0]}<small>${c[1]}</small></b><span>${c[4]} ms</span><span className="rtt"><i style=${{width:Math.max(3,c[4]/320*100)+'%'}}></i></span><span>${c[5]}</span></button>`)}
+    </div></div>`;
+}
+
+/* ───────── CATALOG ───────── */
+const C=[
+ {g:'core',id:'ledger-table',name:'Ledger Table',file:'ledger-table.tsx',wide:1,desc:'Full-bleed, no row rules, text seated on the bottom of each row, a narrow numbered rail, and the title set inside the grid. Click a header to sort.',
+  usage:`import { LedgerTable } from "@/ledger/ledger-table"\n\n<LedgerTable\n  title="Eval runs, Oct"\n  rows={runs}\n  columns={[\n    { key: "id", label: "Run", emphasis: true },\n    { key: "score", label: "Score", numeric: true, bar: [0.7, 1] },\n    { key: "status", label: "Status", render: StatusPill },\n  ]}\n  defaultSort={{ key: "score", dir: "desc" }}\n/>`,el:LedgerTable},
+ {g:'core',id:'buttons',name:'Buttons',file:'button.tsx',desc:'Hard offset shadow that collapses on press. Includes a hold-to-confirm variant for destructive actions.',
+  usage:`<Button variant="ink">Deploy</Button>\n<Button variant="accent">Run eval</Button>\n<Button variant="ghost">Cancel</Button>\n<HoldButton duration={1200} onConfirm={del}>Hold to delete</HoldButton>`,el:Buttons},
+ {g:'core',id:'fields',name:'Fields',file:'field.tsx',desc:'Underline inputs with a mono label row for the counter or requirement. Errors say what to fix.',
+  usage:`<Field label="Dataset name" counter max={32}>\n  <Input value={name} onChange={setName} />\n</Field>\n<Field label="API key" hint="Required" error={err}>\n  <Input value={key} onChange={setKey} />\n</Field>`,el:Fields},
+ {g:'core',id:'tabs',name:'Tabs',file:'tabs.tsx',desc:'Condensed caps with a heavy bar that slides between tabs.',
+  usage:`<Tabs defaultValue="overview">\n  <Tabs.List>\n    <Tabs.Trigger value="overview">Overview</Tabs.Trigger>\n    <Tabs.Trigger value="tokens">Tokens</Tabs.Trigger>\n  </Tabs.List>\n  <Tabs.Panel value="overview">…</Tabs.Panel>\n</Tabs>`,el:Tabs},
+ {g:'core',id:'toggles',name:'Switch & Segment',file:'switch.tsx',desc:'Square switch and a ruled segmented control.',
+  usage:`<Switch checked={stream} onCheckedChange={setStream}>Stream responses</Switch>\n<Segmented value={range} onValueChange={setRange}\n  options={["Day", "Week", "Month", "Year"]} />`,el:Toggles},
+ {g:'motion',id:'roll-number',name:'Roll Number',file:'roll-number.tsx',desc:'Each digit is its own column, so only the digits that change move.',
+  usage:`<RollNumber value={tokens} format="en-US" duration={900} />`,el:RollDemo},
+ {g:'motion',id:'scramble',name:'Scramble Text',file:'scramble-text.tsx',desc:'Decodes left to right from block glyphs. Runs on mount and hover.',
+  usage:`<ScrambleText text="Ship the ledger" trigger={["mount", "hover"]} />`,el:()=>html`<${Scramble} text="Ship the ledger"/>`},
+ {g:'motion',id:'marquee',name:'Marquee Rule',file:'marquee.tsx',desc:'A ruled band of display type. Pauses on hover.',
+  usage:`<Marquee speed={22} pauseOnHover>\n  {["Ledger UI", "Open source", "React"]}\n</Marquee>`,el:Marquee},
+ {g:'motion',id:'stagger',name:'Entry List',file:'entry-list.tsx',desc:'Rows file in one after another, like entries posted to a ledger.',
+  usage:`<EntryList stagger={90}>\n  {invoices.map(i => <EntryList.Row key={i.id} {...i} />)}\n</EntryList>`,el:Stagger},
+ {g:'springs',id:'magnetic',name:'Magnetic Button',file:'springs/magnetic-button.tsx',desc:'The button leans toward the pointer from outside its edge and the label lags behind it. Lets go with an underdamped wobble.',
+  usage:`import { MagneticButton } from "@/ledger/springs/magnetic-button"\n\n<MagneticButton strength={0.32} label={0.12}\n  spring={{ stiffness: 260, damping: 17 }}>\n  Start a run\n</MagneticButton>`,el:MagneticDemo},
+ {g:'springs',id:'detent-slider',name:'Detent Slider',file:'springs/detent-slider.tsx',desc:'Drags freely, then springs into the nearest detent with overshoot. Built as a temperature control; arrow keys step by 0.2.',
+  usage:`<DetentSlider min={0} max={2} step={0.2} value={temp}\n  onValueChange={setTemp}\n  zones={[[0, 0.4, "Deterministic"], [0.6, 1.2, "Balanced"], [1.4, 2, "Creative"]]}\n  spring={{ stiffness: 380, damping: 12 }} />`,el:DetentSlider},
+ {g:'springs',id:'stamp',name:'Stamp Approval',file:'springs/stamp-approval.tsx',wide:1,desc:'Human-in-the-loop sign-off for an agent tool call. The decision lands as a rubber stamp, dropped from above with a stiff spring.',
+  usage:`<StampApproval\n  call={{ name: "send_email", args: { to, subject, attach } }}\n  onApprove={release} onDeny={halt} />`,el:StampApproval},
+ {g:'timelines',id:'split-flap',name:'Split-Flap Board',file:'timelines/split-flap.tsx',wide:1,desc:'A departures board for jobs. Each changed cell spins through random glyphs, staggered by column and row.',
+  usage:`<SplitFlap width={22} rows={jobs.map(j => \`\${j.kind} \${j.target} \${j.state}\`)}\n  stagger={22} spins={[1, 4]} />`,el:SplitFlap},
+ {g:'timelines',id:'ripple-grid',name:'Ripple Heatmap',file:'timelines/ripple-heatmap.tsx',desc:'Requests by weekday and hour. Click a cell and the grid ripples out from it using a 2D stagger.',
+  usage:`<RippleHeatmap cols={24} rows={7} values={perHour}\n  onPick={cell => setFocus(cell)} />`,el:RippleGrid},
+ {g:'timelines',id:'draw-chart',name:'Draw-On Chart',file:'timelines/draw-chart.tsx',desc:'One timeline: the line draws, points drop in, the headline number counts up.',
+  usage:`<DrawChart series={accuracy} format={v => v + "%"} duration={1300} />`,el:DrawChart},
+ {g:'timelines',id:'swipe-review',name:'Swipe Review',file:'timelines/swipe-review.tsx',desc:'A queue for grading model answers. Drag right to accept, left to reject. Short drags spring back.',
+  usage:`<SwipeReview items={queue} threshold={110}\n  onAccept={a => label(a, "good")} onReject={a => label(a, "bad")} />`,el:SwipeReview},
+ {g:'webgl',id:'terrain',name:'Bar Terrain',file:'webgl/bar-terrain.tsx',wide:1,desc:'An instanced field of 480 bars driven by a moving data surface. The pointer raises a bump and colours it with the accent.',
+  usage:`<BarTerrain cols={30} rows={16} source={heightFn}\n  pointer={{ radius: 1.6, lift: 3.2 }} />`,el:Terrain},
+ {g:'webgl',id:'embed-space',name:'Embedding Space',file:'webgl/embedding-space.tsx',wide:1,desc:'Retrieval you can see. 320 chunks in four clusters; pick a query and the nearest six light up with lines from the query point.',
+  usage:`<EmbeddingSpace points={chunks} query={qVec} k={6}\n  onResults={setHits} />`,el:EmbedSpace},
+ {g:'depth',id:'gate-config',name:'Gate Configurator',engine:'three.js · anime.js',file:'depth/configurator.tsx',wide:1,desc:'Sliders, segments and a switch drive a parametric steel gate. Members extrude in when the build changes, leaves swing on a hinge timeline, and the cut list updates live.',
+  usage:`<Configurator model={gate} params={{ width, height, infill, leaves, finish }}\n  sections={SECTIONS} onBom={setBom}>\n  <Configurator.Range name="width" min={2400} max={6000} step={100} unit="mm" />\n  <Configurator.Segment name="infill" options={["bars", "slats", "mesh"]} />\n</Configurator>`,el:GateConfigurator},
+ {g:'depth',id:'tilt-card',name:'Tilt Card',engine:'motion.dev',file:'depth/tilt-card.tsx',desc:'Layers sit at different depths, so the price floats above the list and the badge floats above both. Springs follow the pointer and settle with a wobble.',
+  usage:`<TiltCard max={[18, 22]} spring={{ stiffness: 200, damping: 16 }} glare>\n  <TiltCard.Layer depth={26}>…</TiltCard.Layer>\n  <TiltCard.Layer depth={64}><RollNumber value={price} /></TiltCard.Layer>\n</TiltCard>`,el:TiltCard},
+ {g:'depth',id:'voice-orb',name:'Voice Orb',engine:'three.js · motion.dev',file:'depth/voice-orb.tsx',desc:'Push-to-talk with a wireframe orb that ripples with input level. The level is a spring, so it swells and calms instead of flickering.',
+  usage:`const { level, transcript, start, stop } = useVoice()\n\n<VoiceOrb level={level} active={listening} />\n<HoldButton onHoldStart={start} onHoldEnd={stop}>Hold to talk</HoldButton>`,el:VoiceOrb},
+ {g:'depth',id:'coverflow',name:'Coverflow',engine:'motion.dev',file:'depth/coverflow.tsx',wide:1,desc:'Datasets as cards on a 3D shelf. Flick to throw with momentum; it lands on the nearest card. Tap a side card, or use the arrow keys.',
+  usage:`<Coverflow items={datasets} value={id} onValueChange={setId}\n  render={d => <DatasetCard {...d} />} angle={55} spacing={0.62} />`,el:Coverflow},
+ {g:'depth',id:'cube-tabs',name:'Cube Tabs',engine:'anime.js',file:'depth/cube-tabs.tsx',desc:'Four metrics on four faces. The cube turns the short way, pulls back while it turns, and lands with an elastic settle.',
+  usage:`<CubeTabs faces={[\n  { label: "Latency", value: "840", unit: "ms p50", series },\n  { label: "Cost", value: "$212", unit: "this week", series },\n]} />`,el:CubeTabs},
+ {g:'depth',id:'fold-report',name:'Fold Report',engine:'anime.js',file:'depth/fold-report.tsx',desc:'An incident report as an accordion. Rows unfold like folded paper, staggered top to bottom; closing folds them back up from the end.',
+  usage:`<FoldReport title="Retrieval latency spike" meta="INC-0921 · Sev 2">\n  <FoldReport.Section title="Timeline" rows={timeline} />\n  <FoldReport.Section title="Root cause" rows={causes} />\n</FoldReport>`,el:FoldReport},
+ {g:'depth',id:'drum-picker',name:'Drum Picker',engine:'motion.dev',file:'depth/drum-picker.tsx',wide:1,desc:'A 3D wheel for picking a model. Flick it and it coasts; it always lands on a row. The specs beside it roll to the new values.',
+  usage:`<DrumPicker options={models.map(m => m.id)} value={model}\n  onValueChange={setModel} itemHeight={42} step={22} />`,el:DrumPicker},
+ {g:'depth',id:'linked-bars',name:'Linked Bars',engine:'three.js',file:'depth/linked-bars.tsx',wide:1,desc:'A table and a 3D chart share one highlight. Hover a region row and its bars rise in the accent; hover a bar and the table follows.',
+  usage:`<LinkedBars rows={regions} cols={weeks} values={requests}\n  highlight={hover} onHighlight={setHover}\n  table={<LedgerTable … />} />`,el:LinkedBars},
+ {g:'depth',id:'region-globe',name:'Region Globe',engine:'three.js · anime.js',file:'depth/region-globe.tsx',wide:1,desc:'Pick a region from the list and the globe turns the short way to frame the route from your origin, then draws the arc. Drag to spin it yourself.',
+  usage:`<RegionGlobe origin="ap-south-2" regions={regions} value={region}\n  onValueChange={setRegion} />`,el:RegionGlobe},
+ {g:'ai',id:'stream',name:'Stream Response',file:'stream-response.tsx',wide:1,desc:'Token-by-token output with a block caret, inline citation markers and a source strip. Stop and regenerate built in.',
+  usage:`const { text, sources, stop, regenerate, status } = useStream("/api/chat", { prompt })\n\n<StreamResponse text={text} sources={sources} status={status}\n  onStop={stop} onRegenerate={regenerate} />`,el:Stream},
+ {g:'ai',id:'agent-trace',name:'Agent Trace',file:'agent-trace.tsx',desc:'Tool calls as ledger entries: state, tool, argument, duration. Expand a step to see its output.',
+  usage:`<AgentTrace steps={run.steps} live={run.status === "running"}\n  renderOutput={s => <code>{s.output}</code>} />`,el:Trace},
+ {g:'ai',id:'composer',name:'Prompt Composer',file:'composer.tsx',desc:'Attachments as chips, model picker and a live context meter. ⌘↵ sends.',
+  usage:`<Composer value={prompt} onChange={setPrompt}\n  attachments={files} onAttach={add} onRemove={remove}\n  models={["atlas-l", "atlas-m"]} contextLimit={32_000}\n  onSubmit={send} />`,el:Composer},
+ {g:'ai',id:'thinking',name:'Thinking',file:'thinking.tsx',desc:'A bar waveform with a step label for long-running work.',
+  usage:`<Thinking steps={["Reading 14 sources", "Drafting answer"]} interval={1600} />`,el:Thinking},
+ {g:'ai',id:'context',name:'Context Budget',file:'context-budget.tsx',desc:'Where the window is going, by segment. Try compacting history.',
+  usage:`<ContextBudget limit={200_000} segments={[\n  { label: "System", tokens: 3200 },\n  { label: "Tools", tokens: 9800, accent: true },\n  { label: "History", tokens: 41200 },\n]} />`,el:Context},
+ {g:'ai',id:'eval-matrix',name:'Eval Matrix',file:'eval-matrix.tsx',desc:'Models by task, shaded by score.',
+  usage:`<EvalMatrix rows={models} cols={tasks} values={scores} domain={[0.6, 1]} />`,el:Matrix},
+ {g:'screens',id:'command-palette',name:'Command Palette',file:'screens/command.tsx',desc:'Grouped commands, fuzzy filter, keyboard first.',
+  usage:`<CommandPalette open={open} onOpenChange={setOpen} hotkey="mod+k"\n  groups={{ Navigate: [...], Actions: [...] }} />`,el:CommandPalette},
+ {g:'screens',id:'chat-screen',name:'Chat Screen',file:'screens/chat.tsx',desc:'Thread list, message log and reply bar. Wire the log to Stream Response.',
+  usage:`<ChatScreen threads={threads} active={id} onSelect={setId}\n  messages={messages} onSend={send} />`,el:ChatScreen},
+ {g:'screens',id:'dashboard',name:'Ops Dashboard',file:'screens/dashboard.tsx',wide:1,desc:'KPI strip with sparklines, a daily chart and an activity feed.',
+  usage:`<Dashboard range="14d" kpis={kpis} series={requests} feed={events} />`,el:Dashboard},
+ {g:'field',id:'landscape',name:'Landscape',file:'docs/landscape.mdx',wide:1,desc:'Where Ledger sits among the libraries it learns from, set in Ledger Table itself. Sort any column.',
+  usage:`<LedgerTable title="Landscape" data={libraries} rowKey="lib"
+  columns={[{ key: "lib", label: "Library", emphasis: true }, ...]} />`,
+  el:()=>html`<${LedgerTable} title="Landscape" data=${LAND} rowKey="lib" init=${{k:'lib',d:1}} cols=${[{k:'lib',l:'Library',big:1},{k:'focus',l:'Known for'},{k:'stack',l:'Motion'},{k:'lic',l:'License'},{k:'take',l:'What Ledger takes'}]}/>`},
+];
+
+/* ───────── APP ───────── */
+function App(){
+  const [skin,setSkin]=useState(()=>{try{return localStorage.getItem('lui-skin')||'ledger'}catch(e){return 'ledger'}});
+  const [theme,setTheme]=useState('system');
+  useEffect(()=>{try{localStorage.setItem('lui-skin',skin)}catch(e){}},[skin]);
+  useEffect(()=>{const r=document.documentElement;if(theme==='system')r.removeAttribute('data-theme');else r.setAttribute('data-theme',theme)},[theme]);
+  let n=0;
+  const go=(e,id)=>{e.preventDefault();const el=document.getElementById(id);el&&el.scrollIntoView({behavior:RM?'auto':'smooth',block:'start'})};
+  const cmd='npx ledger-ui add ledger-table';
+  return html`<div className="app" data-skin=${skin}>
+    <nav className="rail" aria-label="Components">
+      <div className="mark">Ledger<br/>UI</div>
+      ${GROUPS.map(g=>html`<${React.Fragment} key=${g.id}><div className="grp">${g.name}</div>${C.filter(c=>c.g===g.id).map(c=>{n++;return html`<a key=${c.id} href=${'#'+c.id} onClick=${e=>go(e,c.id)}><span>L-${String(n).padStart(2,'0')}</span><span>${c.name}</span></a>`})}<//>`)}
+      <div className="foot">v0.3 · MIT · React 18+</div>
+    </nav>
+    <main>
+      <div className="top">
+        <div className="cell"><span className="lbl">Skin</span><div className="seg">${[['ledger','Ledger'],['terminal','Terminal'],['folio','Folio']].map(s=>html`<button key=${s[0]} aria-pressed=${skin===s[0]} onClick=${()=>setSkin(s[0])}>${s[1]}</button>`)}</div></div>
+        <div className="cell"><span className="lbl">Theme</span><div className="seg">${['system','light','dark'].map(t=>html`<button key=${t} aria-pressed=${theme===t} onClick=${()=>setTheme(t)}>${t}</button>`)}</div></div>
+        <div className="cell"><span className="lbl">${C.length} components</span></div>
+      </div>
+      <header className="hero">
+        <h1><span>Ledger<br/><em>/</em>UI</span></h1>
+        <div className="meta">
+          <${Terrain}/>
+          <p>Open source React components cut from a ledger: full-bleed grids, hard rules, type that sits on the baseline. Core parts, spring physics from motion.dev, timelines from anime.js, WebGL from three.js, 3D built into everyday controls, AI interfaces and full screens. Copy a file in and it is yours.</p>
+          <div className="stats"><div><b>${C.length}</b><small>Components</small></div><div><b>3</b><small>Motion engines</small></div><div><b>3</b><small>Skins</small></div></div>
+          <div className="install"><code>$ ${cmd}</code><button onClick=${e=>copy(cmd,e.currentTarget)}>Copy</button></div>
+        </div>
+      </header>
+      ${(()=>{let k=0;return GROUPS.map(g=>html`<div key=${g.id}>
+        <div className="sect-h"><h2>${g.name}</h2><p>${g.blurb}</p></div>
+        <div className="grid">${C.filter(c=>c.g===g.id).map(c=>{k++;const El=c.el;return html`<${Spec} key=${c.id} id=${c.id} no=${'L-'+String(k).padStart(2,'0')} name=${c.name} tag=${c.engine||g.engine||(g.id==='ai'?'AI':g.name)} desc=${c.desc} usage=${c.usage} file=${c.file} wide=${c.wide}><${El}/><//>`})}</div>
+      </div>`)})()}
+      <footer className="colophon">
+        <div><h4>Distribution</h4><p>Each component is one file with its tokens at the top. A CLI copies files into your project, shadcn-style, so there is no package to upgrade around.</p></div>
+        <div><h4>Skins &amp; license</h4><p>Ledger, Terminal and Folio share the same markup; a skin swaps the accent and the display face. MIT. Sample data on this page is invented.</p></div>
+        <div><h4>Engines</h4><p>Each component names its engine in the header. Install only the engine a component needs: motion for springs, anime.js for timelines, three for WebGL. Every effect falls back to a still frame under reduced motion.</p></div>
+      </footer>
+    </main>
+  </div>`;
+}
+ReactDOM.createRoot(document.getElementById('root')).render(html`<${App}/>`);
+</script>
