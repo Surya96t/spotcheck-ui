@@ -1,0 +1,38 @@
+---
+title: Installation
+description: Add components to a project that already uses shadcn/ui.
+order: 1
+---
+
+## Requirements
+
+You need React 19, Tailwind CSS v4 and a project set up with the shadcn CLI. If you don't have one
+yet, run this first:
+
+```bash
+npx shadcn@latest init
+```
+
+## Add a component
+
+Each command copies the source into `components/ledger/`, then installs what that component needs.
+There's no package to keep up to date, and the code is yours to edit.
+
+<InstallCommand name="roll-number" />
+
+The first install also adds the Ledger tokens to your stylesheet and installs the fonts. It doesn't
+change your existing theme, and your shadcn components keep their look.
+
+## Check that it works
+
+```tsx
+import { RollNumber } from "@/components/ledger/roll-number"
+
+export default function Page() {
+  return <RollNumber value={1284903} className="text-7xl" />
+}
+```
+
+## Next steps
+
+Ledger starts in light mode. See [Theming](/docs/theming) to connect it to dark mode and pick a skin.

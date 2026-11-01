@@ -11,7 +11,7 @@ const NEXT_VERSION = "16.4.3"
 const SHADCN_VERSION = "4.23.0"
 const PORT = 4310
 const APP_PORT = 4320
-const COMPONENTS = ["roll-number", "detent-slider", "bar-terrain"]
+const COMPONENTS = ["roll-number", "detent-slider", "bar-terrain", "command-palette"]
 const REGISTRY_URL = process.env.LEDGER_REGISTRY_URL?.replace(/\/$/, "") ?? `http://127.0.0.1:${PORT}`
 const serveLocally = !process.env.LEDGER_REGISTRY_URL
 const ROOT = process.cwd()
@@ -81,6 +81,11 @@ async function checkInBrowser(app) {
     })
     assertEqual(await background(), DARK, "data-theme on an inner element switches the tokens")
 
+    await page.keyboard.press("Control+k")
+    await page.getByRole("combobox").waitFor()
+    assertEqual(await page.getByRole("option").count(), 1, "the command palette opens with its hotkey")
+    await page.keyboard.press("Escape")
+
     const stretch = await page.getByTestId("roll").evaluate((el) => getComputedStyle(el).fontStretch)
     assertEqual(stretch, "62%", "display type uses the condensed width")
     const loaded = await page.evaluate(async () => {
@@ -138,17 +143,20 @@ try {
     `"use client"
 import { useState } from "react"
 import { BarTerrain } from "@/components/ledger/bar-terrain"
+import { CommandPalette } from "@/components/ledger/command-palette"
 import { DetentSlider } from "@/components/ledger/detent-slider"
 import { RollNumber } from "@/components/ledger/roll-number"
 
 export default function Page() {
   const [dark, setDark] = useState(false)
+  const [palette, setPalette] = useState(false)
   return (
     <main id="ledger" className={dark ? "dark" : ""} style={{ background: "var(--paper)", color: "var(--ink)", padding: 24 }}>
       <button id="toggle" onClick={() => setDark(!dark)}>Toggle dark</button>
       <RollNumber data-testid="roll" value={1284903} style={{ fontSize: 64 }} />
       <DetentSlider label="Temperature" min={0} max={2} step={0.2} defaultValue={0.8} />
       <BarTerrain className="h-80" />
+      <CommandPalette groups={[{ label: "Actions", commands: [{ id: "a", label: "Run it", onSelect: () => {} }] }]} open={palette} onOpenChange={setPalette} />
     </main>
   )
 }

@@ -8,6 +8,6 @@ const BarTerrain = dynamic(
   { ssr: false },
 )
 
-export function BarTerrainDemo({ className }: { className?: string }) {
+export function BarTerrainDemo({ className = "h-90" }: { className?: string }) {
   return <BarTerrain className={className} label="3D bar field that rises under the pointer" />
 }

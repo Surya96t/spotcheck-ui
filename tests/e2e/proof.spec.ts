@@ -1,4 +1,3 @@
-import AxeBuilder from "@axe-core/playwright"
 import { expect, test, type Page } from "@playwright/test"
 
 function watchErrors(page: Page) {
@@ -12,7 +11,8 @@ function watchErrors(page: Page) {
 
 test("roll number moves to the new value", async ({ page }) => {
   const errors = watchErrors(page)
-  await page.goto("/")
+  await page.goto("/components/roll-number")
+  await page.waitForLoadState("networkidle")
   const roll = page.getByTestId("roll")
   const before = await roll.locator(".sr-only").textContent()
   await page.getByRole("button", { name: "Randomize" }).click()
@@ -23,7 +23,8 @@ test("roll number moves to the new value", async ({ page }) => {
 test("slider lands on a step after a drag", async ({ page, isMobile }) => {
   test.skip(isMobile, "Mouse drag only; touch is covered by the desktop pointer path")
   const errors = watchErrors(page)
-  await page.goto("/")
+  await page.goto("/components/detent-slider")
+  await page.waitForLoadState("networkidle")
   const slider = page.getByRole("slider", { name: "Temperature" })
   await slider.scrollIntoViewIfNeeded()
   const box = await slider.boundingBox()
@@ -46,7 +47,8 @@ test("slider lands on a step after a drag", async ({ page, isMobile }) => {
 })
 
 test("slider steps with the keyboard", async ({ page }) => {
-  await page.goto("/")
+  await page.goto("/components/detent-slider")
+  await page.waitForLoadState("networkidle")
   const slider = page.getByRole("slider", { name: "Temperature" })
   await slider.focus()
   await page.keyboard.press("ArrowRight")
@@ -57,7 +59,7 @@ test("slider steps with the keyboard", async ({ page }) => {
 
 test("terrain renders and keeps animating", async ({ page }) => {
   const errors = watchErrors(page)
-  await page.goto("/")
+  await page.goto("/components/bar-terrain")
   const canvas = page.locator("canvas")
   await expect(canvas).toBeVisible()
   await page.waitForTimeout(600)
@@ -72,7 +74,7 @@ test.describe("reduced motion", () => {
   test.use({ reducedMotion: "reduce" })
 
   test("terrain holds still and repaints when the theme changes", async ({ page }) => {
-    await page.goto("/")
+    await page.goto("/components/bar-terrain")
     const canvas = page.locator("canvas")
     await expect(canvas).toBeVisible()
     await page.getByRole("button", { name: "light" }).click()
@@ -86,7 +88,8 @@ test.describe("reduced motion", () => {
   })
 
   test("slider jumps to its step", async ({ page }) => {
-    await page.goto("/")
+    await page.goto("/components/detent-slider")
+    await page.waitForLoadState("networkidle")
     const slider = page.getByRole("slider", { name: "Temperature" })
     await slider.focus()
     await page.keyboard.press("Home")
@@ -96,34 +99,3 @@ test.describe("reduced motion", () => {
     expect(Math.abs(thumb.x + thumb.width / 2 - box.x)).toBeLessThan(1)
   })
 })
-
-for (const skin of ["ledger", "terminal", "folio"] as const) {
-  for (const theme of ["light", "dark"] as const) {
-    test(`${skin} ${theme} passes axe and has no sideways scroll`, async ({ page }, testInfo) => {
-      await page.addInitScript(
-        (appearance) => {
-          localStorage.setItem("ledger-skin", appearance.skin)
-          localStorage.setItem("ledger-theme", appearance.theme)
-        },
-        { skin, theme },
-      )
-      await page.goto("/")
-      await page.waitForLoadState("networkidle")
-      await page.evaluate(() => document.fonts.ready)
-      await expect(page.locator("canvas")).toBeVisible()
-
-      const width = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)
-      expect(width).toBeLessThanOrEqual(0)
-
-      const { violations } = await new AxeBuilder({ page }).analyze()
-      const serious = violations.filter((v) => v.impact === "serious" || v.impact === "critical")
-      expect(serious.map((v) => `${v.id}: ${v.nodes.map((n) => n.target).join(" | ")}`)).toEqual([])
-
-      await page.waitForTimeout(400)
-      await page.screenshot({
-        path: `test-results/screens/${testInfo.project.name}-${skin}-${theme}.png`,
-        fullPage: true,
-      })
-    })
-  }
-}

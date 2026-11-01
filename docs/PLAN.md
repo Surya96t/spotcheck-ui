@@ -55,7 +55,7 @@ Versions were checked on npm on 2026-11-01. Re-check at Phase 0 and pin exact ve
 | 3D helpers | `@react-three/drei` | 10.7.9 | Only when it really saves code |
 | Registry | `shadcn build` | 4.23.0 | A `registry:item` called `ledger-base` carries tokens and fonts |
 | Fonts | Fontsource packages | 5.3.0 | `registry:font` has no field for Archivo's width axis |
-| Docs content | `fumadocs-core` + `fumadocs-mdx`, headless | 16.17.9 / 15.4.10 | Content, table of contents and search, under our own shell. Check against Next 16.4 in Phase 0 |
+| Docs content | `fumadocs-core` + `fumadocs-mdx`, headless | 16.17.9 / 15.4.10 | Typed frontmatter and code highlighting, under our own shell |
 | Code blocks | Shiki | 4.5.0 | Colours mapped to our tokens |
 | Props tables | `react-docgen-typescript` | 2.4.0 | Generated from source so they can't drift |
 | Unit and a11y | Vitest, Testing Library | 5.0.5 | From the brief |
@@ -111,7 +111,9 @@ shadcn files such as `components/ui/button.tsx`. Groups like Motion and Depth ar
   static pages can't read them on the server. Pages stay free of hydration mismatches.
 - **Performance:** engines load per page. WebGL demos load on demand and mount only while on
   screen, since the prototype ran 7 WebGL canvases on one page.
-- **Search:** static index, opened with our own `command-palette`.
+- **Search:** `command-palette` over a list built into the page: components, guides, and skin and
+  theme switches. It matches titles and descriptions, not page bodies. Add a real index only if
+  the site grows past what a list can handle.
 - **Publishing extras:** OG image per component, sitemap, `llms.txt`, privacy-friendly analytics.
 
 ### Rules for every component
@@ -131,8 +133,8 @@ shadcn files such as `components/ui/button.tsx`. Groups like Motion and Depth ar
 | # | Phase | What lands | Done when |
 |---|---|---|---|
 | 0 | Proof | Git repo, Next app, tokens, fonts, registry, CI, preview deploy; `roll-number`, `detent-slider`, `bar-terrain` | All three install from a real URL into a clean shadcn app that uses `.dark`, and look right in all skins and both themes |
-| 1 | Site shell | Rail, top bar, hero, component page template, generated props, search | One finished component page at 390px and 1440px |
-| 2 | Core kit | Brief's Core, Base UI primitives, extracted atoms, `command-palette` | A sample settings screen can be built from Ledger parts alone |
+| 1 | Site shell | Rail, top bar, hero, component page template, generated props, search, `command-palette` | One finished component page at 390px and 1440px |
+| 2 | Core kit | Brief's Core, Base UI primitives, extracted atoms | A sample settings screen can be built from Ledger parts alone |
 | 3 | Motion | Motion, Springs and Timelines groups | Each passes its smoke test and the axe check |
 | 4 | AI and review | AI group, reworked `stamp-approval`, `run-receipt`, `trace-waterfall`, `diff-review`, `model-race`, `chat-screen` | A demo works against a real AI SDK stream |
 | 5 | Public launch, v0.1 | `dashboard`, field notes, SEO, name, domain, shadcn directory PR | Live on the real domain and listed |
@@ -178,6 +180,19 @@ hero and the WebGL path are proven early.
     re-declares the tokens. Only a browser test catches this; a build passes either way.
   - The CLI only writes `@theme inline` through `cssVars.theme`, so the build script moves that
     block there.
+
+## Phase 1 results
+
+- **Shipped:** rail, top bar, home page, one template for all 4 component pages, 2 guides, a styled
+  404, search on ⌘K, and props tables generated from TypeScript.
+- **Brought forward:** `command-palette` came from Phase 2 because search needed it anyway.
+- **Dropped:** Orama, because a list this size doesn't need a search index. Table of contents too,
+  because pages are short and the prototype has none.
+- **Props on phones:** a list that stacks, not a table, so descriptions never scroll out of view.
+- **Test setup:** mobile screenshots run at 1× because headless Chrome can't capture images over
+  8,192px tall, and tall pages at 2.6× go over that.
+- **Worth repeating:** the tests passed with descriptions hidden on phones. Keep looking at the
+  screenshots at the end of each phase.
 
 ## Design language
 

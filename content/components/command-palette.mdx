@@ -1,0 +1,42 @@
+---
+title: Command Palette
+description: Grouped commands with a loose filter, run entirely from the keyboard.
+group: screens
+order: 1
+engine: Base UI
+keyboard:
+  - { keys: "⌘ K", action: "Open or close, Ctrl K on Windows and Linux" }
+  - { keys: "↑ ↓", action: "Move through the results" }
+  - { keys: "Enter", action: "Run the highlighted command" }
+  - { keys: "Esc", action: "Close and return focus" }
+reducedMotion: The palette appears without its short slide.
+---
+
+## Usage
+
+```tsx
+"use client"
+
+import { useState } from "react"
+import { CommandPalette, type CommandGroup } from "@/components/ledger/command-palette"
+
+const groups: CommandGroup[] = [
+  {
+    label: "Actions",
+    commands: [
+      { id: "new", label: "New eval run", shortcut: "N", onSelect: createRun },
+      { id: "export", label: "Export as CSV", keywords: "download", onSelect: exportCsv },
+    ],
+  },
+]
+
+export function App() {
+  const [open, setOpen] = useState(false)
+  return <CommandPalette groups={groups} open={open} onOpenChange={setOpen} />
+}
+```
+
+It matches labels first, then `keywords`, then letters in order, so "nrn" finds "New eval run".
+The site's own search on this page is this component. Press ⌘K to try it.
+
+Pass `hotkey={false}` if something else opens it.

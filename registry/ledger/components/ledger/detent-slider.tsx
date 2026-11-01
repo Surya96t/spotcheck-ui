@@ -13,19 +13,29 @@ const MAX_TICKS = 41
 export type DetentZone = { from: number; to: number; label: string }
 
 type DetentSliderProps = {
+  /** Names the control for screen readers and prints above the value. */
   label: string
+  /** The lowest value. */
   min?: number
+  /** The highest value. */
   max?: number
+  /** Distance between detents. */
   step?: number
+  /** The current value, when you control the slider. */
   value?: number
+  /** The starting value, when the slider manages itself. */
   defaultValue?: number
+  /** Runs when the slider lands on a new step, not on every pointer move. */
   onValueChange?: (value: number) => void
   /** Named ranges, such as Deterministic, Balanced and Creative. */
   zones?: DetentZone[]
   /** Values to print under the track. Defaults to the two ends. */
   marks?: number[]
+  /** Formats the readout and marks. Pass it from a client component. */
   format?: (value: number) => string
+  /** The spring used when landing on a step. */
   spring?: { stiffness: number; damping: number }
+  /** Added to the outer element. */
   className?: string
 }
 
