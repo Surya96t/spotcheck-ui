@@ -1,0 +1,26 @@
+---
+title: Dropdown Menu
+description: "A short list of actions behind a button."
+group: core
+order: 16
+engine: Base UI
+keyboard:
+  - { keys: "Enter", action: "Open the menu" }
+  - { keys: "↑ ↓", action: "Move through items" }
+  - { keys: "Esc", action: "Close and return focus" }
+reducedMotion: "The menu appears without animation."
+---
+
+## Usage
+
+```tsx
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ledger/dropdown-menu"
+import { Button } from "@/components/ledger/button"
+
+<DropdownMenu>
+  <DropdownMenuTrigger render={<Button />}>Actions</DropdownMenuTrigger>
+  <DropdownMenuContent>
+    <DropdownMenuItem onClick={rerun}>Re-run</DropdownMenuItem>
+  </DropdownMenuContent>
+</DropdownMenu>
+```

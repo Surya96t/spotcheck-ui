@@ -1,0 +1,26 @@
+---
+title: Toast
+description: "A short message that announces itself and goes away."
+group: core
+order: 19
+engine: Base UI
+keyboard:
+  - { keys: "F6", action: "Move focus into the toasts" }
+  - { keys: "Tab", action: "Reach the dismiss button" }
+  - { keys: "Esc", action: "Dismiss the focused toast" }
+reducedMotion: "Toasts appear without their short rise."
+---
+
+## Usage
+
+```tsx
+import { ToastProvider, toast } from "@/components/ledger/toast"
+
+// Wrap your app once.
+<ToastProvider>{children}</ToastProvider>
+
+// Then call it from anywhere.
+toast.add({ title: "Saved", description: "support-qa is up to date." })
+```
+
+Screen readers hear each toast as it arrives.

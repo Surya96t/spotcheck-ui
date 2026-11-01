@@ -1,0 +1,22 @@
+---
+title: Settings Screen
+description: "A full settings page built only from Ledger parts. Drop it in, then cut it down."
+group: screens
+order: 2
+engine: Base UI
+wide: true
+keyboard:
+  - { keys: "← →", action: "Move between tabs" }
+  - { keys: "Tab", action: "Move through the controls" }
+reducedMotion: "Follows each part: nothing slides, and the hold fill stays."
+---
+
+## Usage
+
+```tsx
+import { SettingsScreen } from "@/components/ledger/settings-screen"
+
+<SettingsScreen />
+```
+
+This is one file you own. The models, regions and keys are constants at the top, ready to replace with your own data.

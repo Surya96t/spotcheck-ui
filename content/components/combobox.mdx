@@ -1,0 +1,20 @@
+---
+title: Combobox
+description: "A select you can type into, for lists too long to scan."
+group: core
+order: 11
+engine: Base UI
+keyboard:
+  - { keys: "↑ ↓", action: "Move through matches" }
+  - { keys: "Enter", action: "Choose a match" }
+  - { keys: "Esc", action: "Close the list" }
+reducedMotion: "The list appears without animation."
+---
+
+## Usage
+
+```tsx
+import { Combobox } from "@/components/ledger/combobox"
+
+<Combobox label="Region" options={regions} value={region} onValueChange={setRegion} />
+```

@@ -2,8 +2,8 @@ import Link from "next/link"
 
 import { Demo } from "@/components/site/demos"
 import { InstallCommand } from "@/components/site/install-command"
-import { Tag } from "@/components/site/tag"
 import { GROUPS, getComponents } from "@/lib/catalog"
+import { Tag } from "@/registry/ledger/components/ledger/tag"
 import { BarTerrainDemo } from "@/registry/ledger/examples/bar-terrain-demo"
 
 const PITCH =
@@ -54,8 +54,14 @@ export default function Home() {
               </h2>
               <p className="text-mute max-w-[40ch] text-[13.5px] md:text-right">{group.blurb}</p>
             </div>
-            {members.map(({ no, slug, page }) => (
-              <article key={slug} className="border-ink border-b-(length:--rule)">
+            <div className="grid lg:grid-cols-2">
+              {members.map(({ no, slug, page }) => (
+                <article
+                  key={slug}
+                  className={`border-ink flex min-w-0 flex-col border-b-(length:--rule) lg:even:border-l-(length:--rule) ${
+                    page.data.wide ? "lg:col-span-2" : ""
+                  }`}
+                >
                 <div className="flex items-end gap-3 border-b border-dashed border-[color-mix(in_srgb,var(--ink)_35%,transparent)] px-4 pt-4 pb-2">
                   <span className="text-mute font-(family-name:--f-mono) text-[11px] tabular-nums">{no}</span>
                   <h3 className="ledger-display grow text-2xl leading-none">
@@ -69,8 +75,9 @@ export default function Home() {
                 <div className="min-w-0 px-4 py-5">
                   <Demo slug={slug} />
                 </div>
-              </article>
-            ))}
+                </article>
+              ))}
+            </div>
           </section>
         )
       })}

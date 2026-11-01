@@ -1,0 +1,18 @@
+---
+title: Chip
+description: "A compact item, such as an attachment, that can be removed."
+group: core
+order: 22
+engine: CSS
+keyboard:
+  - { keys: "Enter", action: "Remove the chip, from its remove button" }
+reducedMotion: "Nothing here animates."
+---
+
+## Usage
+
+```tsx
+import { Chip } from "@/components/ledger/chip"
+
+<Chip onRemove={() => remove(file)} removeLabel={`Remove ${file}`}>{file}</Chip>
+```

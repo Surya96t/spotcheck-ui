@@ -2,6 +2,7 @@
 
 import * as React from "react"
 
+import { Button } from "@/registry/ledger/components/ledger/button"
 import { CommandPalette, type CommandGroup } from "@/registry/ledger/components/ledger/command-palette"
 
 export function CommandPaletteDemo() {
@@ -28,13 +29,9 @@ export function CommandPaletteDemo() {
 
   return (
     <div className="flex flex-col items-start gap-3.5">
-      <button
-        type="button"
-        onClick={() => setOpen(true)}
-        className="bg-ink text-paper border-ink cursor-pointer border-(length:--rule) px-4 py-2.5 font-(family-name:--f-mono) text-[12.5px] font-semibold tracking-[.06em] uppercase shadow-[4px_4px_0_var(--ink)] active:translate-x-1 active:translate-y-1 active:shadow-none"
-      >
+      <Button variant="ink" onClick={() => setOpen(true)}>
         Open palette
-      </button>
+      </Button>
       <span className="ledger-label" data-testid="palette-result">
         {last ? `Ran: ${last}` : "Arrows to move, Enter to run, Esc to close"}
       </span>

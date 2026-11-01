@@ -1,14 +1,14 @@
+import { readdirSync } from "node:fs"
+
 import AxeBuilder from "@axe-core/playwright"
 import { expect, test, type Page } from "@playwright/test"
 
+const slugs = (directory: string) => readdirSync(directory).map((file) => file.replace(/\.mdx$/, ""))
+
 const ROUTES = [
   "/",
-  "/components/roll-number",
-  "/components/detent-slider",
-  "/components/bar-terrain",
-  "/components/command-palette",
-  "/docs/installation",
-  "/docs/theming",
+  ...slugs("content/components").map((slug) => `/components/${slug}`),
+  ...slugs("content/docs").map((slug) => `/docs/${slug}`),
 ]
 
 function watchErrors(page: Page) {
@@ -111,7 +111,7 @@ test.describe("search", () => {
     await page.goto("/")
     await page.waitForLoadState("networkidle")
     await page.keyboard.press("Control+k")
-    const input = page.getByRole("combobox")
+    const input = page.getByRole("combobox", { name: "Search components" })
     await expect(input).toBeFocused()
     await input.fill("bar ter")
     await expect(page.getByRole("option").first()).toHaveText(/Bar Terrain/)
@@ -126,7 +126,7 @@ test.describe("search", () => {
     await page.waitForLoadState("networkidle")
     const trigger = page.getByRole("button", { name: /Search/ })
     await trigger.click()
-    const input = page.getByRole("combobox")
+    const input = page.getByRole("combobox", { name: "Search components" })
     await expect(input).toBeFocused()
     const first = await input.getAttribute("aria-activedescendant")
     await page.keyboard.press("ArrowDown")
@@ -140,7 +140,7 @@ test.describe("search", () => {
     await page.goto("/")
     await page.waitForLoadState("networkidle")
     await page.getByRole("button", { name: /Search/ }).click()
-    await page.getByRole("combobox").fill("folio")
+    await page.getByRole("combobox", { name: "Search components" }).fill("folio")
     await page.keyboard.press("Enter")
     await expect(page.locator("html")).toHaveAttribute("data-skin", "folio")
   })
@@ -149,7 +149,7 @@ test.describe("search", () => {
     await page.goto("/")
     await page.waitForLoadState("networkidle")
     await page.getByRole("button", { name: /Search/ }).click()
-    await page.getByRole("combobox").fill("zzzz")
+    await page.getByRole("combobox", { name: "Search components" }).fill("zzzz")
     await expect(page.getByText("No command matches")).toBeVisible()
   })
 })
@@ -168,7 +168,7 @@ test("palette demo runs a command", async ({ page }) => {
   await page.goto("/components/command-palette")
   await page.waitForLoadState("networkidle")
   await page.getByRole("button", { name: "Open palette" }).click()
-  await page.getByRole("combobox").fill("export")
+  await page.getByRole("combobox", { name: "Type a command" }).fill("export")
   await page.keyboard.press("Enter")
   await expect(page.getByTestId("palette-result")).toHaveText("Ran: Export table as CSV")
 })

@@ -1,0 +1,18 @@
+---
+title: Checkbox
+description: "A square checkbox on the same hard rule as everything else."
+group: core
+order: 8
+engine: Base UI
+keyboard:
+  - { keys: "Space", action: "Check or uncheck" }
+reducedMotion: "Nothing here animates."
+---
+
+## Usage
+
+```tsx
+import { Checkbox } from "@/components/ledger/checkbox"
+
+<Checkbox checked={weekends} onCheckedChange={setWeekends}>Include weekends</Checkbox>
+```

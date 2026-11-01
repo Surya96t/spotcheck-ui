@@ -1,0 +1,23 @@
+---
+title: Radio Group
+description: "Square radios for choosing one option when you want them all visible."
+group: core
+order: 9
+engine: Base UI
+keyboard:
+  - { keys: "↑ ↓", action: "Move to the next option and choose it" }
+reducedMotion: "Nothing here animates."
+---
+
+## Usage
+
+```tsx
+import { RadioGroup } from "@/components/ledger/radio-group"
+
+<RadioGroup
+  label="Keep traces for"
+  options={[{ value: "30", label: "30 days" }, { value: "90", label: "90 days" }]}
+  value={retention}
+  onValueChange={setRetention}
+/>
+```

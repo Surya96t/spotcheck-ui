@@ -1,0 +1,26 @@
+---
+title: Button
+description: "Hard offset shadow that collapses on press, with the button moving into its shadow."
+group: core
+order: 2
+engine: CSS
+keyboard:
+  - { keys: "Enter", action: "Press the button" }
+  - { keys: "Space", action: "Press the button" }
+reducedMotion: "The button moves into its shadow at once, with no transition."
+---
+
+## Usage
+
+```tsx
+import { Button, buttonClass } from "@/components/ledger/button"
+
+<Button variant="ink">Deploy</Button>
+<Button variant="accent">Run eval</Button>
+<Button>Export CSV</Button>
+<Button variant="ghost">Cancel</Button>
+
+<Link href="/runs" className={buttonClass("ink")}>View runs</Link>
+```
+
+Use `buttonClass` to style a link as a button, so it stays a real link.

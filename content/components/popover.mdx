@@ -1,0 +1,23 @@
+---
+title: Popover
+description: "A small panel anchored to a button, for quick detail or settings."
+group: core
+order: 17
+engine: Base UI
+keyboard:
+  - { keys: "Enter", action: "Open the popover" }
+  - { keys: "Esc", action: "Close and return focus" }
+reducedMotion: "The panel appears without animation."
+---
+
+## Usage
+
+```tsx
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ledger/popover"
+import { Button } from "@/components/ledger/button"
+
+<Popover>
+  <PopoverTrigger render={<Button />}>Details</PopoverTrigger>
+  <PopoverContent>…</PopoverContent>
+</Popover>
+```

@@ -1,0 +1,19 @@
+---
+title: Sparkline
+description: "A small trend line with the latest point marked."
+group: core
+order: 25
+engine: SVG
+keyboard: []
+reducedMotion: "Nothing here animates."
+---
+
+## Usage
+
+```tsx
+import { Sparkline } from "@/components/ledger/sparkline"
+
+<Sparkline values={[30, 34, 33, 38, 41]} label="Requests rose from 30k to 41k" />
+```
+
+Leave out `label` when the numbers are already printed nearby, and it's hidden from screen readers.

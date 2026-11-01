@@ -22,7 +22,7 @@ export function CodeBlock({ children, ...props }: React.ComponentProps<"pre">) {
         type="button"
         aria-live="polite"
         onClick={() => copy(ref.current?.textContent ?? "")}
-        className="text-paper border-paper absolute top-2 right-2 cursor-pointer border px-2 py-0.5 font-(family-name:--f-mono) text-[11px]"
+        className="bg-ink text-paper border-paper absolute top-2 right-2 cursor-pointer border px-2 py-0.5 font-(family-name:--f-mono) text-[11px]"
       >
         {copied ? "Copied" : "Copy"}
       </button>

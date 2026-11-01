@@ -19,6 +19,7 @@ function declarations(node) {
   const out = {}
   for (const child of node.nodes ?? []) {
     if (child.type === "decl") out[child.prop] = child.value
+    if (child.type === "rule") out[child.selector] = declarations(child)
   }
   return out
 }

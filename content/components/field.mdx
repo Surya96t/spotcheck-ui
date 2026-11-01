@@ -1,0 +1,25 @@
+---
+title: Field
+description: "Underline inputs with a mono label row for a counter or requirement. Errors say how to fix the problem."
+group: core
+order: 4
+engine: Base UI
+keyboard: []
+reducedMotion: "Nothing here animates."
+---
+
+## Usage
+
+```tsx
+import { Field, Input, Textarea } from "@/components/ledger/field"
+
+<Field label="Dataset name" hint={`${name.length}/32`}>
+  <Input value={name} maxLength={32} onChange={(event) => setName(event.target.value)} />
+</Field>
+
+<Field label="API key" hint="Required" error="Keys are at least 12 characters. Paste the full key.">
+  <Input value={key} onChange={(event) => setKey(event.target.value)} />
+</Field>
+```
+
+Setting `error` marks the field invalid and connects the message to the input for screen readers. Field also works around Select and Combobox.

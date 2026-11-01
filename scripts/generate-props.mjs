@@ -12,6 +12,8 @@ const parser = docgen.withCustomConfig("tsconfig.json", {
 })
 
 const MAX_DEFAULT_LENGTH = 32
+// Blocks you edit directly, which take no props.
+const NO_PROPS = ["settings-screen"]
 const pascal = (slug) => slug.replace(/(^|-)(\w)/g, (_, __, letter) => letter.toUpperCase())
 
 const cleanType = (type) => type.replace(/^\((.*)\)$/s, "$1")
@@ -25,7 +27,16 @@ export function generateProps() {
   const output = {}
   for (const file of readdirSync(SOURCE)) {
     const slug = file.replace(/\.tsx$/, "")
-    const doc = parser.parse(join(SOURCE, file)).find((d) => d.displayName === pascal(slug))
+    if (NO_PROPS.includes(slug)) {
+      output[slug] = []
+      continue
+    }
+    const docs = parser.parse(join(SOURCE, file))
+    // Compound components document the part that holds the options.
+    const doc = ["", "Content", "Provider", "List"]
+      .map((suffix) => docs.find((d) => d.displayName === pascal(slug) + suffix))
+      .filter(Boolean)
+      .find((d, _, all) => Object.keys(d.props).length > 0 || all.length === 1)
     if (!doc) throw new Error(`No props found for ${pascal(slug)} in ${file}`)
     output[slug] = Object.values(doc.props).map((prop) => ({
       name: prop.name,

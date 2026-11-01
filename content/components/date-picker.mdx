@@ -1,0 +1,27 @@
+---
+title: Date Picker
+description: "A calendar on the ledger grid, inline or in a popover."
+group: core
+order: 12
+engine: Base UI
+keyboard:
+  - { keys: "← →", action: "Move by a day" }
+  - { keys: "↑ ↓", action: "Move by a week" }
+  - { keys: "Home", action: "Start of the week" }
+  - { keys: "End", action: "End of the week" }
+  - { keys: "Page Up", action: "Previous month" }
+  - { keys: "Page Down", action: "Next month" }
+  - { keys: "Enter", action: "Choose the date" }
+reducedMotion: "Nothing here animates."
+---
+
+## Usage
+
+```tsx
+import { Calendar, DatePicker } from "@/components/ledger/date-picker"
+
+<DatePicker label="Billing starts" value={date} onValueChange={setDate} />
+<Calendar value={date} onValueChange={setDate} />
+```
+
+Weeks start on Monday. Pass `locale` to change the language of the labels.
