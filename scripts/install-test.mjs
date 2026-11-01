@@ -12,15 +12,15 @@ const SHADCN_VERSION = "4.23.0"
 const PORT = 4310
 const APP_PORT = 4320
 const COMPONENTS = ["roll-number", "detent-slider", "bar-terrain"]
-const REGISTRY_URL = process.env.REGISTRY_URL?.replace(/\/$/, "") ?? `http://127.0.0.1:${PORT}`
-const serveLocally = !process.env.REGISTRY_URL
+const REGISTRY_URL = process.env.LEDGER_REGISTRY_URL?.replace(/\/$/, "") ?? `http://127.0.0.1:${PORT}`
+const serveLocally = !process.env.LEDGER_REGISTRY_URL
 const ROOT = process.cwd()
 
 // Asynchronous, because the registry server below runs in this same process.
 function run(command, args, cwd) {
   console.log(`\n$ ${command} ${args.join(" ")}`)
   return new Promise((done, fail) => {
-    spawn(command, args, { cwd, stdio: "inherit", env: { ...process.env, CI: "1" } })
+    spawn(command, args, { cwd, stdio: "inherit", env: { ...process.env, CI: "1", LEDGER_REGISTRY_URL: REGISTRY_URL } })
       .on("error", fail)
       .on("exit", (code) => (code === 0 ? done() : fail(new Error(`${command} exited with ${code}`))))
   })

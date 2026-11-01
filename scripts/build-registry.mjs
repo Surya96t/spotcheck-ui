@@ -8,7 +8,7 @@ const CSS_SOURCE = "registry/ledger/base/ledger.css"
 const OUTPUT = "registry.generated.json"
 
 function registryUrl() {
-  if (process.env.REGISTRY_URL) return process.env.REGISTRY_URL.replace(/\/$/, "")
+  if (process.env.LEDGER_REGISTRY_URL) return process.env.LEDGER_REGISTRY_URL.replace(/\/$/, "")
   const vercel = process.env.VERCEL_PROJECT_PRODUCTION_URL ?? process.env.VERCEL_URL
   return vercel ? `https://${vercel}` : "http://localhost:3000"
 }

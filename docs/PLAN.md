@@ -157,7 +157,13 @@ hero and the WebGL path are proven early.
 - **Proved:** roll-number, detent-slider and bar-terrain install over HTTP into a brand-new
   shadcn app, build, and render correctly. Checked in a real browser: all three ways of switching
   to dark, condensed Archivo loading, no console errors, and shadcn's `--accent` left unchanged.
-- **Not proved yet:** installing from a public URL, which needs the repo on GitHub and a deploy.
+- **Public install:** the same 15 checks pass installing from
+  `https://ledger-ui-pied.vercel.app`, a temporary address until the name is settled. Run them with
+  `LEDGER_REGISTRY_URL=<site> pnpm test:install`.
+- **Name clash:** the variable can't be called `REGISTRY_URL`, because the shadcn CLI reads that
+  name for its own default registry.
+- **Hosting:** the GitHub repo is private and the Vercel production deployment is public. The
+  Vercel project is linked to the repo, so pushes to `main` deploy.
 - **Bundle cost, gzipped:** three.js with R3F is about 237 KB and Motion about 52 KB. Both load
   only on pages that use them, so no demo needs to change. Archivo's Latin file is 88 KB.
 - **Tooling held back:** TypeScript 5.9 and ESLint 9 are pinned rather than TypeScript 7 and
