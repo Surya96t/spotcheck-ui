@@ -1,0 +1,40 @@
+---
+title: Detent Slider
+description: Drags freely, then springs into the nearest step with overshoot.
+group: springs
+order: 1
+engine: motion.dev
+keyboard:
+  - { keys: "→ ↑", action: "Move up one step" }
+  - { keys: "← ↓", action: "Move down one step" }
+  - { keys: "Home", action: "Jump to the minimum" }
+  - { keys: "End", action: "Jump to the maximum" }
+reducedMotion: The thumb jumps straight to its step, with no spring.
+---
+
+## Usage
+
+```tsx
+"use client"
+
+import { DetentSlider } from "@/components/ledger/detent-slider"
+
+const zones = [
+  { from: 0, to: 0.4, label: "Deterministic" },
+  { from: 0.6, to: 1.2, label: "Balanced" },
+  { from: 1.4, to: 2, label: "Creative" },
+]
+
+<DetentSlider
+  label="Temperature"
+  min={0}
+  max={2}
+  step={0.2}
+  defaultValue={0.8}
+  zones={zones}
+  onValueChange={setTemperature}
+/>
+```
+
+`onValueChange` runs when the slider lands on a step. Screen readers hear the value and its zone
+together, such as "0.8, Balanced".

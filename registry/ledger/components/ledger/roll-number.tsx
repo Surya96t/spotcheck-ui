@@ -11,7 +11,9 @@ type RollNumberProps = Omit<React.ComponentProps<"span">, "children"> & {
   value?: number
   /** Preformatted text such as "₹1,990". Digits roll, everything else stays still. */
   text?: string
+  /** The locale used to format `value`. */
   locale?: string
+  /** Passed to Intl.NumberFormat, for currency or decimal places. */
   formatOptions?: Intl.NumberFormatOptions
   /** Roll time in milliseconds. */
   duration?: number

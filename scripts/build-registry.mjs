@@ -4,6 +4,8 @@ import { execFileSync } from "node:child_process"
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs"
 import postcss from "postcss"
 
+import { generateProps } from "./generate-props.mjs"
+
 const CSS_SOURCE = "registry/ledger/base/ledger.css"
 const OUTPUT = "registry.generated.json"
 
@@ -46,4 +48,5 @@ writeFileSync(OUTPUT, `${JSON.stringify(registry, null, 2)}\n`)
 
 mkdirSync("public/r", { recursive: true })
 execFileSync("pnpm", ["exec", "shadcn", "build", OUTPUT, "--output", "public/r"], { stdio: "inherit" })
+generateProps()
 console.log(`Registry built for ${url}`)

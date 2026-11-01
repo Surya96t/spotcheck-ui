@@ -142,11 +142,15 @@ function Field({ cols, rows, source, radius, lift, still, palette, pointer }: Fi
 }
 
 type BarTerrainProps = Omit<React.ComponentProps<"div">, "children"> & {
+  /** Bars along the long side. */
   cols?: number
+  /** Bars along the short side. */
   rows?: number
-  /** Height of a bar at a grid position and time in seconds. */
+  /** Height of a bar at a grid position and time in seconds. Pass it from a client component. */
   source?: HeightSource
+  /** How wide the bump under the pointer spreads. */
   pointerRadius?: number
+  /** How high the bump under the pointer rises. */
   pointerLift?: number
   /** Describes the data for screen readers. */
   label?: string

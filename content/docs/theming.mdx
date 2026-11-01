@@ -1,0 +1,61 @@
+---
+title: Theming
+description: Connect dark mode, choose a skin, and change the tokens.
+order: 2
+---
+
+## Dark mode
+
+If your app already puts `.dark` on an element, you don't need to do anything. Ledger follows it.
+
+Ledger stays light until something opts in, so an app with no dark mode is never left half dark.
+You can also use `data-theme` on any element:
+
+```tsx
+<html data-theme="system">
+<section data-theme="dark">
+```
+
+The value can be `light`, `dark` or `system`. It works on part of a page too.
+
+## Skins
+
+Skins change the accent and the display type. Set `data-skin` on `<html>` or on any section.
+
+```tsx
+<html data-skin="folio">
+```
+
+| Skin | Display type |
+| --- | --- |
+| `ledger` | Condensed Archivo in uppercase |
+| `terminal` | IBM Plex Mono throughout |
+| `folio` | Instrument Serif italic |
+
+## Tokens
+
+Everything comes from CSS variables in your stylesheet, so you can edit them there.
+
+| Token | Used for |
+| --- | --- |
+| `--paper` | Page background |
+| `--ink` | Text, rules and shadows |
+| `--mute` | Secondary text |
+| `--wash` | Quiet fills |
+| `--raise` | Raised surfaces |
+| `--accent-ink` | The accent |
+| `--on-accent` | Text on the accent |
+| `--ok`, `--warn`, `--bad` | Status |
+| `--rule` | Rule weight |
+
+The accent is called `--accent-ink` because shadcn already uses `--accent`.
+
+To change the accent, set `--accent-light` and `--accent-dark`. Each colour is written with
+`light-dark()`, so one value covers both modes.
+
+```css
+:root {
+  --accent-light: #0f766e;
+  --accent-dark: #5eead4;
+}
+```

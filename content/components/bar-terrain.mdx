@@ -1,0 +1,42 @@
+---
+title: Bar Terrain
+description: An instanced field of bars driven by a height function, with a bump under the pointer.
+group: webgl
+order: 1
+engine: three.js
+keyboard: []
+reducedMotion: Renders one still frame, and renders again when the theme or skin changes. The pointer bump is off.
+---
+
+## Usage
+
+Give it a height. It fills its parent's width, and colours come from your tokens.
+
+```tsx
+"use client"
+
+import dynamic from "next/dynamic"
+
+const BarTerrain = dynamic(
+  () => import("@/components/ledger/bar-terrain").then((module) => module.BarTerrain),
+  { ssr: false },
+)
+
+<BarTerrain className="h-96" label="Requests per hour across 30 regions" />
+```
+
+Load it with `dynamic` so three.js only downloads where it's used. Rendering pauses while the
+canvas is off screen.
+
+Set `label` to describe your data, because screen readers get that instead of the canvas.
+
+## Your own data
+
+`source` returns the height of a bar at a grid position and a time in seconds.
+
+```tsx
+const source = (col: number, row: number, time: number) =>
+  values[row][col] + Math.sin(time + col) * 0.1
+
+<BarTerrain cols={24} rows={7} source={source} />
+```

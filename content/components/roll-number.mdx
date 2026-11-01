@@ -1,0 +1,23 @@
+---
+title: Roll Number
+description: Each digit is its own column, so only the digits that change move.
+group: motion
+order: 1
+engine: CSS
+keyboard: []
+reducedMotion: Digits change instantly, with no transition.
+---
+
+## Usage
+
+Pass a number and it's formatted for you. Pass `text` for anything already formatted: digits roll
+and every other character stays still.
+
+```tsx
+import { RollNumber } from "@/components/ledger/roll-number"
+
+<RollNumber value={tokens} className="text-7xl" />
+<RollNumber text="₹1,990" />
+```
+
+It inherits its size from the surrounding text, and it works in server components.
