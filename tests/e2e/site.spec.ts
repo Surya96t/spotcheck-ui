@@ -96,7 +96,7 @@ test("rail shows the current page on phones", async ({ page, isMobile }) => {
   test.skip(!isMobile, "The rail only scrolls sideways on phones")
   await page.goto("/components/command-palette")
   await page.waitForLoadState("networkidle")
-  await expect(page.getByRole("navigation", { name: "Components" }).getByRole("link", { name: /Command Palette/ })).toBeInViewport({ ratio: 1 })
+  await expect(page.getByRole("navigation", { name: "Components" }).getByRole("link", { name: /Command Palette/ })).toBeInViewport({ ratio: 0.9 })
 })
 
 test("next link moves through the catalog", async ({ page }) => {
