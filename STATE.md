@@ -15,15 +15,15 @@ _none_
 _none_
 
 ## Recent decisions
-- 2026-11-01: chose static Next.js App Router over React + Vite (prerendered docs, static /r JSON, installer fit)
-- 2026-11-01: chose one Next app at the repo root over an apps/docs monorepo (one deployable, no npm package to publish)
-- 2026-11-01: chose shadcn CLI and static registry JSON over a custom npx ledger-ui command (shadcn handles install; npm name taken)
-- 2026-11-01: chose Base UI primitives for dialog, select and popover (accessibility is the hard part; brief named no headless layer)
-- 2026-11-01: chose headless fumadocs-core and fumadocs-mdx over fumadocs-ui (its layout would fight the ledger shell)
-- 2026-11-01: chose R3F 9 with React 19 over R3F 10 (v10 is alpha and WebGPU-first)
-- 2026-11-01: changed light tokens to --ok #14733F, --warn #8F5500, --mute #5C616A (originals miss 4.5:1 on small text and would fail axe)
-- 2026-11-01: chose tokens that respond to .dark, [data-theme] and system setting (shadcn CLI writes dark cssVars to .dark)
-- 2026-11-01: chose flat named exports over Tabs.List-style dot access (dot access fails across the Next server/client boundary)
-- 2026-11-01: chose WebGL one frame per state change under reduced motion over one frame ever (prototype loop would freeze interactive 3D controls)
+- 2026-11-01: narrowed positioning to reviewing, grading and auditing AI work plus motion on controls (AI Elements and assistant-ui already cover chat parts)
+- 2026-11-01: chose AI before WebGL and Depth, with public v0.1 before Depth (AI carries the positioning; launch feedback comes before the most expensive work)
+- 2026-11-01: chose a Phase 0 slice (roll-number, detent-slider, bar-terrain installed into a clean shadcn app) because install, tokens and fonts are the riskiest setup
+- 2026-11-01: chose do-not-copy for Animate UI, React Bits, Aceternity and coss ui (Commons Clause, source redistribution ban, AGPL default)
+- 2026-11-01: kept Ledger UI as a working title only (Ledger SAS publishes @ledgerhq/lumen-ui-react; trademark check required before buying a domain)
+- 2026-11-01: chose registry/ledger/components/ledger/ over group folders so the CLI rewrites imports and components install to components/ledger, clear of shadcn's ui folder
+- 2026-11-01: chose Fontsource packages over registry:font because registry:font cannot express Archivo's width axis
+- 2026-11-01: chose a registry:item ledger-base over registry:base so adding a component never touches the user's project config
+- 2026-11-01: renamed the accent token to --accent-ink because shadcn owns --accent and installing would repaint the user's app
+- 2026-11-01: tokens stay light unless .dark or data-theme opts in, rather than following the system by default (a shadcn app with no theme provider would end up half dark)
 
 ## Notes
