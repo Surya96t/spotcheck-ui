@@ -1,10 +1,10 @@
 import Link from "next/link"
 
-import { Shell } from "@/components/site/shell"
+import { SiteFrame } from "@/components/site/site-frame"
 
 export default function NotFound() {
   return (
-    <Shell>
+    <SiteFrame>
       <div className="px-4 py-10">
         <p className="spotcheck-label">404</p>
         <h1 className="spotcheck-display mt-2 text-[clamp(44px,7vw,96px)] leading-[.85]">Not on file</h1>
@@ -15,6 +15,6 @@ export default function NotFound() {
           </Link>
         </p>
       </div>
-    </Shell>
+    </SiteFrame>
   )
 }

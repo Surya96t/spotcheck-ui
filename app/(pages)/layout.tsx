@@ -1,0 +1,7 @@
+import type { ReactNode } from "react"
+
+import { SiteFrame } from "@/components/site/site-frame"
+
+export default function PagesLayout({ children }: { children: ReactNode }) {
+  return <SiteFrame>{children}</SiteFrame>
+}

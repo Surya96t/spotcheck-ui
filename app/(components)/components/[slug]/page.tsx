@@ -6,7 +6,8 @@ import type { ReactNode } from "react"
 import { Demo } from "@/components/site/demos"
 import { InstallCommand } from "@/components/site/install-command"
 import { mdxComponents } from "@/components/site/mdx"
-import { getComponents, getProps, getRegistryItem } from "@/lib/catalog"
+import { Breadcrumb } from "@/components/site/page-title"
+import { GROUPS, getComponents, getProps, getRegistryItem } from "@/lib/catalog"
 import { Tag } from "@/registry/spotcheck/components/spotcheck/tag"
 
 type Params = { params: Promise<{ slug: string }> }
@@ -38,6 +39,8 @@ const SOFT_RULE = "border-[color-mix(in_srgb,var(--ink)_18%,transparent)]"
 const CELL = `border-b ${SOFT_RULE} py-2 pr-4 align-bottom`
 const PROP_GRID = "lg:grid-cols-[minmax(0,.9fr)_minmax(0,1fr)_minmax(0,.7fr)_minmax(0,1.4fr)] lg:gap-x-4"
 const MONO = "font-(family-name:--f-mono) text-xs"
+const SIDE_LINK = "flex min-h-10 items-center px-4 font-(family-name:--f-mono) text-[12.5px]"
+const SIDE_RULE = "border-b border-dashed border-[color-mix(in_srgb,var(--ink)_20%,transparent)]"
 
 export default async function ComponentPage({ params }: Params) {
   const { slug } = await params
@@ -46,23 +49,49 @@ export default async function ComponentPage({ params }: Params) {
   const entry = all[index]
   if (!entry) notFound()
 
-  const { page, no } = entry
+  const { page } = entry
   const Body = page.data.body
   const props = getProps(slug)
   const dependencies = getRegistryItem(slug)?.dependencies ?? []
   const previous = all[index - 1]
   const next = all[index + 1]
+  const group = GROUPS.find(({ id }) => id === page.data.group)
+  const members = all.filter((component) => component.page.data.group === page.data.group)
 
   return (
-    <article>
-      <header className="border-ink border-b-(length:--rule) px-4 pt-7 pb-4">
-        <div className="mb-3 flex items-center justify-between gap-3">
-          <span className="text-mute font-(family-name:--f-mono) text-[11px] tabular-nums">{no}</span>
-          <Tag>{page.data.engine}</Tag>
+    <div className="flex items-stretch">
+      <nav aria-label={`${group?.name} components`} className="border-ink hidden w-60 flex-none border-r-(length:--rule) lg:block">
+        <div className="sticky top-[58px]">
+          <Link href="/components" className={`${SIDE_LINK} border-ink border-b-(length:--rule) font-semibold`}>
+            ← All components
+          </Link>
+          <div className="spotcheck-label px-4 pt-4 pb-2">
+            {group?.name} · {members.length} parts
+          </div>
+          {members.map((member) => (
+            <Link
+              key={member.slug}
+              href={`/components/${member.slug}`}
+              aria-current={member.slug === slug ? "page" : undefined}
+              className={`${SIDE_LINK} ${SIDE_RULE} ${
+                member.slug === slug ? "bg-accent-ink text-on-accent font-semibold" : "hover:text-accent-ink"
+              }`}
+            >
+              {member.page.data.title}
+            </Link>
+          ))}
         </div>
-        <h1 className="spotcheck-display text-[clamp(44px,7vw,96px)] leading-[.85]">{page.data.title}</h1>
-        <p className="text-mute mt-3 max-w-[62ch] text-pretty">{page.data.description}</p>
-      </header>
+      </nav>
+
+      <article className="min-w-0 grow">
+        <header className="border-ink border-b-(length:--rule) px-4 pt-6 pb-5 md:px-8">
+          <Breadcrumb trail={[{ label: "Components", href: "/components" }, { label: page.data.title }]} />
+          <div className="mt-4 flex flex-wrap items-end justify-between gap-3">
+            <h1 className="spotcheck-display text-[clamp(56px,8vw,118px)] leading-[.88]">{page.data.title}</h1>
+            <Tag>{page.data.engine}</Tag>
+          </div>
+          <p className="mt-3 max-w-[46ch] text-lg leading-snug text-pretty">{page.data.description}</p>
+        </header>
 
       <div data-testid="demo" className="border-ink min-w-0 border-b-(length:--rule) px-4 py-6">
         <Demo slug={slug} />
@@ -159,6 +188,7 @@ export default async function ComponentPage({ params }: Params) {
           </Link>
         )}
       </nav>
-    </article>
+      </article>
+    </div>
   )
 }

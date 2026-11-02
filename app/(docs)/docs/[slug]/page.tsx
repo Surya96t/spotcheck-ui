@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 
 import { mdxComponents } from "@/components/site/mdx"
+import { PageTitle } from "@/components/site/page-title"
 import { getGuides } from "@/lib/catalog"
 
 type Params = { params: Promise<{ slug: string }> }
@@ -26,12 +27,10 @@ export default async function GuidePage({ params }: Params) {
 
   return (
     <article>
-      <header className="border-ink border-b-(length:--rule) px-4 pt-7 pb-4">
-        <span className="text-mute font-(family-name:--f-mono) text-[11px] tabular-nums">{entry.no}</span>
-        <h1 className="spotcheck-display mt-3 text-[clamp(44px,7vw,96px)] leading-[.85]">{entry.page.data.title}</h1>
-        <p className="text-mute mt-3 max-w-[62ch] text-pretty">{entry.page.data.description}</p>
-      </header>
-      <div className="min-w-0 px-4 py-6">
+      <PageTitle trail={[{ label: "Docs", href: "/docs" }, { label: entry.page.data.title }]} title={entry.page.data.title}>
+        {entry.page.data.description}
+      </PageTitle>
+      <div className="min-w-0 px-4 py-6 md:px-8">
         <Body components={mdxComponents} />
       </div>
     </article>

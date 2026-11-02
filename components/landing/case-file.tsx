@@ -15,7 +15,7 @@ import { useInView } from "@/registry/spotcheck/hooks/use-in-view"
 import { useStream } from "@/registry/spotcheck/hooks/use-stream"
 import { ModelRaceDemo } from "@/registry/spotcheck/examples/model-race-demo"
 
-import { WhenSeen } from "./when-seen"
+import { WhenSeen } from "@/components/site/when-seen"
 
 export type PartLink = { slug: string; no: string; title: string }
 

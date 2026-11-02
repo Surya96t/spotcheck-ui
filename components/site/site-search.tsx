@@ -4,6 +4,7 @@ import * as React from "react"
 import { useRouter } from "next/navigation"
 
 import { setAppearance } from "@/lib/appearance"
+import { PRODUCTS, RESOURCES } from "@/lib/nav"
 import { CommandPalette, type CommandGroup } from "@/registry/spotcheck/components/spotcheck/command-palette"
 
 import type { ComponentLink, GuideLink } from "./nav-types"
@@ -13,7 +14,9 @@ const THEMES = ["system", "light", "dark"]
 
 const title = (word: string) => word[0]?.toUpperCase() + word.slice(1)
 
-export function SiteSearch({ components, guides }: { components: ComponentLink[]; guides: GuideLink[] }) {
+type SiteSearchProps = { components: ComponentLink[]; guides: GuideLink[]; className?: string }
+
+export function SiteSearch({ components, guides, className }: SiteSearchProps) {
   const [open, setOpen] = React.useState(false)
   const router = useRouter()
 
@@ -24,7 +27,6 @@ export function SiteSearch({ components, guides }: { components: ComponentLink[]
         id: component.href,
         label: component.name,
         keywords: `${component.group} ${component.description}`,
-        shortcut: component.no,
         onSelect: () => router.push(component.href),
       })),
     },
@@ -37,7 +39,12 @@ export function SiteSearch({ components, guides }: { components: ComponentLink[]
           keywords: guide.description,
           onSelect: () => router.push(guide.href),
         })),
-        { id: "/components", label: "All components", onSelect: () => router.push("/components") },
+        ...[...PRODUCTS.slice(0, 1), ...RESOURCES].map((item) => ({
+          id: item.href,
+          label: item.label,
+          keywords: item.note,
+          onSelect: () => router.push(item.href),
+        })),
       ],
     },
     {
@@ -58,16 +65,12 @@ export function SiteSearch({ components, guides }: { components: ComponentLink[]
   ]
 
   return (
-    <div className="flex min-w-0 grow items-center justify-end px-2 py-2 md:px-3.5">
-      <button
-        type="button"
-        onClick={() => setOpen(true)}
-        className="border-ink hover:bg-ink hover:text-paper flex cursor-pointer items-center gap-3 border-(length:--rule) px-2.5 py-1"
-      >
+    <>
+      <button type="button" onClick={() => setOpen(true)} className={className}>
         Search
-        <kbd className="hidden text-[11px] md:inline">⌘K</kbd>
+        <kbd className="text-mute hidden font-(family-name:--f-mono) lg:inline">⌘K</kbd>
       </button>
       <CommandPalette groups={groups} open={open} onOpenChange={setOpen} label="Search" placeholder="Search components" />
-    </div>
+    </>
   )
 }
