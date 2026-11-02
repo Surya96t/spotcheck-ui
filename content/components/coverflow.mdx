@@ -1,0 +1,35 @@
+---
+title: Coverflow
+description: Cards on a 3D shelf that you flick through. A throw carries momentum and lands on the nearest card.
+group: depth
+order: 3
+engine: motion
+wide: true
+keyboard:
+  - { keys: "← →", action: "Move one card" }
+  - { keys: "Home", action: "Jump to the first card" }
+  - { keys: "End", action: "Jump to the last card" }
+reducedMotion: The shelf jumps to the card with no spin or coasting.
+---
+
+## Usage
+
+```tsx
+import { Coverflow } from "@/components/spotcheck/coverflow"
+
+const items = [
+  { value: "support-qa", content: <DatasetCard name="support-qa" />, summary: "2,400 pairs" },
+  { value: "tool-use", content: <DatasetCard name="tool-use" />, summary: "1,180 pairs" },
+]
+
+<Coverflow label="Datasets" items={items} defaultValue="support-qa" onValueChange={setDataset} />
+```
+
+Each card's `content` is yours, and screen readers read its text. Keep it to text, because a listbox
+option doesn't expose buttons or links inside it. `summary` prints one line beside the buttons for
+the selected card.
+
+Tapping a side card, the arrow keys and the previous and next buttons all change the selection, so
+nobody needs to flick. A vertical swipe over the shelf still scrolls the page on phones.
+
+Cards take half the width of the shelf, up to 220px, and they're 262px tall.

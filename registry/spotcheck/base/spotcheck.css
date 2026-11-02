@@ -47,6 +47,8 @@
   --warn: light-dark(#8f5500, #e6a43a);
   --bad: light-dark(#be2219, #ff5f52);
   --on-accent: light-dark(#ffffff, #0c0d0f);
+  /* Light falling on a raised surface, such as the glare on a tilted card. */
+  --highlight: light-dark(#ffffff, #e8eae5);
 
   /* Named --accent-ink because shadcn already owns --accent. */
   --accent-ink: light-dark(var(--accent-light), var(--accent-dark));
@@ -143,6 +145,7 @@
   --color-warn: var(--warn);
   --color-bad: var(--bad);
   --color-on-accent: var(--on-accent);
+  --color-highlight: var(--highlight);
   --color-accent-ink: var(--accent-ink);
   --color-accent-on-ink: var(--accent-on-ink);
 }

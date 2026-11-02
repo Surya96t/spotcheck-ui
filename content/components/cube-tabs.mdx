@@ -1,0 +1,34 @@
+---
+title: Cube Tabs
+description: Four tabs on the faces of a cube that turns the short way and settles.
+group: depth
+order: 5
+engine: anime.js
+keyboard:
+  - { keys: "← →", action: "Move to the next tab, wrapping at the ends" }
+  - { keys: "Home", action: "Jump to the first tab" }
+  - { keys: "End", action: "Jump to the last tab" }
+reducedMotion: The cube jumps to the face with no turn.
+---
+
+## Usage
+
+```tsx
+import { CubeTabs } from "@/components/spotcheck/cube-tabs"
+
+<CubeTabs
+  label="Metrics"
+  faces={[
+    { value: "latency", label: "Latency", content: <LatencyPanel /> },
+    { value: "cost", label: "Cost", content: <CostPanel /> },
+    { value: "quality", label: "Quality", content: <QualityPanel /> },
+    { value: "volume", label: "Volume", content: <VolumePanel /> },
+  ]}
+/>
+```
+
+A cube has four sides to turn through, so `faces` takes exactly four and TypeScript holds you to it.
+Each face holds your own content in a 250px tall panel.
+
+Going from the first tab to the last turns one face back, not three forward. Faces turned away are
+`inert`, so nothing on them can be reached by keyboard or screen reader.

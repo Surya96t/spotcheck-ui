@@ -90,6 +90,24 @@
       ]
     },
     {
+      "name": "use-flick",
+      "type": "registry:hook",
+      "title": "useFlick",
+      "description": "Drag, throw and spring-to-nearest for lists that land on an item.",
+      "dependencies": [
+        "motion"
+      ],
+      "registryDependencies": [
+        "{{REGISTRY_URL}}/r/use-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "registry/spotcheck/hooks/use-flick.ts",
+          "type": "registry:hook"
+        }
+      ]
+    },
+    {
       "name": "use-stream",
       "type": "registry:hook",
       "title": "useStream",
@@ -1257,6 +1275,117 @@
       "files": [
         {
           "path": "registry/spotcheck/components/spotcheck/linked-bars.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "drum-picker",
+      "type": "registry:component",
+      "title": "Drum Picker",
+      "description": "A spinning wheel for picking one option. It coasts when flicked and always lands on a row.",
+      "categories": [
+        "depth"
+      ],
+      "dependencies": [
+        "motion"
+      ],
+      "registryDependencies": [
+        "{{REGISTRY_URL}}/r/spotcheck-base.json",
+        "{{REGISTRY_URL}}/r/use-flick.json"
+      ],
+      "files": [
+        {
+          "path": "registry/spotcheck/components/spotcheck/drum-picker.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "coverflow",
+      "type": "registry:component",
+      "title": "Coverflow",
+      "description": "Cards on a 3D shelf that you flick through. A throw carries momentum and lands on the nearest card.",
+      "categories": [
+        "depth"
+      ],
+      "dependencies": [
+        "motion"
+      ],
+      "registryDependencies": [
+        "{{REGISTRY_URL}}/r/spotcheck-base.json",
+        "{{REGISTRY_URL}}/r/button.json",
+        "{{REGISTRY_URL}}/r/use-flick.json"
+      ],
+      "files": [
+        {
+          "path": "registry/spotcheck/components/spotcheck/coverflow.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "fold-report",
+      "type": "registry:component",
+      "title": "Fold Report",
+      "description": "An accordion whose rows unfold like folded paper, top to bottom, and fold back up from the end.",
+      "categories": [
+        "depth"
+      ],
+      "dependencies": [
+        "animejs"
+      ],
+      "registryDependencies": [
+        "{{REGISTRY_URL}}/r/spotcheck-base.json",
+        "{{REGISTRY_URL}}/r/use-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "registry/spotcheck/components/spotcheck/fold-report.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "cube-tabs",
+      "type": "registry:component",
+      "title": "Cube Tabs",
+      "description": "Four tabs on the faces of a cube that turns the short way and settles.",
+      "categories": [
+        "depth"
+      ],
+      "dependencies": [
+        "animejs"
+      ],
+      "registryDependencies": [
+        "{{REGISTRY_URL}}/r/spotcheck-base.json",
+        "{{REGISTRY_URL}}/r/use-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "registry/spotcheck/components/spotcheck/cube-tabs.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "tilt-card",
+      "type": "registry:component",
+      "title": "Tilt Card",
+      "description": "A card that tilts toward the pointer, with layers at different depths and a glare spot.",
+      "categories": [
+        "depth"
+      ],
+      "dependencies": [
+        "motion"
+      ],
+      "registryDependencies": [
+        "{{REGISTRY_URL}}/r/spotcheck-base.json",
+        "{{REGISTRY_URL}}/r/use-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "registry/spotcheck/components/spotcheck/tilt-card.tsx",
           "type": "registry:component"
         }
       ]

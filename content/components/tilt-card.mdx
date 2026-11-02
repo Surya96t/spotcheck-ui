@@ -1,0 +1,31 @@
+---
+title: Tilt Card
+description: A card that tilts toward the pointer, with layers at different depths and a glare spot.
+group: depth
+order: 6
+engine: motion
+reducedMotion: The card stays flat and every layer sits on the surface, with no glare.
+---
+
+## Usage
+
+```tsx
+import { TiltCard, TiltLayer } from "@/components/spotcheck/tilt-card"
+
+<TiltCard>
+  <TiltLayer depth={26}>Team</TiltLayer>
+  <TiltLayer depth={64}>₹2,400 per seat</TiltLayer>
+  <TiltLayer depth={36}>
+    <button>Choose Team</button>
+  </TiltLayer>
+</TiltCard>
+```
+
+`depth` is how far a layer floats above the card, in pixels. Layers can hold any content, and the
+tilt doesn't change how it works, so buttons and links stay usable.
+
+On touch screens the card stays flat too, because there's no pointer to follow, and a vertical swipe
+scrolls the page as normal.
+
+The glare uses the `--highlight` token, which is set for every skin in both themes. Override it if
+your cards sit on a tinted surface.
