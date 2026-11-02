@@ -1,0 +1,49 @@
+---
+title: Drum Picker
+description: A spinning wheel for picking one option. It coasts when flicked and always lands on a row.
+group: depth
+order: 2
+engine: motion
+wide: true
+keyboard:
+  - { keys: "↑ ↓", action: "Move one row" }
+  - { keys: "Home", action: "Jump to the first row" }
+  - { keys: "End", action: "Jump to the last row" }
+reducedMotion: The wheel jumps to the row with no spin or coasting.
+---
+
+## Usage
+
+```tsx
+"use client"
+
+import { useState } from "react"
+import { DrumPicker } from "@/components/spotcheck/drum-picker"
+
+const options = [
+  { value: "atlas-l", label: "atlas-l" },
+  { value: "atlas-m", label: "atlas-m" },
+  { value: "atlas-s", label: "atlas-s" },
+]
+
+const [model, setModel] = useState("atlas-m")
+
+<DrumPicker label="Model" options={options} value={model} onValueChange={setModel} />
+```
+
+Leave out `value` and pass `defaultValue` if you don't need to control it. It's a listbox, so screen
+readers hear each option as the wheel lands.
+
+## Scrolling past it
+
+The mouse wheel turns the drum until it reaches the first or last row, then the page scrolls again.
+
+The drum is the one place Spotcheck sets `touch-action: none`, because it drags up and down and so
+can't share vertical swipes with the page. It applies to the wheel only. Below the `md` breakpoint
+the picker keeps a 48px gutter on its right, so a thumb always has somewhere to scroll the page.
+Keep that gutter if you change the padding.
+
+## The flick
+
+Dragging and throwing come from the `use-flick` hook, which `coverflow` also uses. It works in items
+rather than pixels, caps the throw and springs to the nearest item.

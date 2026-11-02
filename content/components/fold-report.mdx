@@ -1,0 +1,36 @@
+---
+title: Fold Report
+description: An accordion whose rows unfold like folded paper, top to bottom, and fold back up from the end.
+group: depth
+order: 4
+engine: anime.js
+keyboard:
+  - { keys: "Tab", action: "Move between section headers" }
+  - { keys: "Enter or Space", action: "Open or close the focused section" }
+reducedMotion: Sections open and close at once with no fold.
+---
+
+## Usage
+
+```tsx
+import { FoldReport, FoldRow, FoldSection } from "@/components/spotcheck/fold-report"
+
+<FoldReport defaultOpen="timeline">
+  <FoldSection value="timeline" title="Timeline" meta="2 entries">
+    <FoldRow label="09:12">p95 on /chat crosses 2.4 s</FoldRow>
+    <FoldRow label="10:05">p95 back under 900 ms</FoldRow>
+  </FoldSection>
+  <FoldSection value="fix" title="Fix" meta="1 entry">
+    <FoldRow label="Done">CPU limits on every queue worker</FoldRow>
+  </FoldSection>
+</FoldReport>
+```
+
+One section is open at a time. Pass `open` and `onOpenChange` to control it, with `null` for none.
+
+Rows can hold anything, and they can be any height. The height is measured when a section opens and
+released when the animation ends, so content that grows or wraps later still shows in full. A closed
+section is hidden from the keyboard and screen readers.
+
+`FoldRow` paints `--paper` behind its text so the fold looks solid, so set `className` if the report
+sits on another background.

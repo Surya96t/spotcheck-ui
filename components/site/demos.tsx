@@ -21,6 +21,21 @@ const DEMOS = {
     () => import("@/registry/spotcheck/examples/linked-bars-demo").then((module) => module.LinkedBarsDemo),
     { ssr: false },
   ),
+  "drum-picker": dynamic(
+    () => import("@/registry/spotcheck/examples/drum-picker-demo").then((module) => module.DrumPickerDemo),
+  ),
+  "coverflow": dynamic(
+    () => import("@/registry/spotcheck/examples/coverflow-demo").then((module) => module.CoverflowDemo),
+  ),
+  "fold-report": dynamic(
+    () => import("@/registry/spotcheck/examples/fold-report-demo").then((module) => module.FoldReportDemo),
+  ),
+  "cube-tabs": dynamic(
+    () => import("@/registry/spotcheck/examples/cube-tabs-demo").then((module) => module.CubeTabsDemo),
+  ),
+  "tilt-card": dynamic(
+    () => import("@/registry/spotcheck/examples/tilt-card-demo").then((module) => module.TiltCardDemo),
+  ),
   "command-palette": dynamic(
     () => import("@/registry/spotcheck/examples/command-palette-demo").then((module) => module.CommandPaletteDemo),
   ),
