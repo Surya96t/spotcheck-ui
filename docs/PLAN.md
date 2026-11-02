@@ -141,14 +141,15 @@ shadcn files such as `components/ui/button.tsx`. Groups like Motion and Depth ar
 | 3 | Motion | Motion, Springs and Timelines groups, `/components` index | Each passes its smoke test and the axe check |
 | 4 | AI and review | AI group, `run-receipt`, `trace-waterfall`, `diff-review`, `model-race`, `chat-screen` | A demo works against a real AI SDK stream |
 | 5 | Landing page | A real landing page at `/`, with the catalog moved to `/components` | A first-time visitor can tell what Ledger is, see it work and reach the install step without opening the catalog |
-| 6 | Depth | WebGL and Depth groups, `configurator` as a block | Each piece ships with its demo and tests |
+| 6 | Depth | Shared WebGL groundwork and seven pieces, scoped in `docs/DEPTH-PLAN.md` | Each piece ships with its demo and tests |
 | 7 | Public launch, v0.1 | `dashboard`, field notes, SEO, name, domain, shadcn directory PR | Live on the real domain and listed |
-| 8 | Ongoing | Next-tier components, 21st.dev submission | Driven by what people use |
+| 8 | Ongoing | `region-globe`, `voice-orb`, `configurator`, next-tier components, 21st.dev submission | Driven by what people use |
 
 AI moved ahead of WebGL and Depth because it carries the positioning. Depth then moved ahead of
-the public launch at Surya's request, so v0.1 ships the full kit. `bar-terrain` still lands in
-Phase 0, so the hero and the WebGL path are proven early. The launch plan is written in
-`docs/LAUNCH-PLAN.md`.
+the public launch at Surya's request. Surya scoped it to seven pieces on 2026-11-02, so the launch
+ships those, and `region-globe`, `voice-orb` and `configurator` wait for Phase 8. `bar-terrain`
+still lands in Phase 0, so the hero and the WebGL path are proven early. The launch plan is written
+in `docs/LAUNCH-PLAN.md`, and Depth's scope is in `docs/DEPTH-PLAN.md`.
 
 ### Landing page
 

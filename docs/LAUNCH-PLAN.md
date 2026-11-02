@@ -110,13 +110,13 @@ production build**.
   preview's install commands point at production. Keep this in mind when testing a preview.
 - **Old address:** redirect `ledger-ui-pied.vercel.app` to the new domain, then confirm the shadcn CLI
   follows it.
-- **Test:** run the 33 install checks against the live domain with
+- **Test:** run the 41 install checks against the live domain with
   `SPOTCHECK_REGISTRY_URL=https://spotcheckui.com pnpm test:install`.
 
 ## shadcn directory
 
 The directory had 530 entries on 2026-11-02, none using a Spotcheck or Ledger name. The registry
-looks ready: 59 items, no `content` in the index, and the same `/r/{name}.json` pattern as 476
+looks ready: 69 items, no `content` in the index, and the same `/r/{name}.json` pattern as 476
 other entries.
 
 The entry goes in `apps/v4/registry/directory.json` in `shadcn-ui/ui`:
@@ -179,7 +179,7 @@ Order matters. The rename comes before Depth, so new files get the right names f
 
 | # | Step | Owner |
 |---|---|---|
-| 10 | Phase 6, Depth, to the scope Surya sets (see open questions) | Claude |
+| 10 | Phase 6, Depth, to the scope in [DEPTH-PLAN.md](DEPTH-PLAN.md) (done on 2026-11-02) | Claude |
 | 11 | `dashboard` component | Claude |
 | 12 | Field note: why AI review needs its own components | Claude drafts, Surya edits |
 | 13 | Field note: one build story, such as streaming without `ai` on the client | Claude drafts, Surya edits |
@@ -198,7 +198,7 @@ Order matters. The rename comes before Depth, so new files get the right names f
 
 | # | Step | Owner |
 |---|---|---|
-| 19 | Write the device checklist: touch drag, swipe, sheets, WebGL, Safari fonts, reduced motion | Claude |
+| 19 | Write the device checklist: touch drag, swipe, sheets, WebGL, Safari fonts, reduced motion, plus `linked-bars`, `embedding-space`, the `drum-picker` gutter, the `coverflow` flick and the CSS 3D pieces in Safari | Claude |
 | 20 | Run it on an iPhone and Mac Safari | Surya |
 | 21 | Fix what's found and re-check | Claude, then Surya |
 | 22 | Compare Motion 14 springs with the prototype, which is still unverified | Claude |
@@ -243,9 +243,10 @@ hook, so the rename doesn't change that.
 
 ## Open questions
 
-1. **How much of Depth ships before launch?** All of it, or a few pieces? This decides the launch
-   date more than anything else here. Owner: Surya, at the start of Phase 6.
-2. **Target date?** Set after question 1.
+1. **How much of Depth ships before launch?** Answered on 2026-11-02: seven pieces, listed in
+   [DEPTH-PLAN.md](DEPTH-PLAN.md). `region-globe`, `voice-orb` and `configurator` wait for Phase 8.
+2. **Target date?** Answered on 2026-11-02: Friday 6 November 2026 for the repo going public and the
+   soft launch, with Show HN about a week later.
 3. **Does the attorney hour happen?** Recommended, but optional. Owner: Surya.
 4. **Should the Praxis id change from `ledger-ui`?** It isn't public, so this plan keeps it. Owner: Surya.
 5. **Does the landing page still say enough once "ledger" comes out?** Owner: Surya and the landing
