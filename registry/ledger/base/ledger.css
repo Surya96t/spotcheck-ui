@@ -111,6 +111,28 @@
   }
 }
 
+@keyframes ledger-grow {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+@keyframes ledger-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+@keyframes ledger-wave {
+  0%,
+  100% {
+    height: 14%;
+  }
+  50% {
+    height: 100%;
+  }
+}
+
 @theme inline {
   --color-paper: var(--paper);
   --color-ink: var(--ink);

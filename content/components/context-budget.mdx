@@ -1,0 +1,27 @@
+---
+title: Context Budget
+description: "A segmented bar showing where the context window goes, with a compact action."
+group: ai
+order: 6
+engine: CSS
+keyboard:
+  - { keys: "Enter", action: "Press Compact" }
+reducedMotion: "Segments change size at once."
+---
+
+## Usage
+
+```tsx
+import { ContextBudget } from "@/components/ledger/context-budget"
+
+<ContextBudget
+  limit={200000}
+  segments={[
+    { label: "System", tokens: 3200 },
+    { label: "Tools", tokens: 9800 },
+    { label: "History", tokens: 41200 },
+    { label: "Files", tokens: 62400 },
+  ]}
+  onCompact={compact}
+/>
+```

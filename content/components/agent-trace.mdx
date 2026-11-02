@@ -1,0 +1,21 @@
+---
+title: Agent Trace
+description: "Tool calls as ledger rows, with state, tool, argument and duration. Expand a row to see its output."
+group: ai
+order: 2
+engine: React
+keyboard:
+  - { keys: "Tab", action: "Move between steps" }
+  - { keys: "Enter", action: "Show or hide a step's output" }
+reducedMotion: "The running marker stays still, and the bar updates without easing."
+---
+
+## Usage
+
+```tsx
+import { AgentTrace } from "@/components/ledger/agent-trace"
+
+<AgentTrace steps={run.steps} live={run.status === "running"} />
+```
+
+Pass `ms` as an estimate for steps that haven't finished, so the progress bar has something to measure against.

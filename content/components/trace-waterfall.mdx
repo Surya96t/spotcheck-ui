@@ -1,0 +1,29 @@
+---
+title: Trace Waterfall
+description: "Nested spans on a shared timeline, so parallel work and slow steps show up at a glance."
+group: ai
+order: 3
+engine: CSS
+wide: true
+keyboard:
+  - { keys: "Tab", action: "Reach the chart, then each parent span" }
+  - { keys: "Enter", action: "Collapse or expand a parent span" }
+  - { keys: "← →", action: "Scroll the chart on small screens" }
+reducedMotion: "Bars appear at full width, without growing."
+---
+
+## Usage
+
+```tsx
+import { TraceWaterfall } from "@/components/ledger/trace-waterfall"
+
+<TraceWaterfall
+  label="Support answer, 2.9 seconds in total"
+  spans={[
+    { id: "run", name: "agent.run", start: 0, end: 2900 },
+    { id: "search", parent: "run", name: "search", start: 120, end: 760 },
+  ]}
+/>
+```
+
+Spans link through `parent`, and overlapping bars are work that ran in parallel.

@@ -1,0 +1,27 @@
+---
+title: Eval Matrix
+description: "Models by tasks, with cells shaded by score."
+group: ai
+order: 7
+engine: CSS
+wide: true
+keyboard:
+  - { keys: "← →", action: "Scroll the table on small screens" }
+reducedMotion: "Nothing here animates."
+---
+
+## Usage
+
+```tsx
+import { EvalMatrix } from "@/components/ledger/eval-matrix"
+
+<EvalMatrix
+  label="Scores by model and task"
+  rows={["atlas-l", "atlas-m"]}
+  cols={["QA", "Tools"]}
+  values={[[0.93, 0.96], [0.89, 0.93]]}
+  domain={[0.6, 1]}
+/>
+```
+
+Digits sit on a paper chip, so they stay readable on every shade in every skin.

@@ -1,0 +1,25 @@
+---
+title: Model Race
+description: "One prompt across several models, with live time and cost, and the winner marked."
+group: ai
+order: 10
+engine: CSS
+wide: true
+keyboard: []
+reducedMotion: "Numbers change at once, without rolling."
+---
+
+## Usage
+
+```tsx
+import { ModelRace } from "@/components/ledger/model-race"
+
+<ModelRace
+  lanes={[
+    { id: "a", model: "atlas-l", text: answer, status: "streaming", ms: 1240, cost: 0.0012 },
+    { id: "b", model: "atlas-s", text: fast, status: "done", ms: 890, cost: 0.0002 },
+  ]}
+/>
+```
+
+It shows whatever you pass, so run one `useStream` per lane and update `lanes` as they arrive. Screen readers hear the winner, not every token.
