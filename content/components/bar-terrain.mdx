@@ -25,10 +25,11 @@ const BarTerrain = dynamic(
 <BarTerrain className="h-96" label="Requests per hour across 30 regions" />
 ```
 
-Load it with `dynamic` so three.js only downloads where it's used. Rendering pauses while the
-canvas is off screen.
+Load it with `dynamic` so three.js only downloads where it's used. The canvas is created as it
+nears the viewport, pauses off screen and is removed when it's far away.
 
-Set `label` to describe your data, because screen readers get that instead of the canvas.
+Set `label` to describe your data, because screen readers get that instead of the canvas. It also
+replaces the canvas if WebGL fails or the browser drops it.
 
 ## Your own data
 

@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { Canvas, useFrame, useThree } from "@react-three/fiber"
+import { useFrame, useThree } from "@react-three/fiber"
 import {
   BoxGeometry,
   Color,
@@ -14,8 +14,8 @@ import {
   Vector3,
 } from "three"
 
+import { GlStage } from "@/registry/spotcheck/components/spotcheck/gl-stage"
 import { useGlPalette } from "@/registry/spotcheck/hooks/use-gl-palette"
-import { useInView } from "@/registry/spotcheck/hooks/use-in-view"
 import { useReducedMotion } from "@/registry/spotcheck/hooks/use-reduced-motion"
 import { cn } from "@/lib/utils"
 
@@ -24,6 +24,8 @@ const BAR_WIDTH = 0.82
 const POINTER_EASE = 0.1
 const LIFT_EASE = 0.06
 const PALETTE_TOKENS = ["--ink", "--wash", "--accent-ink"] as const
+const CAMERA = { fov: 26, position: [12.5, 11, 13.5], near: 0.1, far: 200 } as const
+const LOOK_AT: [number, number, number] = [0, 0.9, 0]
 
 export type HeightSource = (col: number, row: number, time: number) => number
 
@@ -168,7 +170,6 @@ export function BarTerrain({
 }: BarTerrainProps) {
   const host = React.useRef<HTMLDivElement>(null)
   const pointer = React.useRef<Pointer>({ x: 0, y: 0, over: false })
-  const inView = useInView(host)
   const reduced = useReducedMotion()
   const palette = useGlPalette(host, PALETTE_TOKENS)
 
@@ -182,34 +183,26 @@ export function BarTerrain({
   }
 
   return (
-    <div
+    <GlStage
       ref={host}
-      role="img"
-      aria-label={label}
-      className={cn("relative h-64 min-w-0 cursor-crosshair touch-pan-y overflow-hidden", className)}
+      label={label}
+      camera={CAMERA}
+      lookAt={LOOK_AT}
+      className={cn("h-64 cursor-crosshair", className)}
       onPointerMove={onPointerMove}
       onPointerLeave={() => (pointer.current.over = false)}
       {...props}
     >
-      <Canvas
-        flat
-        dpr={[1, 2]}
-        frameloop={inView && !reduced ? "always" : "demand"}
-        gl={{ antialias: true, alpha: true }}
-        camera={{ fov: 26, position: [12.5, 11, 13.5], near: 0.1, far: 200 }}
-        onCreated={({ camera }) => camera.lookAt(0, 0.9, 0)}
-      >
-        <Field
-          cols={cols}
-          rows={rows}
-          source={source}
-          radius={pointerRadius}
-          lift={pointerLift}
-          still={reduced}
-          palette={palette}
-          pointer={pointer}
-        />
-      </Canvas>
-    </div>
+      <Field
+        cols={cols}
+        rows={rows}
+        source={source}
+        radius={pointerRadius}
+        lift={pointerLift}
+        still={reduced}
+        palette={palette}
+        pointer={pointer}
+      />
+    </GlStage>
   )
 }

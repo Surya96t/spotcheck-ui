@@ -13,6 +13,14 @@ const DEMOS = {
     () => import("@/registry/spotcheck/examples/bar-terrain-demo").then((module) => module.BarTerrainDemo),
     { ssr: false },
   ),
+  "embedding-space": dynamic(
+    () => import("@/registry/spotcheck/examples/embedding-space-demo").then((module) => module.EmbeddingSpaceDemo),
+    { ssr: false },
+  ),
+  "linked-bars": dynamic(
+    () => import("@/registry/spotcheck/examples/linked-bars-demo").then((module) => module.LinkedBarsDemo),
+    { ssr: false },
+  ),
   "command-palette": dynamic(
     () => import("@/registry/spotcheck/examples/command-palette-demo").then((module) => module.CommandPaletteDemo),
   ),

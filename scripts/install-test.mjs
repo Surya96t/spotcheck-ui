@@ -11,7 +11,7 @@ const NEXT_VERSION = "16.4.3"
 const SHADCN_VERSION = "4.23.0"
 const PORT = 4310
 const APP_PORT = 4320
-const COMPONENTS = ["roll-number", "detent-slider", "bar-terrain", "command-palette", "settings-screen", "split-flap", "swipe-review", "stamp-approval", "chat-screen", "composer", "agent-trace", "trace-waterfall", "diff-review", "model-race", "run-receipt", "context-budget", "eval-matrix", "thinking"]
+const COMPONENTS = ["roll-number", "detent-slider", "bar-terrain", "embedding-space", "linked-bars", "command-palette", "settings-screen", "split-flap", "swipe-review", "stamp-approval", "chat-screen", "composer", "agent-trace", "trace-waterfall", "diff-review", "model-race", "run-receipt", "context-budget", "eval-matrix", "thinking"]
 const REGISTRY_URL = process.env.SPOTCHECK_REGISTRY_URL?.replace(/\/$/, "") ?? `http://127.0.0.1:${PORT}`
 const serveLocally = !process.env.SPOTCHECK_REGISTRY_URL
 const ROOT = process.cwd()
@@ -146,6 +146,7 @@ try {
   }
   const terrain = readFileSync(join(app, "components/spotcheck/bar-terrain.tsx"), "utf8")
   assertIncludes(terrain, '"@/hooks/use-gl-palette"', "registry imports were rewritten to the app's hooks")
+  assertIncludes(terrain, '"@/components/spotcheck/gl-stage"', "gl-stage installed beside the components that use it")
   assertExcludes(terrain, "@/registry/", "no registry paths remain in installed code")
 
   writeFileSync(

@@ -54,6 +54,42 @@
       ]
     },
     {
+      "name": "use-orbit-drag",
+      "type": "registry:hook",
+      "title": "useOrbitDrag",
+      "description": "Rotates on horizontal drag and leaves vertical page scroll working.",
+      "files": [
+        {
+          "path": "registry/spotcheck/hooks/use-orbit-drag.ts",
+          "type": "registry:hook"
+        }
+      ]
+    },
+    {
+      "name": "gl-stage",
+      "type": "registry:item",
+      "title": "GL Stage",
+      "description": "Creates a WebGL canvas near the viewport and falls back to a description if WebGL fails.",
+      "dependencies": [
+        "three",
+        "@react-three/fiber"
+      ],
+      "devDependencies": [
+        "@types/three"
+      ],
+      "registryDependencies": [
+        "{{REGISTRY_URL}}/r/spotcheck-base.json",
+        "{{REGISTRY_URL}}/r/use-in-view.json",
+        "{{REGISTRY_URL}}/r/use-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "registry/spotcheck/components/spotcheck/gl-stage.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "use-stream",
       "type": "registry:hook",
       "title": "useStream",
@@ -121,13 +157,42 @@
       ],
       "registryDependencies": [
         "{{REGISTRY_URL}}/r/spotcheck-base.json",
+        "{{REGISTRY_URL}}/r/gl-stage.json",
         "{{REGISTRY_URL}}/r/use-gl-palette.json",
-        "{{REGISTRY_URL}}/r/use-in-view.json",
         "{{REGISTRY_URL}}/r/use-reduced-motion.json"
       ],
       "files": [
         {
           "path": "registry/spotcheck/components/spotcheck/bar-terrain.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "embedding-space",
+      "type": "registry:component",
+      "title": "Embedding Space",
+      "description": "A cloud of document chunks. Choosing a question draws lines to the closest chunks and ranks them with scores.",
+      "categories": [
+        "webgl"
+      ],
+      "dependencies": [
+        "three",
+        "@react-three/fiber"
+      ],
+      "devDependencies": [
+        "@types/three"
+      ],
+      "registryDependencies": [
+        "{{REGISTRY_URL}}/r/spotcheck-base.json",
+        "{{REGISTRY_URL}}/r/gl-stage.json",
+        "{{REGISTRY_URL}}/r/use-gl-palette.json",
+        "{{REGISTRY_URL}}/r/use-orbit-drag.json",
+        "{{REGISTRY_URL}}/r/use-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "registry/spotcheck/components/spotcheck/embedding-space.tsx",
           "type": "registry:component"
         }
       ]
@@ -1164,6 +1229,34 @@
       "files": [
         {
           "path": "registry/spotcheck/components/spotcheck/chat-screen.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "linked-bars",
+      "type": "registry:component",
+      "title": "Linked Bars",
+      "description": "A table and a 3D bar chart that share one highlight.",
+      "categories": [
+        "depth"
+      ],
+      "dependencies": [
+        "three",
+        "@react-three/fiber"
+      ],
+      "devDependencies": [
+        "@types/three"
+      ],
+      "registryDependencies": [
+        "{{REGISTRY_URL}}/r/spotcheck-base.json",
+        "{{REGISTRY_URL}}/r/gl-stage.json",
+        "{{REGISTRY_URL}}/r/use-gl-palette.json",
+        "{{REGISTRY_URL}}/r/use-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "registry/spotcheck/components/spotcheck/linked-bars.tsx",
           "type": "registry:component"
         }
       ]

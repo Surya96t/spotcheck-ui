@@ -1,0 +1,49 @@
+---
+title: Linked Bars
+description: A table and a 3D bar chart that share one highlight.
+group: depth
+order: 1
+engine: three.js
+wide: true
+keyboard:
+  - { keys: "Tab", action: "Move between rows, which highlights each one in the chart" }
+  - { keys: "Enter", action: "Keep the row highlighted after focus moves on" }
+reducedMotion: Bars jump to their new height, and the chart renders one frame per change.
+---
+
+## Usage
+
+```tsx
+"use client"
+
+import dynamic from "next/dynamic"
+
+const LinkedBars = dynamic(
+  () => import("@/components/spotcheck/linked-bars").then((module) => module.LinkedBars),
+  { ssr: false },
+)
+
+<LinkedBars
+  title="Requests per week, in thousands"
+  rows={["Mumbai", "Frankfurt", "Oregon"]}
+  columns={["W1", "W2", "W3"]}
+  values={[
+    [14, 18, 21],
+    [22, 24, 23],
+    [31, 29, 34],
+  ]}
+  format={(value) => value.toFixed(1)}
+/>
+```
+
+The table is real table markup with every value in it, so nobody needs the chart to read the data.
+On a narrow screen the table scrolls inside its own box, and the chart sits above it.
+
+## Highlighting
+
+Hovering or focusing a row raises its bars in the accent and dims the rest. Hovering a bar does the
+same for its row and shows a tooltip. On touch, tap a row or a bar to set the highlight, tap the row
+again to clear it, or tap the empty part of the chart.
+
+To drive the highlight from outside, pass `highlight` and `onHighlightChange`. Use `null` for no
+highlight. Rows and bars are counted from 0.
