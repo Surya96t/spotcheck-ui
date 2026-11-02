@@ -1,4 +1,4 @@
-import { expect, test, type Page } from "@playwright/test"
+import { expect, test, type Locator, type Page } from "@playwright/test"
 
 async function open(page: Page, slug: string) {
   await page.goto(`/components/${slug}`)
@@ -69,6 +69,71 @@ test("chat screen sends, streams and switches threads", async ({ page }) => {
   await expect(demo.getByRole("log")).not.toContainText("And for split orders?")
   await demo.getByRole("button", { name: /Refund policy summary/ }).click()
   await expect(demo.getByRole("log")).toContainText("And for split orders?")
+})
+
+test.describe("chat screen keeps each conversation intact", () => {
+  async function send(demo: Locator, text: string) {
+    await demo.getByRole("textbox", { name: "Reply" }).fill(text)
+    await demo.getByRole("button", { name: "Send" }).click()
+    await expect(demo.getByTestId("stream-status")).toHaveText("done", { timeout: 10000 })
+  }
+
+  const thread = (demo: Locator, name: RegExp) => demo.getByRole("button", { name }).click()
+
+  test("sends the last reply with the next request", async ({ page }) => {
+    const bodies: { messages: { role: string; text: string }[] }[] = []
+    page.on("request", (request) => {
+      if (request.url().endsWith("/api/demo/chat")) bodies.push(request.postDataJSON())
+    })
+    const demo = await open(page, "chat-screen")
+    await send(demo, "first")
+    await send(demo, "second")
+
+    const messages = bodies[1]!.messages
+    expect(messages.map((message) => message.role).slice(-3)).toEqual(["user", "assistant", "user"])
+    expect(messages.at(-3)?.text).toBe("first")
+    expect(messages.at(-2)?.text).toContain("Refunds over 30 days")
+    expect(messages.at(-1)?.text).toBe("second")
+  })
+
+  test("a reply stays in its own thread and is saved once", async ({ page }) => {
+    const demo = await open(page, "chat-screen")
+    const log = demo.getByRole("log")
+    await send(demo, "first")
+
+    await thread(demo, /Q3 ticket clustering/)
+    await expect(log).toContainText("Cluster the Q3 tickets")
+    await expect(log).not.toContainText("Refunds over 30 days")
+    await thread(demo, /Onboarding email draft/)
+    await expect(log).not.toContainText("Refunds over 30 days")
+    await thread(demo, /Refund policy summary/)
+    await thread(demo, /Refund policy summary/)
+    await thread(demo, /Q3 ticket clustering/)
+    await thread(demo, /Refund policy summary/)
+    await expect(log.getByText("Refunds over 30 days")).toHaveCount(1)
+  })
+
+  test("a saved reply keeps its formatting and sources", async ({ page }) => {
+    const errors: string[] = []
+    page.on("console", (message) => message.type() === "error" && errors.push(`${message.text()} ${message.location().url}`))
+    const demo = await open(page, "chat-screen")
+    const log = demo.getByRole("log")
+    await send(demo, "first")
+    await thread(demo, /Q3 ticket clustering/)
+    await thread(demo, /Refund policy summary/)
+
+    await expect(log.locator("strong")).toHaveText("manager approval")
+    await expect(log).not.toContainText("**")
+    await expect(log.getByRole("link", { name: "refund-policy.md §2" })).toBeVisible()
+
+    await send(demo, "second")
+    const targets = await log
+      .getByRole("link", { name: "Source 1" })
+      .evaluateAll((links) => links.map((link) => link.getAttribute("href")!.slice(1)))
+    expect(new Set(targets).size).toBe(2)
+    for (const id of targets) await expect(page.locator(`[id="${id}"]`)).toHaveCount(1)
+    expect(errors).toEqual([])
+  })
 })
 
 test("agent trace finishes and expands a step", async ({ page }) => {

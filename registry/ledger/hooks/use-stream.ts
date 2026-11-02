@@ -123,7 +123,14 @@ export function useStream(url: string, { body, headers }: UseStreamOptions = {})
     setStatus("stopped")
   }, [])
 
+  const reset = React.useCallback(() => {
+    controller.current?.abort()
+    setState(EMPTY)
+    setError(null)
+    setStatus("idle")
+  }, [])
+
   React.useEffect(() => () => controller.current?.abort(), [])
 
-  return { ...state, status, error, start, stop, regenerate: start }
+  return { ...state, status, error, start, stop, regenerate: start, reset }
 }

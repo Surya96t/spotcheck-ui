@@ -19,4 +19,4 @@ import { ChatScreen } from "@/components/ledger/chat-screen"
 <ChatScreen api="/api/chat" threads={threads} />
 ```
 
-It posts `{ messages }` to `api` and reads the reply with `useStream`. Threads live in component state, so connect them to your own storage.
+It posts the whole conversation as `{ messages }` to `api` and reads the reply with `useStream`. Each finished reply is saved to its thread with its sources. Threads live in component state, so connect them to your own storage.

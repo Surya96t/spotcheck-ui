@@ -4,10 +4,10 @@ import * as React from "react"
 
 import { cn } from "@/lib/utils"
 import { AppFrame } from "@/registry/ledger/components/ledger/app-frame"
-import { StreamResponse } from "@/registry/ledger/components/ledger/stream-response"
-import { useStream } from "@/registry/ledger/hooks/use-stream"
+import { SavedResponse, StreamResponse } from "@/registry/ledger/components/ledger/stream-response"
+import { useStream, type StreamSource } from "@/registry/ledger/hooks/use-stream"
 
-export type ChatMessage = { role: "user" | "assistant"; text: string }
+export type ChatMessage = { role: "user" | "assistant"; text: string; sources?: StreamSource[] }
 export type ChatThread = { id: string; title: string; when: string; messages: ChatMessage[] }
 
 type ChatScreenProps = {
@@ -26,24 +26,29 @@ export function ChatScreen({ api, threads, className }: ChatScreenProps) {
   const active = all.find((thread) => thread.id === activeId)
   const streaming = stream.status === "streaming"
 
-  const append = (id: string | undefined, message: ChatMessage) =>
+  const append = (id: string | undefined, messages: ChatMessage[]) =>
     setAll((current) =>
-      current.map((thread) => (thread.id === id ? { ...thread, messages: [...thread.messages, message] } : thread)),
+      current.map((thread) => (thread.id === id ? { ...thread, messages: [...thread.messages, ...messages] } : thread)),
     )
+
+  // The live reply, as a message that can be saved to the thread it arrived in.
+  const liveReply = (): ChatMessage[] =>
+    stream.text ? [{ role: "assistant", text: stream.text, sources: stream.sources }] : []
 
   const send = (event: React.FormEvent) => {
     event.preventDefault()
     const text = draft.trim()
     if (!text || streaming || !active) return
-    if (stream.text) append(active.id, { role: "assistant", text: stream.text })
-    append(active.id, { role: "user", text })
+    const added: ChatMessage[] = [...liveReply(), { role: "user", text }]
+    append(active.id, added)
     setDraft("")
-    void stream.start({ messages: [...active.messages, { role: "user", text }] })
+    void stream.start({ messages: [...active.messages, ...added] })
   }
 
   const choose = (id: string) => {
-    if (streaming) stream.stop()
-    if (stream.text) append(activeId, { role: "assistant", text: stream.text })
+    if (id === activeId) return
+    append(activeId, liveReply())
+    stream.reset()
     setActiveId(id)
   }
 
@@ -56,7 +61,7 @@ export function ChatScreen({ api, threads, className }: ChatScreenProps) {
       <div className="grid h-[440px] grid-rows-[auto_minmax(0,1fr)] md:grid-cols-[200px_minmax(0,1fr)] md:grid-rows-1">
         <nav
           aria-label="Conversations"
-          className="border-ink flex overflow-x-auto border-b-(length:--rule) text-[13px] md:flex-col md:overflow-x-hidden md:overflow-y-auto md:border-r-(length:--rule) md:border-b-0"
+          className="border-ink flex [scrollbar-width:none] overflow-x-auto border-b-(length:--rule) text-[13px] md:flex-col md:overflow-x-hidden md:overflow-y-auto md:border-r-(length:--rule) md:border-b-0"
         >
           {all.map((thread) => (
             <button
@@ -84,7 +89,7 @@ export function ChatScreen({ api, threads, className }: ChatScreenProps) {
               ) : (
                 <div key={index} className="max-w-[88%] text-sm">
                   <div className="ledger-label mb-0.5">Assistant</div>
-                  {message.text}
+                  <SavedResponse text={message.text} sources={message.sources} />
                 </div>
               ),
             )}
