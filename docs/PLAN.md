@@ -15,9 +15,9 @@ A public website with a live, documented catalogue of React components, plus a s
 served from the same site. People run one command and the component source lands in their
 project. There is no npm package to publish or version.
 
-**Positioning:** components for reviewing, grading and auditing AI work, and motion on everyday
-app controls, with a brutalist ledger look. Chat building blocks alone are not the opening; see
-[Who else is out there](#who-else-is-out-there).
+**Positioning:** a React component kit with hard edges, real motion and 3D. Reviewing AI work is its
+strongest set, not its whole identity: only 10 of the 61 components are in the AI group. Chat
+building blocks alone are not the opening; see [Who else is out there](#who-else-is-out-there).
 
 ## How we work
 
@@ -74,8 +74,8 @@ One Next.js app at the root. The brief suggested `apps/docs`, but there is only 
 deploy and no package to publish, so a monorepo adds setup and no benefit.
 
 ```
-app/                      routes: /, /components/[slug], /docs/*, /field-notes
-components/site/          the docs shell (rail, top bar, previews); never installed by users
+app/                      routes: /, /components/[slug], /docs/*, /roadmap, /compare, /support
+components/site/          the site frame (nav, footer, previews); never installed by users
 content/components/       one MDX file per component
 content/docs/             install, tokens, skins, shadcn interop
 registry/spotcheck/
@@ -154,6 +154,7 @@ in `docs/LAUNCH-PLAN.md`, and Depth's scope is in `docs/DEPTH-PLAN.md`.
 ### Landing page
 
 Added after Phase 2, because the home page is a catalog and no phase covered selling the idea.
+[REDESIGN-PLAN.md](REDESIGN-PLAN.md) replaces the direction below once it's approved.
 
 - **What it needs:** what Ledger is for and who it's for, a showcase, how it compares with other
   libraries, a clear next step, and the prototype's footer.

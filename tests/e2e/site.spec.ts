@@ -8,6 +8,10 @@ const slugs = (directory: string) => readdirSync(directory).map((file) => file.r
 const ROUTES = [
   "/",
   "/components",
+  "/docs",
+  "/roadmap",
+  "/compare",
+  "/support",
   ...slugs("content/components").map((slug) => `/components/${slug}`),
   ...slugs("content/docs").map((slug) => `/docs/${slug}`),
 ]
@@ -88,16 +92,91 @@ test("install command copies", async ({ page, context, browserName }) => {
   expect(copied).toMatch(/^npx shadcn@latest add .+\/r\/roll-number\.json$/)
 })
 
-test("rail marks the current page", async ({ page }) => {
-  await page.goto("/components/bar-terrain")
-  await expect(page.getByRole("navigation", { name: "Components" }).getByRole("link", { name: /Bar Terrain/ })).toHaveAttribute("aria-current", "page")
-})
+test.describe("site structure", () => {
+  const PAGES = ["/", "/components", "/components/diff-review", "/docs", "/docs/theming", "/roadmap", "/compare", "/support"]
 
-test("rail shows the current page on phones", async ({ page, isMobile }) => {
-  test.skip(!isMobile, "The rail only scrolls sideways on phones")
-  await page.goto("/components/command-palette")
-  await page.waitForLoadState("networkidle")
-  await expect(page.getByRole("navigation", { name: "Components" }).getByRole("link", { name: /Command Palette/ })).toBeInViewport({ ratio: 0.9 })
+  for (const route of PAGES) {
+    test(`${route} has the nav, a way home and the footer`, async ({ page }) => {
+      await page.goto(route)
+      const nav = page.getByRole("navigation", { name: "Main" })
+      await expect(nav.getByRole("link", { name: "Spotcheck UI home" })).toHaveAttribute("href", "/")
+      await expect(page.getByRole("contentinfo")).toBeVisible()
+      await expect(nav.getByText(/pricing|account/i)).toHaveCount(0)
+    })
+  }
+
+  test("the nav has the four sections", async ({ page, isMobile }) => {
+    test.skip(isMobile, "Phones use the menu")
+    await page.goto("/")
+    const nav = page.getByRole("navigation", { name: "Main" })
+    await expect(nav.getByRole("button", { name: "Products" })).toBeVisible()
+    await expect(nav.getByRole("button", { name: "Resources" })).toBeVisible()
+    await expect(nav.getByRole("link", { name: "Docs" })).toHaveAttribute("href", "/docs")
+    await expect(nav.getByRole("link", { name: "Support" })).toHaveAttribute("href", "/support")
+  })
+
+  test("a nav menu goes to a component group, from the keyboard too", async ({ page, isMobile }) => {
+    test.skip(isMobile, "Phones use the menu")
+    await page.goto("/")
+    await page.waitForLoadState("networkidle")
+    await page.getByRole("button", { name: "Products" }).click()
+    await page.getByRole("menuitem", { name: /3D and WebGL/ }).click()
+    await expect(page).toHaveURL(/\/components#webgl$/)
+    await page.goto("/")
+    await page.waitForLoadState("networkidle")
+    await page.getByRole("button", { name: "Resources" }).focus()
+    await page.keyboard.press("Enter")
+    await page.keyboard.press("ArrowDown")
+    await page.keyboard.press("Enter")
+    await expect(page).toHaveURL(/\/(roadmap|compare)$/)
+  })
+
+  test("the phone menu opens and navigates", async ({ page, isMobile }) => {
+    test.skip(!isMobile, "Only phones use the sheet")
+    await page.goto("/")
+    await page.waitForLoadState("networkidle")
+    await page.getByRole("button", { name: "Menu" }).click()
+    await page.getByRole("navigation", { name: "Menu" }).getByRole("link", { name: "Docs" }).click()
+    await expect(page).toHaveURL(/\/docs$/)
+    await expect(page.getByRole("heading", { level: 1, name: "Introduction" })).toBeVisible()
+  })
+
+  test("/components lists each component once, with no sidebar", async ({ page }) => {
+    await page.goto("/components")
+    await expect(page.getByRole("heading", { level: 3 })).toHaveCount(readdirSync("content/components").length)
+    await expect(page.getByRole("navigation", { name: /components$/ })).toHaveCount(0)
+    await expect(page.getByRole("heading", { level: 2 }).first()).toHaveText("AI")
+  })
+
+  test("a jump lands on its group after the demos above it load", async ({ page }) => {
+    await page.goto("/components#webgl")
+    await page.waitForLoadState("networkidle")
+    await page.waitForTimeout(2800)
+    await expect(page.getByRole("heading", { level: 2, name: "WebGL" })).toBeInViewport()
+  })
+
+  test("a component page lists only its own group", async ({ page, isMobile }) => {
+    test.skip(isMobile, "The group list is hidden on phones")
+    await page.goto("/components/bar-terrain")
+    const group = page.getByRole("navigation", { name: "WebGL components" })
+    await expect(group.getByRole("link", { name: "Bar Terrain" })).toHaveAttribute("aria-current", "page")
+    await expect(group.getByRole("link", { name: "Diff Review" })).toHaveCount(0)
+  })
+
+  test("docs and components don't list each other", async ({ page, isMobile }) => {
+    test.skip(isMobile, "The group list is hidden on phones")
+    await page.goto("/docs/installation")
+    const docs = page.getByRole("navigation", { name: "Docs" })
+    await expect(docs.getByRole("link", { name: "Installation" })).toHaveAttribute("aria-current", "page")
+    await expect(docs.getByRole("link", { name: "Diff Review" })).toHaveCount(0)
+    await page.goto("/components/diff-review")
+    await expect(page.getByRole("navigation", { name: "Docs" })).toHaveCount(0)
+  })
+
+  test("the old tally rail is gone", async ({ page }) => {
+    await page.goto("/components")
+    await expect(page.getByRole("navigation", { name: "Components", exact: true })).toHaveCount(0)
+  })
 })
 
 test("next link moves through the catalog", async ({ page }) => {
@@ -155,9 +234,10 @@ test.describe("search", () => {
   })
 })
 
-test("choices survive a reload without a flash", async ({ page }) => {
+test("choices survive a reload without a flash", async ({ page, isMobile }) => {
   await page.goto("/components")
   await page.waitForLoadState("networkidle")
+  await page.getByRole("button", { name: isMobile ? "Menu" : "Skin" }).click()
   await page.getByRole("group", { name: "Skin" }).getByRole("button", { name: "terminal" }).click()
   await page.getByRole("group", { name: "Theme" }).getByRole("button", { name: "dark" }).click()
   await page.reload()

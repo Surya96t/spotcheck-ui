@@ -40,7 +40,8 @@ Returning visitors lose a saved skin or theme once. That's harmless.
 
 - The Ledger skin and `data-skin="ledger"`, because that's the name of a look.
 - `ledger-table`, `LedgerTable` and `LedgerColumn`, because that's a table style.
-- The headline "Keep the books on your AI."
+- The headline "Keep the books on your AI." Surya replaced it on 2026-11-02 with "Pick any part. Look
+  closely.", which ships with the redesign in [REDESIGN-PLAN.md](REDESIGN-PLAN.md).
 - The plain word in Entry List's description, "like entries posted to a ledger".
 - The Praxis project id `ledger-ui`, unless Surya decides otherwise.
 - Past history: git commits, `reference/`, and the dated results in `docs/PLAN.md`.

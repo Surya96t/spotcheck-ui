@@ -20,7 +20,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <head>
         <script dangerouslySetInnerHTML={{ __html: restoreAppearance }} />
       </head>
-      <body className="px-[max(16px,env(safe-area-inset-left,0px))]">
+      <body className="pr-[env(safe-area-inset-right,0px)] pl-[env(safe-area-inset-left,0px)]">
         <a
           href="#content"
           className="bg-ink text-paper fixed top-2 left-6 z-30 -translate-y-16 px-3 py-1.5 font-(family-name:--f-mono) text-xs focus:translate-y-0"

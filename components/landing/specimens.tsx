@@ -4,7 +4,7 @@ import { Demo } from "@/components/site/demos"
 import { Tag } from "@/registry/spotcheck/components/spotcheck/tag"
 
 import type { PartLink } from "./case-file"
-import { WhenSeen } from "./when-seen"
+import { WhenSeen } from "@/components/site/when-seen"
 
 const SPECIMENS = [
   { slug: "detent-slider", span: "xl:col-span-2" },

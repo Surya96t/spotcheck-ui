@@ -303,14 +303,10 @@ test.describe("reduced motion", () => {
   })
 })
 
-test("components index lists and sorts the catalog", async ({ page }) => {
+test("components index links to every part", async ({ page }) => {
   await page.goto("/components")
   await page.waitForLoadState("networkidle")
-  await expect(page.getByRole("heading", { level: 1, name: "All components" })).toBeAttached()
-  const table = page.getByRole("region", { name: "All components" })
-  await expect(table.getByRole("link", { name: "Split-Flap Board" })).toBeVisible()
-  await table.getByRole("button", { name: "Component" }).click()
-  await table.getByRole("link", { name: "App Frame" }).first().waitFor()
-  await table.getByRole("link", { name: "Detent Slider" }).click()
+  await expect(page.getByRole("heading", { level: 1, name: "61 parts. Pick one." })).toBeVisible()
+  await page.getByRole("link", { name: "Detent Slider" }).click()
   await expect(page).toHaveURL(/detent-slider/)
 })

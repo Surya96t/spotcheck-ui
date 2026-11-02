@@ -70,7 +70,7 @@ The steps, in order and with checks, are in [RENAME.md](RENAME.md).
 | Area | Change |
 |---|---|
 | Site | Name, metadata and description in `app/layout.tsx`, the rail, top bar, footer, 404 and landing page |
-| Landing copy | "Start your ledger." became "Start checking.", and "Running ledger" became "Running tally". "Keep the books on your AI." stays |
+| Landing copy | "Start your ledger." became "Start checking.", and "Running ledger" became "Running tally". The redesign replaces "Keep the books on your AI." with "Pick any part. Look closely." |
 | Registry | `name: ledger` to `spotcheck`, `ledger-base` to `spotcheck-base`, and titles and descriptions |
 | Install path | `registry/ledger/` and `registry/ledger/components/ledger/`, so components install to `components/spotcheck/` |
 | Imports | Every `@/registry/ledger/...` path |

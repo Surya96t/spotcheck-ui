@@ -1,25 +1,4 @@
-const ROWS = [
-  {
-    name: "shadcn/ui",
-    theirs: "App primitives and the registry model.",
-    ours: "Follows the same install and API shape, so the two sit together in one app.",
-  },
-  {
-    name: "AI Elements",
-    theirs: "Chat parts for the AI SDK.",
-    ours: "Adds the review side: grading, diffs, cost, traces and sign-off.",
-  },
-  {
-    name: "assistant-ui",
-    theirs: "A chat runtime with primitives.",
-    ours: "Has no runtime. It reads your stream and renders it.",
-  },
-  {
-    name: "Magic UI, Cult UI",
-    theirs: "Marketing effects and polished motion.",
-    ours: "Puts the motion on working controls, with a still frame under reduced motion.",
-  },
-]
+import { COMPARISONS } from "@/lib/compare"
 
 export function Reconciliation() {
   return (
@@ -33,7 +12,7 @@ export function Reconciliation() {
         </p>
       </div>
       <dl>
-        {ROWS.map((row) => (
+        {COMPARISONS.map((row) => (
           <div
             key={row.name}
             className="border-ink grid gap-x-4 gap-y-1 border-b-(length:--rule) px-4.5 py-3.5 md:grid-cols-[minmax(0,1fr)_minmax(0,2fr)_minmax(0,2fr)]"
