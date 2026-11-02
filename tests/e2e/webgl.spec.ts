@@ -46,24 +46,15 @@ async function paintedPixels(page: Page) {
 }
 
 test.describe("gl-stage", () => {
-  test("/components mounts canvases near the viewport and scrolls end to end with no errors", async ({ page }) => {
+  test("/components keeps its canvas near the viewport and scrolls end to end with no errors", async ({ page }) => {
     const errors = watchErrors(page)
     await page.goto("/components")
     await page.waitForLoadState("networkidle")
-    const height = await page.evaluate(() => document.documentElement.scrollHeight)
+    await expect(page.locator("canvas")).toHaveCount(1)
+    await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight))
     await expect(page.locator("canvas")).toHaveCount(0)
-    const counts: number[] = []
-    for (let top = 0; top < height; top += 700) {
-      await page.evaluate((y) => window.scrollTo(0, y), top)
-      await page.waitForTimeout(120)
-      counts.push(await page.locator("canvas").count())
-    }
     await page.evaluate(() => window.scrollTo(0, 0))
-    await page.waitForTimeout(300)
-    expect(Math.max(...counts)).toBeGreaterThanOrEqual(1)
-    expect(Math.max(...counts)).toBeLessThanOrEqual(3)
-    expect(counts.at(-1)).toBe(0)
-    await expect(page.locator("canvas")).toHaveCount(0)
+    await expect(page.locator("canvas")).toHaveCount(1)
     expect(errors).toEqual([])
   })
 

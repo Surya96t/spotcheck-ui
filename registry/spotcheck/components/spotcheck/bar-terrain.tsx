@@ -5,6 +5,7 @@ import { useFrame, useThree } from "@react-three/fiber"
 import {
   BoxGeometry,
   Color,
+  Fog,
   type InstancedMesh,
   MeshLambertMaterial,
   Object3D,
@@ -23,14 +24,21 @@ const SPACING = 0.6
 const BAR_WIDTH = 0.82
 const POINTER_EASE = 0.1
 const LIFT_EASE = 0.06
-const PALETTE_TOKENS = ["--ink", "--wash", "--accent-ink"] as const
-const CAMERA = { fov: 26, position: [12.5, 11, 13.5], near: 0.1, far: 200 } as const
+const COLOR_HEIGHT = 1.5
+const AUTO_PICK_SECONDS = 3
+const AUTO_REST_SECONDS = 0.7
+const PALETTE_TOKENS = ["--ink", "--wash", "--accent-ink", "--paper"] as const
+const CAMERA: TerrainCamera = { fov: 26, position: [12.5, 11, 13.5], near: 0.1, far: 200 }
 const LOOK_AT: [number, number, number] = [0, 0.9, 0]
 
+export type TerrainCamera = { fov: number; position: [x: number, y: number, z: number]; near?: number; far?: number }
 export type HeightSource = (col: number, row: number, time: number) => number
 
 const defaultSource: HeightSource = (col, row, time) =>
   0.12 + 1.7 * Math.pow(0.5 + 0.5 * Math.sin(col * 0.36 + time * 0.8) * Math.cos(row * 0.47 - time * 0.55), 2.4)
+
+/** Where the lifted bar is. `x` and `y` are pixels inside the stage. */
+export type BarPick = { col: number; row: number; x: number; y: number; strength: number }
 
 type Pointer = { x: number; y: number; over: boolean }
 type Palette = Record<(typeof PALETTE_TOKENS)[number], string>
@@ -44,11 +52,16 @@ type FieldProps = {
   still: boolean
   palette: Palette | null
   pointer: React.RefObject<Pointer>
+  peak?: number
+  fade?: { near: number; far: number }
+  autoPick: boolean
+  onPick?: (pick: BarPick | null) => void
 }
 
-function Field({ cols, rows, source, radius, lift, still, palette, pointer }: FieldProps) {
+function Field({ cols, rows, source, radius, lift, still, palette, pointer, peak, fade, autoPick, onPick }: FieldProps) {
   const mesh = React.useRef<InstancedMesh>(null)
   const invalidate = useThree((state) => state.invalidate)
+  const scene = useThree((state) => state.scene)
 
   const [geometry, material] = React.useMemo(() => {
     const box = new BoxGeometry(SPACING * BAR_WIDTH, 1, SPACING * BAR_WIDTH)
@@ -67,7 +80,9 @@ function Field({ cols, rows, source, radius, lift, still, palette, pointer }: Fi
       ndc: new Vector2(),
       floor: new Plane(new Vector3(0, 1, 0), 0),
       hit: new Vector3(),
+      tip: new Vector3(),
       bump: { x: 0, z: 0, target: { x: 0, z: 0 }, amount: 0, placed: false },
+      auto: { on: false, next: 1.5 },
     }),
     [],
   )
@@ -84,27 +99,43 @@ function Field({ cols, rows, source, radius, lift, still, palette, pointer }: Fi
     scratch.ink.set(palette["--ink"])
     scratch.accent.set(palette["--accent-ink"])
     scratch.wash.set(palette["--wash"])
+    scene.fog = fade ? new Fog(palette["--paper"], fade.near, fade.far) : null
     invalidate()
-  }, [invalidate, palette, scratch])
+  }, [fade, invalidate, palette, scene, scratch])
 
-  useFrame(({ camera, clock }) => {
+  const center = (cols: number, index: number) => (index - (cols - 1) / 2) * SPACING
+  const nearest = (cols: number, value: number) => Math.max(0, Math.min(cols - 1, Math.round(value / SPACING + (cols - 1) / 2)))
+
+  useFrame(({ camera, clock, size }) => {
     const bars = mesh.current
     if (!bars) return
-    const { dummy, color, ink, accent, wash, ray, ndc, floor, hit, bump } = scratch
+    const { dummy, color, ink, accent, wash, ray, ndc, floor, hit, tip, bump, auto } = scratch
     const time = still ? 0 : clock.elapsedTime
     const over = pointer.current.over && !still
 
-    if (over) {
-      ndc.set(pointer.current.x, pointer.current.y)
+    const aim = (x: number, y: number) => {
+      ndc.set(x, y)
       ray.setFromCamera(ndc, camera)
-      if (ray.ray.intersectPlane(floor, hit)) {
-        bump.target = { x: hit.x, z: hit.z }
-        if (!bump.placed) Object.assign(bump, { x: hit.x, z: hit.z, placed: true })
+      if (!ray.ray.intersectPlane(floor, hit)) return
+      const target = onPick || autoPick ? { x: center(cols, nearest(cols, hit.x)), z: center(rows, nearest(rows, hit.z)) } : { x: hit.x, z: hit.z }
+      bump.target = target
+      if (!bump.placed) Object.assign(bump, { ...target, placed: true })
+    }
+
+    if (over) {
+      aim(pointer.current.x, pointer.current.y)
+      Object.assign(auto, { on: false, next: time + AUTO_PICK_SECONDS })
+    } else if (autoPick && !still && time > auto.next) {
+      auto.on = !auto.on
+      auto.next = time + (auto.on ? AUTO_PICK_SECONDS : AUTO_REST_SECONDS)
+      if (auto.on) {
+        bump.placed = false
+        aim(0.05 + Math.random() * 0.75, -0.25 + Math.random() * 0.75)
       }
     }
     bump.x += (bump.target.x - bump.x) * POINTER_EASE
     bump.z += (bump.target.z - bump.z) * POINTER_EASE
-    bump.amount += ((over ? 1 : 0) - bump.amount) * LIFT_EASE
+    bump.amount += ((over || auto.on ? 1 : 0) - bump.amount) * LIFT_EASE
     if (bump.amount < 0.001) bump.placed = false
 
     for (let col = 0, index = 0; col < cols; col++) {
@@ -120,13 +151,21 @@ function Field({ cols, rows, source, radius, lift, still, palette, pointer }: Fi
         dummy.updateMatrix()
         bars.setMatrixAt(index, dummy.matrix)
 
-        color.copy(wash).lerp(ink, Math.min(1, height / 1.5))
+        color.copy(wash).lerp(ink, Math.min(1, height / (peak ?? COLOR_HEIGHT)))
+        if (peak) color.lerp(accent, Math.max(0, Math.min(1, (height - peak * 0.6) / (peak * 0.6))))
         if (raised > 0.25) color.lerp(accent, Math.min(1, raised / 1.8))
         bars.setColorAt(index, color)
       }
     }
     bars.instanceMatrix.needsUpdate = true
     if (bars.instanceColor) bars.instanceColor.needsUpdate = true
+
+    if (!onPick) return
+    if (bump.amount < 0.02) return onPick(null)
+    const col = nearest(cols, bump.x)
+    const row = nearest(rows, bump.z)
+    tip.set(bump.x, source(col, row, time) + lift * bump.amount, bump.z).project(camera)
+    onPick({ col, row, x: ((tip.x + 1) / 2) * size.width, y: ((1 - tip.y) / 2) * size.height, strength: bump.amount })
   })
 
   return (
@@ -154,6 +193,18 @@ type BarTerrainProps = Omit<React.ComponentProps<"div">, "children"> & {
   pointerRadius?: number
   /** How high the bump under the pointer rises. */
   pointerLift?: number
+  /** Bars this tall turn the accent, and lower ones shade toward it. Off by default. */
+  peak?: number
+  /** Fades the far bars into the page. Distances are in scene units from the camera. */
+  fade?: { near: number; far: number }
+  /** The camera, for a wider view than the default. */
+  camera?: TerrainCamera
+  /** The point the camera faces. */
+  lookAt?: [x: number, y: number, z: number]
+  /** Lifts a bar every few seconds when nobody's pointing. */
+  autoPick?: boolean
+  /** Runs every frame with the lifted bar, or `null` when there isn't one. Snaps the bump to one bar. */
+  onPick?: (pick: BarPick | null) => void
   /** Describes the data for screen readers. */
   label?: string
 }
@@ -164,6 +215,12 @@ export function BarTerrain({
   source = defaultSource,
   pointerRadius = 1.6,
   pointerLift = 3.2,
+  peak,
+  fade,
+  camera = CAMERA,
+  lookAt = LOOK_AT,
+  autoPick = false,
+  onPick,
   label = "3D bar field",
   className,
   ...props
@@ -186,8 +243,8 @@ export function BarTerrain({
     <GlStage
       ref={host}
       label={label}
-      camera={CAMERA}
-      lookAt={LOOK_AT}
+      camera={camera}
+      lookAt={lookAt}
       className={cn("h-64 cursor-crosshair", className)}
       onPointerMove={onPointerMove}
       onPointerLeave={() => (pointer.current.over = false)}
@@ -202,6 +259,10 @@ export function BarTerrain({
         still={reduced}
         palette={palette}
         pointer={pointer}
+        peak={peak}
+        fade={fade}
+        autoPick={autoPick}
+        onPick={onPick}
       />
     </GlStage>
   )

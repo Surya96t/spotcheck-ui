@@ -1,53 +1,50 @@
 import Link from "next/link"
 
 import { Demo } from "@/components/site/demos"
+import { WhenSeen } from "@/components/site/when-seen"
 import { Tag } from "@/registry/spotcheck/components/spotcheck/tag"
 
-import type { PartLink } from "./case-file"
-import { WhenSeen } from "@/components/site/when-seen"
+export type PartLink = { slug: string; title: string; engine: string }
 
 const SPECIMENS = [
-  { slug: "detent-slider", span: "xl:col-span-2" },
-  { slug: "hold-button", span: "" },
-  { slug: "scrub-input", span: "" },
-  { slug: "split-flap", span: "xl:col-span-2" },
-  { slug: "magnetic-button", span: "" },
+  { slug: "embedding-space", span: "xl:col-span-2" },
+  { slug: "swipe-review", span: "" },
   { slug: "scramble-text", span: "" },
-  { slug: "ripple-heatmap", span: "xl:col-span-2" },
-  { slug: "draw-chart", span: "xl:col-span-2" },
+  { slug: "coverflow", span: "xl:col-span-2" },
+  { slug: "fold-report", span: "" },
+  { slug: "roll-number", span: "" },
 ]
 
-export function Specimens({ parts }: { parts: Record<string, PartLink & { engine: string }> }) {
+export function Specimens({ parts, count }: { parts: Record<string, PartLink>; count: number }) {
   return (
     <section aria-labelledby="specimens-title">
-      <div className="border-ink flex flex-col items-start justify-between gap-3 border-b-(length:--rule) px-4.5 pt-10 pb-3 md:flex-row md:items-end">
-        <h2 id="specimens-title" className="spotcheck-display text-[clamp(40px,7vw,104px)] leading-[.85]">
-          Parts with weight
+      <div className="border-ink flex flex-wrap items-end justify-between gap-3 border-b-(length:--rule) px-4 pt-10 pb-3 md:px-8 md:pt-14">
+        <h2 id="specimens-title" className="landing-mask spotcheck-display text-[clamp(52px,7.4vw,108px)] leading-[.88]">
+          <span data-rise>Parts with weight</span>
         </h2>
-        <p className="text-mute max-w-[42ch] text-[13.5px] md:text-right">
-          The everyday controls get real motion too. Try them. Each one falls back to a still frame under reduced motion.
-        </p>
+        <Link
+          href="/components"
+          className="border-ink hover:bg-ink hover:text-paper flex min-h-11.5 items-center border-(length:--rule) px-5 font-(family-name:--f-mono) text-xs tracking-[.1em] uppercase"
+        >
+          Browse all {count} →
+        </Link>
       </div>
       <div className="overflow-hidden">
-        <div className="-mr-(--rule) grid grid-cols-[minmax(0,1fr)] md:grid-cols-2 xl:grid-cols-4">
+        <div data-cells className="-mr-(--rule) grid grid-cols-[minmax(0,1fr)] md:grid-cols-2 xl:grid-cols-4">
           {SPECIMENS.map(({ slug, span }) => {
             const part = parts[slug]
             if (!part) return null
             return (
-              <article
-                key={slug}
-                className={`landing-cell border-ink flex min-w-0 flex-col border-b-(length:--rule) ${span}`}
-              >
-                <div className="flex items-baseline gap-2.5 px-3.5 pt-3">
-                  <span className="text-mute font-(family-name:--f-mono) text-[11px] tabular-nums">{part.no}</span>
-                  <h3 className="spotcheck-heading grow text-base leading-none">
+              <article key={slug} className={`landing-cell border-ink flex min-w-0 flex-col border-b-(length:--rule) ${span}`}>
+                <div className="flex items-baseline justify-between gap-2.5 px-4 pt-3">
+                  <h3 className="grow text-base leading-none font-bold">
                     <Link href={`/components/${slug}`} className="hover:text-accent-ink">
                       {part.title}
                     </Link>
                   </h3>
                   <Tag>{part.engine}</Tag>
                 </div>
-                <WhenSeen minHeight={150} className="flex min-w-0 grow flex-col justify-end p-3.5">
+                <WhenSeen minHeight={280} className="flex min-w-0 grow flex-col justify-end p-4">
                   <Demo slug={slug} />
                 </WhenSeen>
               </article>

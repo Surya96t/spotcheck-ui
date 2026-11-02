@@ -1,81 +1,53 @@
 import Link from "next/link"
-import type { CSSProperties, ReactNode } from "react"
+import type { CSSProperties } from "react"
 
 import { InstallCommand } from "@/components/site/install-command"
-import { BarTerrainDemo } from "@/registry/spotcheck/examples/bar-terrain-demo"
 
-const PITCH =
-  "Open source React components for reviewing, grading and signing off AI work. Hard rules, real motion and no package to install. Copy a file in and it's yours."
+import { HeroTerrain, type TerrainPart } from "./hero-terrain"
 
-function Stat({ value, label }: { value: number; label: string }) {
+export function Hero({ parts }: { parts: TerrainPart[] }) {
   return (
-    <div className="border-ink flex flex-col justify-end border-r-(length:--rule) px-3.5 pt-2.5 pb-2 last:border-r-0">
-      <b className="spotcheck-display text-[34px] leading-none tabular-nums">{value}</b>
-      <small className="spotcheck-label">{label}</small>
-    </div>
-  )
-}
-
-type LineProps = { children: ReactNode; index?: number; ruled?: boolean; last?: boolean }
-
-function Line({ children, index = 0, ruled = false, last = false }: LineProps) {
-  return (
-    <span
-      className={`landing-line ${ruled ? "border-ink border-b-(length:--rule)" : ""}`}
-      style={{ "--line": index } as CSSProperties}
+    <section
+      aria-labelledby="hero-title"
+      className="landing-hero border-ink bg-paper @container relative h-[max(620px,min(800px,calc(100svh-58px)))] cursor-crosshair overflow-hidden border-b-(length:--rule)"
     >
-      <span>
-        {children}
-        {last && <em className="text-accent-ink not-italic">.</em>}
-      </span>
-    </span>
-  )
-}
+      <HeroTerrain parts={parts} label="Bar Terrain, a 3D bar field. One bar lifts out and shows a component name." />
+      <div aria-hidden className="landing-shade pointer-events-none absolute inset-0" />
 
-export function Hero({ count }: { count: number }) {
-  return (
-    <header className="@container">
-      <div className="landing-hero border-ink relative border-b-(length:--rule)">
-        <h1 className="spotcheck-display">
-          <span className="hidden md:block">
-            <Line ruled>Keep the books</Line>
-            <Line index={1} last>
-              on your AI
-            </Line>
-          </span>
-          {/* Phones get three lines, so the type stays huge. */}
-          <span className="md:hidden">
-            <Line ruled>Keep the</Line>
-            <Line ruled index={1}>
-              books on
-            </Line>
-            <Line index={2} last>
-              your AI
-            </Line>
-          </span>
-        </h1>
-        <div className="landing-slip border-ink hidden flex-col justify-end gap-0.5 border-l-(length:--rule) p-3.5 font-(family-name:--f-mono) text-xs md:flex">
-          <span className="spotcheck-label">File open</span>
-          <span>Run R-2041</span>
-          <span>atlas-l · 2.84 s</span>
-          <Link href="#case-file" className="text-accent-ink mt-1.5 underline underline-offset-2">
-            Audit it
+      <div className="pointer-events-none absolute inset-x-0 bottom-0">
+        <div className="max-w-[1100px] px-4 pb-6 md:px-8">
+          <p data-copy className="landing-enter spotcheck-label text-ink mb-4" style={{ "--line": 2 } as CSSProperties}>
+            Open source · {parts.length} components · 3 skins
+          </p>
+          <h1 id="hero-title" className="spotcheck-display">
+            <span className="landing-line">
+              <span>Pick any part.</span>
+            </span>
+            <span className="landing-line" style={{ "--line": 1 } as CSSProperties}>
+              <span>
+                Look closely<em className="text-accent-ink not-italic">.</em>
+              </span>
+            </span>
+          </h1>
+          <p data-copy className="landing-enter mt-4 max-w-[40ch] text-xl leading-snug text-pretty" style={{ "--line": 3 } as CSSProperties}>
+            {parts.length} React components with hard edges, real motion and 3D. Copy the code and it&apos;s yours.
+          </p>
+        </div>
+        <div
+          className="landing-enter border-ink pointer-events-auto flex flex-wrap items-stretch border-t-(length:--rule) bg-[color-mix(in_srgb,var(--paper)_88%,transparent)]"
+          style={{ "--line": 4 } as CSSProperties}
+        >
+          <div className="border-ink flex min-w-0 flex-[1_1_100%] items-center md:flex-[1_1_560px] md:border-r-(length:--rule)">
+            <InstallCommand name="chat-screen" plain />
+          </div>
+          <Link
+            href="/components"
+            className="bg-accent-ink text-on-accent flex min-h-13 flex-[1_1_100%] items-center justify-center px-10 font-(family-name:--f-mono) text-[13px] tracking-[.1em] uppercase md:min-h-17 md:flex-none"
+          >
+            Browse components →
           </Link>
         </div>
       </div>
-
-      <div className="border-ink grid border-b-(length:--rule) lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
-        <BarTerrainDemo className="border-ink h-64 border-b-(length:--rule) lg:h-auto lg:min-h-80 lg:border-r-(length:--rule) lg:border-b-0" />
-        <div className="flex min-w-0 flex-col">
-          <p className="max-w-[46ch] grow p-4.5 text-lg leading-snug text-pretty">{PITCH}</p>
-          <div className="border-ink grid grid-cols-3 border-t-(length:--rule)">
-            <Stat value={count} label="Components" />
-            <Stat value={3} label="Motion engines" />
-            <Stat value={3} label="Skins" />
-          </div>
-          <InstallCommand name="chat-screen" />
-        </div>
-      </div>
-    </header>
+    </section>
   )
 }
