@@ -24,7 +24,7 @@ test.describe("stream response, the Phase 4 exit check", () => {
     await expect(demo.getByRole("link", { name: "Source 1" })).toBeVisible()
     await expect(demo.getByRole("link", { name: "refund-policy.md §2" })).toHaveAttribute("href", "https://example.com/refund-policy")
     await expect(demo.getByText("[1]").first()).toBeVisible()
-    expect(demo.getByText("[object Object]")).toHaveCount(0)
+    await expect(demo.getByText("[object Object]")).toHaveCount(0)
     expect(errors).toEqual([])
   })
 
