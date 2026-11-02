@@ -92,10 +92,19 @@ test.describe("landing page", () => {
     expect(await display("Folio")).toContain("Instrument Serif")
   })
 
-  test("passes axe", async ({ page }) => {
-    await page.goto("/")
-    await page.waitForLoadState("networkidle")
-    const results = await new AxeBuilder({ page }).analyze()
-    expect(results.violations.map((violation) => violation.id)).toEqual([])
-  })
+  for (const theme of ["light", "dark"]) {
+    test(`passes axe in ${theme}, once the hero has finished arriving`, async ({ page }) => {
+      await page.addInitScript((choice) => localStorage.setItem("spotcheck-theme", choice), theme)
+      await page.goto("/")
+      await page.waitForLoadState("networkidle")
+      // Text that's still fading in has a lower contrast than it settles at.
+      await page.evaluate(() =>
+        Promise.all(
+          [...document.querySelectorAll(".landing-enter")].flatMap((element) => element.getAnimations().map((animation) => animation.finished)),
+        ),
+      )
+      const results = await new AxeBuilder({ page }).analyze()
+      expect(results.violations.map((violation) => violation.id)).toEqual([])
+    })
+  }
 })
