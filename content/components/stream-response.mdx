@@ -1,0 +1,39 @@
+---
+title: Stream Response
+description: "Streaming markdown with a block caret, inline citations and a source strip. Stop and regenerate built in."
+group: ai
+order: 1
+engine: Streamdown
+wide: true
+keyboard:
+  - { keys: "Tab", action: "Reach citations, sources and buttons" }
+reducedMotion: "The caret stays still. Text still arrives as it streams."
+---
+
+## Usage
+
+```tsx
+"use client"
+
+import { StreamResponse } from "@/components/ledger/stream-response"
+import { useStream } from "@/hooks/use-stream"
+
+export function Answer() {
+  const { text, sources, status, error, start, stop, regenerate } = useStream("/api/chat")
+
+  return (
+    <StreamResponse
+      text={text}
+      sources={sources}
+      status={status}
+      error={error}
+      onStop={stop}
+      onRegenerate={() => regenerate()}
+    />
+  )
+}
+```
+
+`useStream` reads the AI SDK's UI message stream with no `ai` package on the client. Return `createUIMessageStreamResponse` or `toUIMessageStreamResponse` from your route and it works. Anything else is read as plain SSE, where each `data:` line is more text.
+
+Write `[1]` in the text to cite the first source. Screen readers hear one finished sentence at a time, not every token.

@@ -133,6 +133,39 @@ const DEMOS = {
   "swipe-review": dynamic(
     () => import("@/registry/ledger/examples/swipe-review-demo").then((module) => module.SwipeReviewDemo),
   ),
+  "stream-response": dynamic(
+    () => import("@/registry/ledger/examples/stream-response-demo").then((module) => module.StreamResponseDemo),
+  ),
+  "agent-trace": dynamic(
+    () => import("@/registry/ledger/examples/agent-trace-demo").then((module) => module.AgentTraceDemo),
+  ),
+  "trace-waterfall": dynamic(
+    () => import("@/registry/ledger/examples/trace-waterfall-demo").then((module) => module.TraceWaterfallDemo),
+  ),
+  "composer": dynamic(
+    () => import("@/registry/ledger/examples/composer-demo").then((module) => module.ComposerDemo),
+  ),
+  "thinking": dynamic(
+    () => import("@/registry/ledger/examples/thinking-demo").then((module) => module.ThinkingDemo),
+  ),
+  "context-budget": dynamic(
+    () => import("@/registry/ledger/examples/context-budget-demo").then((module) => module.ContextBudgetDemo),
+  ),
+  "eval-matrix": dynamic(
+    () => import("@/registry/ledger/examples/eval-matrix-demo").then((module) => module.EvalMatrixDemo),
+  ),
+  "run-receipt": dynamic(
+    () => import("@/registry/ledger/examples/run-receipt-demo").then((module) => module.RunReceiptDemo),
+  ),
+  "diff-review": dynamic(
+    () => import("@/registry/ledger/examples/diff-review-demo").then((module) => module.DiffReviewDemo),
+  ),
+  "model-race": dynamic(
+    () => import("@/registry/ledger/examples/model-race-demo").then((module) => module.ModelRaceDemo),
+  ),
+  "chat-screen": dynamic(
+    () => import("@/registry/ledger/examples/chat-screen-demo").then((module) => module.ChatScreenDemo),
+  ),
 }
 
 export function Demo({ slug }: { slug: string }) {

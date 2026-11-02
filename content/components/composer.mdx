@@ -1,0 +1,32 @@
+---
+title: Composer
+description: "A prompt box with attachment chips, a model picker and a live context meter."
+group: ai
+order: 4
+engine: Base UI
+keyboard:
+  - { keys: "⌘ Enter", action: "Send, Ctrl Enter on Windows and Linux" }
+  - { keys: "Tab", action: "Move between the box, chips and controls" }
+reducedMotion: "Nothing here animates."
+---
+
+## Usage
+
+```tsx
+import { Composer } from "@/components/ledger/composer"
+
+<Composer
+  value={prompt}
+  onValueChange={setPrompt}
+  onSubmit={send}
+  attachments={files}
+  onRemove={removeFile}
+  models={[{ value: "atlas-l", label: "atlas-l" }]}
+  model={model}
+  onModelChange={setModel}
+  contextLimit={32000}
+  usedTokens={3600}
+/>
+```
+
+The meter estimates four characters per token for the draft. Pass real counts through `usedTokens`.

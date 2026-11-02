@@ -1,0 +1,28 @@
+---
+title: Run Receipt
+description: "A tear-off receipt of a run's tokens, cost and tools that prints line by line."
+group: ai
+order: 8
+engine: anime.js
+keyboard: []
+reducedMotion: "The finished receipt appears at once."
+---
+
+## Usage
+
+```tsx
+import { RunReceipt } from "@/components/ledger/run-receipt"
+
+<RunReceipt
+  title="Run R-2041"
+  meta="atlas-l · 31 Oct 21:42"
+  lines={[
+    { label: "Input tokens", value: "2,140" },
+    { label: "Output tokens", value: "412" },
+    { label: "Tool calls", value: "5" },
+  ]}
+  total={{ label: "Total", value: "$0.0092" }}
+/>
+```
+
+It prints the first time it scrolls into view. Change its `key` to print it again.

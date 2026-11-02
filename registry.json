@@ -54,6 +54,18 @@
       ]
     },
     {
+      "name": "use-stream",
+      "type": "registry:hook",
+      "title": "useStream",
+      "description": "Reads an AI SDK UI message stream or plain SSE, with stop and regenerate.",
+      "files": [
+        {
+          "path": "registry/ledger/hooks/use-stream.ts",
+          "type": "registry:hook"
+        }
+      ]
+    },
+    {
       "name": "roll-number",
       "type": "registry:component",
       "title": "Roll Number",
@@ -930,6 +942,228 @@
       "files": [
         {
           "path": "registry/ledger/components/ledger/swipe-review.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "stream-response",
+      "type": "registry:component",
+      "title": "Stream Response",
+      "description": "Streaming markdown with a block caret, inline citations and a source strip. Stop and regenerate built in.",
+      "categories": [
+        "ai"
+      ],
+      "dependencies": [
+        "streamdown"
+      ],
+      "registryDependencies": [
+        "{{REGISTRY_URL}}/r/ledger-base.json",
+        "{{REGISTRY_URL}}/r/button.json",
+        "{{REGISTRY_URL}}/r/use-stream.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ledger/components/ledger/stream-response.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "agent-trace",
+      "type": "registry:component",
+      "title": "Agent Trace",
+      "description": "Tool calls as ledger rows, with state, tool, argument and duration. Expand a row to see its output.",
+      "categories": [
+        "ai"
+      ],
+      "registryDependencies": [
+        "{{REGISTRY_URL}}/r/ledger-base.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ledger/components/ledger/agent-trace.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "trace-waterfall",
+      "type": "registry:component",
+      "title": "Trace Waterfall",
+      "description": "Nested spans on a shared timeline, so parallel work and slow steps show up at a glance.",
+      "categories": [
+        "ai"
+      ],
+      "registryDependencies": [
+        "{{REGISTRY_URL}}/r/ledger-base.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ledger/components/ledger/trace-waterfall.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "composer",
+      "type": "registry:component",
+      "title": "Composer",
+      "description": "A prompt box with attachment chips, a model picker and a live context meter.",
+      "categories": [
+        "ai"
+      ],
+      "registryDependencies": [
+        "{{REGISTRY_URL}}/r/ledger-base.json",
+        "{{REGISTRY_URL}}/r/chip.json",
+        "{{REGISTRY_URL}}/r/select.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ledger/components/ledger/composer.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "thinking",
+      "type": "registry:component",
+      "title": "Thinking",
+      "description": "A bar waveform with a rotating step label, for long-running work.",
+      "categories": [
+        "ai"
+      ],
+      "registryDependencies": [
+        "{{REGISTRY_URL}}/r/ledger-base.json",
+        "{{REGISTRY_URL}}/r/use-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ledger/components/ledger/thinking.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "context-budget",
+      "type": "registry:component",
+      "title": "Context Budget",
+      "description": "A segmented bar showing where the context window goes, with a compact action.",
+      "categories": [
+        "ai"
+      ],
+      "registryDependencies": [
+        "{{REGISTRY_URL}}/r/ledger-base.json",
+        "{{REGISTRY_URL}}/r/button.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ledger/components/ledger/context-budget.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "eval-matrix",
+      "type": "registry:component",
+      "title": "Eval Matrix",
+      "description": "Models by tasks, with cells shaded by score.",
+      "categories": [
+        "ai"
+      ],
+      "registryDependencies": [
+        "{{REGISTRY_URL}}/r/ledger-base.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ledger/components/ledger/eval-matrix.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "run-receipt",
+      "type": "registry:component",
+      "title": "Run Receipt",
+      "description": "A tear-off receipt of a run's tokens, cost and tools that prints line by line.",
+      "categories": [
+        "ai"
+      ],
+      "dependencies": [
+        "animejs"
+      ],
+      "registryDependencies": [
+        "{{REGISTRY_URL}}/r/ledger-base.json",
+        "{{REGISTRY_URL}}/r/use-in-view.json",
+        "{{REGISTRY_URL}}/r/use-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ledger/components/ledger/run-receipt.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "diff-review",
+      "type": "registry:component",
+      "title": "Diff Review",
+      "description": "Accept or reject an agent's edits hunk by hunk, with undo.",
+      "categories": [
+        "ai"
+      ],
+      "dependencies": [
+        "motion"
+      ],
+      "registryDependencies": [
+        "{{REGISTRY_URL}}/r/ledger-base.json",
+        "{{REGISTRY_URL}}/r/button.json",
+        "{{REGISTRY_URL}}/r/status-pill.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ledger/components/ledger/diff-review.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "model-race",
+      "type": "registry:component",
+      "title": "Model Race",
+      "description": "One prompt across several models, with live time and cost, and the winner marked.",
+      "categories": [
+        "ai"
+      ],
+      "registryDependencies": [
+        "{{REGISTRY_URL}}/r/ledger-base.json",
+        "{{REGISTRY_URL}}/r/roll-number.json",
+        "{{REGISTRY_URL}}/r/tag.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ledger/components/ledger/model-race.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "chat-screen",
+      "type": "registry:component",
+      "title": "Chat Screen",
+      "description": "Thread list, message log and reply bar, wired to Stream Response.",
+      "categories": [
+        "screens"
+      ],
+      "registryDependencies": [
+        "{{REGISTRY_URL}}/r/ledger-base.json",
+        "{{REGISTRY_URL}}/r/app-frame.json",
+        "{{REGISTRY_URL}}/r/stream-response.json",
+        "{{REGISTRY_URL}}/r/use-stream.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ledger/components/ledger/chat-screen.tsx",
           "type": "registry:component"
         }
       ]

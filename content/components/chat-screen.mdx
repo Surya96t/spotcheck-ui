@@ -1,0 +1,22 @@
+---
+title: Chat Screen
+description: "Thread list, message log and reply bar, wired to Stream Response."
+group: screens
+order: 3
+engine: Streamdown
+wide: true
+keyboard:
+  - { keys: "Tab", action: "Move between threads, the log and the reply bar" }
+  - { keys: "Enter", action: "Send the reply" }
+reducedMotion: "Follows Stream Response: text streams, and the caret stays still."
+---
+
+## Usage
+
+```tsx
+import { ChatScreen } from "@/components/ledger/chat-screen"
+
+<ChatScreen api="/api/chat" threads={threads} />
+```
+
+It posts `{ messages }` to `api` and reads the reply with `useStream`. Threads live in component state, so connect them to your own storage.

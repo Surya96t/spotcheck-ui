@@ -36,7 +36,8 @@ a site that has to be published and found:
 - Most people installing these components use Next, so building on it exposes server/client
   problems before they do.
 
-The build stays static: no database, no server code, no accounts.
+The build stays static apart from one demo route that streams scripted text: no database, no
+accounts and no model calls.
 
 ### Stack
 
@@ -236,6 +237,21 @@ Added after Phase 2, because the home page is a catalog and no phase covered sel
 - **anime.js:** `createSpring` is deprecated in v4.5, so components use `spring`.
 - **Bugs the tests caught:** glyphs widened Scramble Text by 84px, and Scrub Input lost keyboard
   focus after typing a value.
+
+## Phase 4 results
+
+- **Shipped:** 11 components and a hook, for 54 in the catalog: `stream-response`, `agent-trace`,
+  `trace-waterfall`, `composer`, `thinking`, `context-budget`, `eval-matrix`, `run-receipt`,
+  `diff-review`, `model-race`, `chat-screen` and `use-stream`.
+- **Real stream:** `use-stream` parses the AI SDK's UI message stream with no `ai` package on the
+  client. A unit test runs it on output from the real `ai` package, and `/api/demo/chat` sends a
+  real stream with scripted text, so demos need no model or API key.
+- **First server code:** that route is the only one, and the plan had said no server code.
+- **Streamdown:** renders markdown as it arrives, with our own element styles so it needs no
+  Tailwind source path in users' projects.
+- **Screen readers:** hear one finished sentence at a time, never tokens.
+- **Eval matrix:** digits sit on a paper chip, which replaces the text colour threshold that failed
+  contrast in Terminal.
 
 ## Design language
 

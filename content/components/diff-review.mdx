@@ -1,0 +1,35 @@
+---
+title: Diff Review
+description: "Accept or reject an agent's edits hunk by hunk, with undo."
+group: ai
+order: 9
+engine: motion.dev
+wide: true
+keyboard:
+  - { keys: "Tab", action: "Move between hunks and buttons" }
+  - { keys: "Enter", action: "Accept, reject or undo" }
+reducedMotion: "Decided hunks close at once."
+---
+
+## Usage
+
+```tsx
+import { DiffReview } from "@/components/ledger/diff-review"
+
+<DiffReview
+  hunks={[
+    {
+      id: "h1",
+      file: "lib/refunds.ts",
+      summary: "Require approval past 30 days",
+      lines: [
+        { kind: "remove", text: "if (days > 60) return approve()" },
+        { kind: "add", text: "if (days > 30) return requestApproval()" },
+      ],
+    },
+  ]}
+  onDecide={(id, decision) => record(id, decision)}
+/>
+```
+
+`onDecide` runs on each decision, and with `null` when one is undone.
