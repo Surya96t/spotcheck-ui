@@ -15,15 +15,15 @@ _none_
 _none_
 
 ## Recent decisions
-- tokens respond to .dark, [data-theme] and system setting
-- narrowed positioning to reviewing, grading and auditing AI work plus motion on controls
-- AI before WebGL and Depth; public v0.1 before Depth
-- Phase 0 slice: roll-number, detent-slider, bar-terrain installed into a clean shadcn app
-- do-not-copy for Animate UI, React Bits, Aceternity and coss ui (Commons Clause, source redistribution ban, AGPL default)
-- kept Ledger UI as working title only; Ledger SAS publishes @ledgerhq/lumen-ui-react
-- registry/ledger/components/ledger/ layout over group folders
-- Fontsource packages over registry:font (no width axis for Archivo)
-- registry:item ledger-base over registry:base
-- renamed accent token to --accent-ink
+- tokens stay light unless .dark or data-theme opts in, rather than following the system by default, because a shadcn app with no theme provider would end up half dark
+- tokens are re-declared on every scope because Tailwind compiles light-dark() to a fallback fixed on the declaring element
+- AI before WebGL and Depth; Depth moved ahead of public v0.1 so v0.1 ships the full kit (order: 5 Landing, 6 Depth, 7 Public launch, 8 Ongoing)
+- single live case file for the landing page over a grid of unrelated demos, because one audited AI run shows the review positioning and proves the components work together
+- launch name is Spotcheck UI, replacing Ledger UI and the earlier Inloop UI, because a TMview search found no live US/UK/EU software mark in the first 30 of 80 results; InLoop has a UK word mark covering software and Ledger SAS has an overlapping React UI library
+- Surya Prakash Madichetti is the MIT copyright holder, matching the git identity
+- spotcheckui.com is the only domain: short, reads cleanly in install commands, one renewal
+- repo goes public with full history and all files; the scan found no secrets and the build record has value; the Gmail address on commits is accepted
+- device testing on Surya's iPhone and Mac Safari with a Claude-written checklist over a paid device cloud or WebKit in CI, because it is free and the only true test of touch
+- kept the Ledger skin and ledger-table after the rename because they describe a look and table style, not the brand
 
 ## Notes

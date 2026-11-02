@@ -19,7 +19,7 @@ function subscribe(onChange: () => void) {
   return () => observer.disconnect()
 }
 
-function Control({ control }: { control: (typeof CONTROLS)[number] }) {
+function Control({ control, compact }: { control: (typeof CONTROLS)[number]; compact: boolean }) {
   const current = React.useSyncExternalStore(
     subscribe,
     () => document.documentElement.dataset[control.key] ?? control.fallback,
@@ -27,7 +27,7 @@ function Control({ control }: { control: (typeof CONTROLS)[number] }) {
   )
 
   return (
-    <div className="border-ink flex items-center gap-2.5 px-3.5 py-2 md:border-r-(length:--rule)">
+    <div className={cn("border-ink items-center gap-2.5 px-3.5 py-2 md:flex md:border-r-(length:--rule)", compact ? "hidden" : "flex")}>
       <span className="ledger-label">{control.label}</span>
       <div role="group" aria-label={control.label} className="border-ink inline-flex border-(length:--rule)">
         {control.options.map((option) => (
@@ -49,11 +49,21 @@ function Control({ control }: { control: (typeof CONTROLS)[number] }) {
   )
 }
 
-export function TopBar({ components, guides }: { components: ComponentLink[]; guides: GuideLink[] }) {
+type TopBarProps = {
+  components: ComponentLink[]
+  guides: GuideLink[]
+  /** Shown ahead of the controls. */
+  children?: React.ReactNode
+  /** Leaves the skin and theme controls out on phones. Search still offers both. */
+  compact?: boolean
+}
+
+export function TopBar({ components, guides, children, compact = false }: TopBarProps) {
   return (
     <div className="border-ink bg-paper z-10 flex flex-wrap items-stretch border-b-(length:--rule) font-(family-name:--f-mono) text-xs md:sticky md:top-0">
+      {children}
       {CONTROLS.map((control) => (
-        <Control key={control.key} control={control} />
+        <Control key={control.key} control={control} compact={compact} />
       ))}
       <SiteSearch components={components} guides={guides} />
     </div>

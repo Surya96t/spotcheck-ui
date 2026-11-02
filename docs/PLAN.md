@@ -139,13 +139,14 @@ shadcn files such as `components/ui/button.tsx`. Groups like Motion and Depth ar
 | 3 | Motion | Motion, Springs and Timelines groups, `/components` index | Each passes its smoke test and the axe check |
 | 4 | AI and review | AI group, `run-receipt`, `trace-waterfall`, `diff-review`, `model-race`, `chat-screen` | A demo works against a real AI SDK stream |
 | 5 | Landing page | A real landing page at `/`, with the catalog moved to `/components` | A first-time visitor can tell what Ledger is, see it work and reach the install step without opening the catalog |
-| 6 | Public launch, v0.1 | `dashboard`, field notes, SEO, name, domain, shadcn directory PR | Live on the real domain and listed |
-| 7 | Depth, v0.2 onward | WebGL and Depth groups, `configurator` as a block, one release at a time | Each release ships with its demo and tests |
+| 6 | Depth | WebGL and Depth groups, `configurator` as a block | Each piece ships with its demo and tests |
+| 7 | Public launch, v0.1 | `dashboard`, field notes, SEO, name, domain, shadcn directory PR | Live on the real domain and listed |
 | 8 | Ongoing | Next-tier components, 21st.dev submission | Driven by what people use |
 
-AI moved ahead of WebGL and Depth because it carries the positioning, and launching first gives
-us real feedback before the most expensive work. `bar-terrain` still lands in Phase 0, so the
-hero and the WebGL path are proven early.
+AI moved ahead of WebGL and Depth because it carries the positioning. Depth then moved ahead of
+the public launch at Surya's request, so v0.1 ships the full kit. `bar-terrain` still lands in
+Phase 0, so the hero and the WebGL path are proven early. The launch plan is written in
+`docs/LAUNCH-PLAN.md`.
 
 ### Landing page
 
@@ -153,9 +154,13 @@ Added after Phase 2, because the home page is a catalog and no phase covered sel
 
 - **What it needs:** what Ledger is for and who it's for, a showcase, how it compares with other
   libraries, a clear next step, and the prototype's footer.
-- **What it can show:** Depth comes after launch, so the showcase uses `bar-terrain` and the Motion
-  and AI pieces. If that isn't enough, pull one or two Depth pieces forward when we plan the phase.
-- **Still open:** the direction. Collect sites or references you like before the phase starts.
+- **Direction:** the page is one live case file. It opens with "Keep the books on your AI", then a
+  single AI run is audited with the real components while a running ledger counts open items and
+  spend in the margin. Stamping the sign-off closes the books and prints the receipt. Surya left the
+  design to me, so this replaces the reference hunt.
+- **Layout:** the landing page has no rail, so the headline can run edge to edge. The catalog moved
+  to `/components`, under the index. Each skin sets its own headline size in `app/globals.css`,
+  because the type widths differ.
 
 ## Open decisions
 
@@ -252,6 +257,17 @@ Added after Phase 2, because the home page is a catalog and no phase covered sel
 - **Screen readers:** hear one finished sentence at a time, never tokens.
 - **Eval matrix:** digits sit on a paper chip, which replaces the text colour threshold that failed
   contrast in Terminal.
+
+## Phase 5 results
+
+- The landing page is built at `/`, and the live catalog moved to `/components`, under the index.
+- It's one case file: five entries, a running ledger in the margin, and a stamp that closes the
+  books and prints the receipt. The stream is the real demo route.
+- All three skins run side by side on the page, and each has its own headline size.
+- Two component fixes came out of it: `trace-waterfall` no longer widens the page on phones, and
+  `model-race` fits three lanes in a narrower space.
+- Local results: 71 unit tests, 325 browser tests pass with 9 skipped, 33 install checks, axe clean.
+- **Not checked:** real phones, Safari, and how the page feels on a slow connection.
 
 ## Design language
 
