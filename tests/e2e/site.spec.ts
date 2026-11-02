@@ -46,8 +46,8 @@ for (const skin of ["ledger", "terminal", "folio"] as const) {
     test(`component page in ${skin} ${theme}`, async ({ page }, testInfo) => {
       await page.addInitScript(
         (appearance) => {
-          localStorage.setItem("ledger-skin", appearance.skin)
-          localStorage.setItem("ledger-theme", appearance.theme)
+          localStorage.setItem("spotcheck-skin", appearance.skin)
+          localStorage.setItem("spotcheck-theme", appearance.theme)
         },
         { skin, theme },
       )
@@ -74,7 +74,7 @@ test("component page has everything the template promises", async ({ page }) => 
   await expect(props.getByText("Distance between detents.")).toBeVisible()
   await expect(page.getByRole("region", { name: "Keyboard" }).getByText("Jump to the maximum")).toBeVisible()
   await expect(page.getByRole("region", { name: "Reduced motion" })).toContainText("jumps straight to its step")
-  await expect(page).toHaveTitle("Detent Slider · Ledger UI")
+  await expect(page).toHaveTitle("Detent Slider · Spotcheck UI")
 })
 
 test("install command copies", async ({ page, context, browserName }) => {
@@ -176,5 +176,5 @@ test("palette demo runs a command", async ({ page }) => {
 
 test("unknown pages get the styled 404", async ({ page }) => {
   await page.goto("/components/nope")
-  await expect(page.getByRole("heading", { name: "Not in the ledger" })).toBeVisible()
+  await expect(page.getByRole("heading", { name: "Not on file" })).toBeVisible()
 })

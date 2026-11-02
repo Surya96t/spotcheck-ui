@@ -18,7 +18,7 @@ Give it a height. It fills its parent's width, and colours come from your tokens
 import dynamic from "next/dynamic"
 
 const BarTerrain = dynamic(
-  () => import("@/components/ledger/bar-terrain").then((module) => module.BarTerrain),
+  () => import("@/components/spotcheck/bar-terrain").then((module) => module.BarTerrain),
   { ssr: false },
 )
 

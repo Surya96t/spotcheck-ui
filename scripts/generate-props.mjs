@@ -3,7 +3,7 @@ import { mkdirSync, readdirSync, writeFileSync } from "node:fs"
 import { join } from "node:path"
 import docgen from "react-docgen-typescript"
 
-const SOURCE = "registry/ledger/components/ledger"
+const SOURCE = "registry/spotcheck/components/spotcheck"
 
 const parser = docgen.withCustomConfig("tsconfig.json", {
   savePropValueAsString: true,

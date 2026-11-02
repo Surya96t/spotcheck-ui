@@ -4,7 +4,7 @@ import { components, guides } from "@/.source/server"
 import { loader } from "fumadocs-core/source"
 
 export const GROUPS = [
-  { id: "core", name: "Core", blurb: "Primitives cut from the ledger grid. Hard rules, no radius, type that sits on the baseline." },
+  { id: "core", name: "Core", blurb: "Primitives cut from a ruled grid. Hard rules, no radius, type that sits on the baseline." },
   { id: "motion", name: "Motion", blurb: "Typographic motion. Numbers roll, headings decode, lists file in like entries." },
   { id: "springs", name: "Springs", blurb: "Physics on the controls people touch most. Sliders snap into detents and stamps land with weight." },
   { id: "timelines", name: "Timelines", blurb: "Sequenced motion: split-flap boards, staggered grid ripples and lines that draw themselves." },

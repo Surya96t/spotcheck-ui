@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest"
 
-import { toHex } from "@/registry/ledger/hooks/use-gl-palette"
+import { toHex } from "@/registry/spotcheck/hooks/use-gl-palette"
 
 describe("toHex", () => {
   beforeEach(() => {

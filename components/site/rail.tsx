@@ -6,7 +6,7 @@ import type { ComponentLink, GuideLink } from "./nav-types"
 import { RailLink } from "./rail-link"
 
 function GroupLabel({ children }: { children: string }) {
-  return <div className="ledger-label hidden px-3 pt-3.5 pb-1 md:block">{children}</div>
+  return <div className="spotcheck-label hidden px-3 pt-3.5 pb-1 md:block">{children}</div>
 }
 
 export function Rail({ components, guides }: { components: ComponentLink[]; guides: GuideLink[] }) {
@@ -17,9 +17,9 @@ export function Rail({ components, guides }: { components: ComponentLink[]; guid
     >
       <Link
         href="/"
-        className="ledger-display border-ink flex shrink-0 items-center border-r-(length:--rule) px-3 pt-3.5 pb-2.5 text-[28px] leading-[.9] md:block md:border-r-0 md:border-b-(length:--rule)"
+        className="spotcheck-display border-ink flex shrink-0 items-center border-r-(length:--rule) px-3 pt-3.5 pb-2.5 text-[28px] leading-[.9] md:block md:border-r-0 md:border-b-(length:--rule)"
       >
-        Ledger
+        Spotcheck
         <br />
         UI
       </Link>

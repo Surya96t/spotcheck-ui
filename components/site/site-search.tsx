@@ -4,7 +4,7 @@ import * as React from "react"
 import { useRouter } from "next/navigation"
 
 import { setAppearance } from "@/lib/appearance"
-import { CommandPalette, type CommandGroup } from "@/registry/ledger/components/ledger/command-palette"
+import { CommandPalette, type CommandGroup } from "@/registry/spotcheck/components/spotcheck/command-palette"
 
 import type { ComponentLink, GuideLink } from "./nav-types"
 

@@ -70,7 +70,7 @@ The steps, in order and with checks, are in [RENAME.md](RENAME.md).
 | Area | Change |
 |---|---|
 | Site | Name, metadata and description in `app/layout.tsx`, the rail, top bar, footer, 404 and landing page |
-| Landing copy | "Start your ledger." and phrases like "Running ledger". "Keep the books on your AI." can stay |
+| Landing copy | "Start your ledger." became "Start checking.", and "Running ledger" became "Running tally". "Keep the books on your AI." stays |
 | Registry | `name: ledger` to `spotcheck`, `ledger-base` to `spotcheck-base`, and titles and descriptions |
 | Install path | `registry/ledger/` and `registry/ledger/components/ledger/`, so components install to `components/spotcheck/` |
 | Imports | Every `@/registry/ledger/...` path |
@@ -110,7 +110,7 @@ production build**.
   preview's install commands point at production. Keep this in mind when testing a preview.
 - **Old address:** redirect `ledger-ui-pied.vercel.app` to the new domain, then confirm the shadcn CLI
   follows it.
-- **Test:** run the 15 install checks against the live domain with
+- **Test:** run the 33 install checks against the live domain with
   `SPOTCHECK_REGISTRY_URL=https://spotcheckui.com pnpm test:install`.
 
 ## shadcn directory
@@ -160,15 +160,15 @@ Order matters. The rename comes before Depth, so new files get the right names f
 
 | # | Step | Owner |
 |---|---|---|
-| 1 | Check that `spotcheckui.com` and the social handles you want are free | Surya |
+| 1 | Check that `spotcheckui.com` and the social handles you want are free (domain done; handles not checked) | Surya |
 | 2 | Optional: an hour with a trademark attorney on Spotcheck | Surya |
-| 3 | Buy `spotcheckui.com` | Surya |
+| 3 | Buy `spotcheckui.com` (done on 2026-11-02, at Hostinger) | Surya |
 
 ### 2. Rename
 
 | # | Step | Owner |
 |---|---|---|
-| 4 | Merge the landing page PR, so the rename doesn't collide with it | Surya |
+| 4 | Merge the landing page PR, so the rename doesn't collide with it (done) | Surya |
 | 5 | Rename PR, using the table above, with all tests passing | Claude |
 | 6 | Update `docs/PLAN.md` to the new name and record this plan | Claude |
 | 7 | Rename the GitHub repo to `spotcheck-ui` and the Vercel project | Surya |

@@ -1,13 +1,13 @@
 import { fireEvent, render, screen } from "@testing-library/react"
 import { describe, expect, it, vi } from "vitest"
 
-import { Chip } from "@/registry/ledger/components/ledger/chip"
-import { addMonths, monthGrid, sameDay } from "@/registry/ledger/components/ledger/date-picker"
-import { LedgerTable, sortRows } from "@/registry/ledger/components/ledger/ledger-table"
-import { Pagination, pageRange } from "@/registry/ledger/components/ledger/pagination"
-import { Progress } from "@/registry/ledger/components/ledger/progress"
-import { Segmented } from "@/registry/ledger/components/ledger/segmented"
-import { sparklinePoints } from "@/registry/ledger/components/ledger/sparkline"
+import { Chip } from "@/registry/spotcheck/components/spotcheck/chip"
+import { addMonths, monthGrid, sameDay } from "@/registry/spotcheck/components/spotcheck/date-picker"
+import { LedgerTable, sortRows } from "@/registry/spotcheck/components/spotcheck/ledger-table"
+import { Pagination, pageRange } from "@/registry/spotcheck/components/spotcheck/pagination"
+import { Progress } from "@/registry/spotcheck/components/spotcheck/progress"
+import { Segmented } from "@/registry/spotcheck/components/spotcheck/segmented"
+import { sparklinePoints } from "@/registry/spotcheck/components/spotcheck/sparkline"
 
 const ROWS = [
   { id: "a", score: 2, name: "Beta" },

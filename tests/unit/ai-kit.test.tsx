@@ -2,14 +2,14 @@ import { render, screen } from "@testing-library/react"
 import { createUIMessageStream, createUIMessageStreamResponse } from "ai"
 import { describe, expect, it } from "vitest"
 
-import { traceProgress, type TraceStep } from "@/registry/ledger/components/ledger/agent-trace"
-import { reviewCounts, type DiffHunk } from "@/registry/ledger/components/ledger/diff-review"
-import { EvalMatrix, scoreShare } from "@/registry/ledger/components/ledger/eval-matrix"
-import { finishPlaces, type RaceLane } from "@/registry/ledger/components/ledger/model-race"
-import { tornEdge } from "@/registry/ledger/components/ledger/run-receipt"
-import { finishedSentences, linkCitations } from "@/registry/ledger/components/ledger/stream-response"
-import { flattenSpans, formatMs, type Span } from "@/registry/ledger/components/ledger/trace-waterfall"
-import { applyAiSdkPart, readSseEvents, type StreamState } from "@/registry/ledger/hooks/use-stream"
+import { traceProgress, type TraceStep } from "@/registry/spotcheck/components/spotcheck/agent-trace"
+import { reviewCounts, type DiffHunk } from "@/registry/spotcheck/components/spotcheck/diff-review"
+import { EvalMatrix, scoreShare } from "@/registry/spotcheck/components/spotcheck/eval-matrix"
+import { finishPlaces, type RaceLane } from "@/registry/spotcheck/components/spotcheck/model-race"
+import { tornEdge } from "@/registry/spotcheck/components/spotcheck/run-receipt"
+import { finishedSentences, linkCitations } from "@/registry/spotcheck/components/spotcheck/stream-response"
+import { flattenSpans, formatMs, type Span } from "@/registry/spotcheck/components/spotcheck/trace-waterfall"
+import { applyAiSdkPart, readSseEvents, type StreamState } from "@/registry/spotcheck/hooks/use-stream"
 
 const EMPTY: StreamState = { text: "", sources: [], tools: [] }
 

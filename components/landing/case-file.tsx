@@ -5,15 +5,15 @@ import * as React from "react"
 
 import { Demo } from "@/components/site/demos"
 import { cn } from "@/lib/utils"
-import { Button } from "@/registry/ledger/components/ledger/button"
-import { RollNumber } from "@/registry/ledger/components/ledger/roll-number"
-import { RunReceipt } from "@/registry/ledger/components/ledger/run-receipt"
-import { StampApproval, type ToolCall } from "@/registry/ledger/components/ledger/stamp-approval"
-import { StatusPill } from "@/registry/ledger/components/ledger/status-pill"
-import { StreamResponse } from "@/registry/ledger/components/ledger/stream-response"
-import { useInView } from "@/registry/ledger/hooks/use-in-view"
-import { useStream } from "@/registry/ledger/hooks/use-stream"
-import { ModelRaceDemo } from "@/registry/ledger/examples/model-race-demo"
+import { Button } from "@/registry/spotcheck/components/spotcheck/button"
+import { RollNumber } from "@/registry/spotcheck/components/spotcheck/roll-number"
+import { RunReceipt } from "@/registry/spotcheck/components/spotcheck/run-receipt"
+import { StampApproval, type ToolCall } from "@/registry/spotcheck/components/spotcheck/stamp-approval"
+import { StatusPill } from "@/registry/spotcheck/components/spotcheck/status-pill"
+import { StreamResponse } from "@/registry/spotcheck/components/spotcheck/stream-response"
+import { useInView } from "@/registry/spotcheck/hooks/use-in-view"
+import { useStream } from "@/registry/spotcheck/hooks/use-stream"
+import { ModelRaceDemo } from "@/registry/spotcheck/examples/model-race-demo"
 
 import { WhenSeen } from "./when-seen"
 
@@ -72,8 +72,8 @@ function Entry({ index, title, body, parts, onReach, children }: EntryProps) {
     >
       <div className="border-ink flex flex-col justify-end border-b-(length:--rule) p-4.5 xl:border-r-(length:--rule) xl:border-b-0">
         <div className="xl:sticky xl:bottom-6">
-          <span className="ledger-label mb-2 block">Entry {String(index + 1).padStart(2, "0")}</span>
-          <h3 id={`entry-${index}`} className="ledger-display text-[clamp(44px,6vw,92px)] leading-[.86]">
+          <span className="spotcheck-label mb-2 block">Entry {String(index + 1).padStart(2, "0")}</span>
+          <h3 id={`entry-${index}`} className="spotcheck-display text-[clamp(44px,6vw,92px)] leading-[.86]">
             {title}
           </h3>
           <p className="mt-3 max-w-[38ch] text-pretty">{body}</p>
@@ -165,7 +165,7 @@ function SignStage({ onSigned }: { onSigned: (signed: boolean) => void }) {
             </Button>
           </>
         ) : (
-          <div className="ledger-label border-ink flex min-h-60 w-full items-center justify-center border-(length:--rule) border-dashed p-4 text-center">
+          <div className="spotcheck-label border-ink flex min-h-60 w-full items-center justify-center border-(length:--rule) border-dashed p-4 text-center">
             The receipt prints when you sign
           </div>
         )}
@@ -180,10 +180,10 @@ function Margin({ reached, signed }: { reached: number; signed: boolean }) {
 
   return (
     <aside
-      aria-label="Running ledger"
+      aria-label="Running tally"
       className="border-ink bg-paper sticky top-0 z-[5] flex min-w-0 flex-col border-b-(length:--rule) lg:top-12 lg:h-[calc(100dvh-3rem)] lg:self-start lg:border-b-0"
     >
-      <div className="ledger-label border-ink hidden border-b-(length:--rule) p-3.5 lg:block">Running ledger · R-2041</div>
+      <div className="spotcheck-label border-ink hidden border-b-(length:--rule) p-3.5 lg:block">Running tally · R-2041</div>
       <ol className="hidden grow font-(family-name:--f-mono) text-xs lg:block">
         {ENTRIES.map((entry, index) => {
           const posted = index < reached || signed
@@ -207,18 +207,18 @@ function Margin({ reached, signed }: { reached: number; signed: boolean }) {
       </ol>
       <div className="border-ink grid grid-cols-[auto_1fr] items-center gap-x-5 px-3.5 py-2 lg:grid-cols-1 lg:gap-3 lg:border-t-(length:--rule) lg:py-3.5">
         <div className="flex items-center justify-between gap-3 lg:items-end">
-          <span className="ledger-label">Open items</span>
-          <RollNumber value={open} className="ledger-display text-2xl leading-none lg:text-[44px]" />
+          <span className="spotcheck-label">Open items</span>
+          <RollNumber value={open} className="spotcheck-display text-2xl leading-none lg:text-[44px]" />
         </div>
         <div className="flex items-center justify-between gap-3 lg:items-end">
-          <span className="ledger-label">Spend</span>
+          <span className="spotcheck-label">Spend</span>
           <RollNumber
             value={spend}
             formatOptions={SPEND_FORMAT}
             className="font-(family-name:--f-mono) text-sm tabular-nums lg:text-lg"
           />
         </div>
-        <div className="hidden lg:block" data-testid="ledger-state">
+        <div className="hidden lg:block" data-testid="spotcheck-state">
           {signed ? <StatusPill tone="ok">Books closed</StatusPill> : <StatusPill tone="warn">In review</StatusPill>}
         </div>
       </div>
@@ -235,7 +235,7 @@ export function CaseFile({ parts }: { parts: Record<string, PartLink> }) {
   return (
     <section id="case-file" aria-labelledby="case-file-title" className="@container">
       <div className="border-ink flex flex-col items-start justify-between gap-3 border-b-(length:--rule) px-4.5 pt-10 pb-3 md:flex-row md:items-end">
-        <h2 id="case-file-title" className="ledger-display text-[clamp(40px,7vw,104px)] leading-[.85]">
+        <h2 id="case-file-title" className="spotcheck-display text-[clamp(40px,7vw,104px)] leading-[.85]">
           One run, audited
         </h2>
         <p className="text-mute max-w-[42ch] text-[13.5px] md:text-right">

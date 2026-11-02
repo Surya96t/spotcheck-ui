@@ -28,7 +28,7 @@ function Control({ control, compact }: { control: (typeof CONTROLS)[number]; com
 
   return (
     <div className={cn("border-ink items-center gap-2.5 px-3.5 py-2 md:flex md:border-r-(length:--rule)", compact ? "hidden" : "flex")}>
-      <span className="ledger-label">{control.label}</span>
+      <span className="spotcheck-label">{control.label}</span>
       <div role="group" aria-label={control.label} className="border-ink inline-flex border-(length:--rule)">
         {control.options.map((option) => (
           <button

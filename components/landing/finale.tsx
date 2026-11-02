@@ -4,7 +4,7 @@ import { InstallCommand } from "@/components/site/install-command"
 
 const STEPS = [
   { no: "01", text: "Run one command. It uses the shadcn CLI you already have." },
-  { no: "02", text: "The source lands in components/ledger, in your repo." },
+  { no: "02", text: "The source lands in components/spotcheck, in your repo." },
   { no: "03", text: "It's yours. Change it, cut it down, ship it." },
 ]
 
@@ -28,8 +28,8 @@ export function Finale({ count }: { count: number }) {
     <>
       <section aria-labelledby="finale-title" className="bg-accent-ink text-on-accent border-ink @container border-b-(length:--rule)">
         <div className="landing-finale">
-          <h2 id="finale-title" className="ledger-display pt-12 pb-2">
-            Start your ledger<span>.</span>
+          <h2 id="finale-title" className="spotcheck-display pt-12 pb-2">
+            Start checking<span>.</span>
           </h2>
         </div>
         <ol className="grid border-t-(length:--rule) border-current md:grid-cols-3">
@@ -60,14 +60,14 @@ export function Finale({ count }: { count: number }) {
         <div className="grid gap-5 px-4.5 pt-6 pb-8 md:grid-cols-3">
           {NOTES.map((note) => (
             <div key={note.title}>
-              <h3 className="ledger-label mb-1">{note.title}</h3>
+              <h3 className="spotcheck-label mb-1">{note.title}</h3>
               <p className="max-w-[40ch] text-sm text-pretty">{note.text}</p>
             </div>
           ))}
         </div>
-        <div aria-hidden className="landing-wordmark ledger-display border-ink @container overflow-hidden border-t-(length:--rule)">
+        <div aria-hidden className="landing-wordmark spotcheck-display border-ink @container overflow-hidden border-t-(length:--rule)">
           <span>
-            Ledger<em className="text-accent-ink not-italic">/</em>UI
+            Spotcheck<em className="text-accent-ink not-italic">/</em>UI
           </span>
         </div>
       </footer>

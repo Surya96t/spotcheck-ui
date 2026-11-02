@@ -4,7 +4,7 @@ import { expect, test } from "@playwright/test"
 test.describe("landing page", () => {
   for (const skin of ["ledger", "terminal", "folio"]) {
     test(`the headlines fit edge to edge in ${skin}`, async ({ page }) => {
-      await page.addInitScript((choice) => localStorage.setItem("ledger-skin", choice), skin)
+      await page.addInitScript((choice) => localStorage.setItem("spotcheck-skin", choice), skin)
       await page.goto("/")
       await page.waitForLoadState("networkidle")
       await expect(page.getByRole("heading", { level: 1 })).toContainText(/keep the books/i)
@@ -46,8 +46,8 @@ test.describe("landing page", () => {
     await expect(page.getByText("The receipt prints when you sign")).toBeVisible()
     await entry.getByRole("button", { name: "Approve" }).click()
     await expect(entry.getByText("Run R-2041")).toBeVisible({ timeout: 5000 })
-    if (!isMobile) await expect(page.getByTestId("ledger-state")).toHaveText("Books closed")
-    await expect(page.getByRole("complementary", { name: "Running ledger" })).toContainText("0")
+    if (!isMobile) await expect(page.getByTestId("spotcheck-state")).toHaveText("Books closed")
+    await expect(page.getByRole("complementary", { name: "Running tally" })).toContainText("0")
 
     await entry.getByRole("button", { name: "Reopen the file" }).click()
     await expect(page.getByText("The receipt prints when you sign")).toBeVisible()
@@ -60,7 +60,7 @@ test.describe("landing page", () => {
   })
 
   test("the skin sheets keep their own type on any page skin", async ({ page }) => {
-    await page.addInitScript(() => localStorage.setItem("ledger-skin", "terminal"))
+    await page.addInitScript(() => localStorage.setItem("spotcheck-skin", "terminal"))
     await page.goto("/")
     const display = (name: string) =>
       page.getByRole("heading", { name, exact: true }).evaluate((element) => getComputedStyle(element).fontFamily)

@@ -6,11 +6,11 @@ import postcss from "postcss"
 
 import { generateProps } from "./generate-props.mjs"
 
-const CSS_SOURCE = "registry/ledger/base/ledger.css"
+const CSS_SOURCE = "registry/spotcheck/base/spotcheck.css"
 const OUTPUT = "registry.generated.json"
 
 function registryUrl() {
-  if (process.env.LEDGER_REGISTRY_URL) return process.env.LEDGER_REGISTRY_URL.replace(/\/$/, "")
+  if (process.env.SPOTCHECK_REGISTRY_URL) return process.env.SPOTCHECK_REGISTRY_URL.replace(/\/$/, "")
   const vercel = process.env.VERCEL_PROJECT_PRODUCTION_URL ?? process.env.VERCEL_URL
   return vercel ? `https://${vercel}` : "http://localhost:3000"
 }
@@ -43,7 +43,7 @@ function cssToItem(source) {
 
 const url = registryUrl()
 const registry = JSON.parse(readFileSync("registry.json", "utf8").replaceAll("{{REGISTRY_URL}}", url))
-const base = registry.items.find((item) => item.name === "ledger-base")
+const base = registry.items.find((item) => item.name === "spotcheck-base")
 Object.assign(base, cssToItem(readFileSync(CSS_SOURCE, "utf8")))
 writeFileSync(OUTPUT, `${JSON.stringify(registry, null, 2)}\n`)
 

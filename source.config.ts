@@ -24,12 +24,12 @@ export const guides = defineDocs({
 })
 
 // Colours come from CSS variables, so code blocks follow the skin and theme.
-const ledgerTheme = createCssVariablesTheme({ name: "ledger", variablePrefix: "--code-", fontStyle: true })
+const codeTheme = createCssVariablesTheme({ name: "spotcheck", variablePrefix: "--code-", fontStyle: true })
 
 export default defineConfig({
   mdxOptions: {
     rehypeCodeOptions: {
-      themes: { light: ledgerTheme, dark: ledgerTheme },
+      themes: { light: codeTheme, dark: codeTheme },
       defaultColor: "light",
       langs: ["tsx", "ts", "bash", "css", "json"],
     },
