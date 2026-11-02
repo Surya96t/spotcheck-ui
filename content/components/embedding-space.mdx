@@ -1,0 +1,60 @@
+---
+title: Embedding Space
+description: A cloud of document chunks. Choosing a question draws lines to the closest chunks and ranks them with scores.
+group: webgl
+order: 2
+engine: three.js
+wide: true
+keyboard:
+  - { keys: "Tab", action: "Move between the query buttons" }
+  - { keys: "Enter", action: "Choose the focused query" }
+reducedMotion: The cloud holds still with no spin, the marker jumps to the query, and the lines appear in one frame.
+---
+
+## Usage
+
+```tsx
+"use client"
+
+import dynamic from "next/dynamic"
+
+const EmbeddingSpace = dynamic(
+  () => import("@/components/spotcheck/embedding-space").then((module) => module.EmbeddingSpace),
+  { ssr: false },
+)
+
+<EmbeddingSpace
+  label="Help centre chunks, reduced to three dimensions"
+  points={[
+    { id: "a", position: [-3.1, 0.8, 0.4], label: "Duplicate charges" },
+    { id: "b", position: [-2.8, 1.1, 0.2], label: "Refund to wallet" },
+    { id: "c", position: [3, 0.2, -1], label: "Tracking delays" },
+  ]}
+  queries={[
+    {
+      id: "charged-twice",
+      label: "Why was I charged twice?",
+      position: [-3, 0.9, 0.3],
+      neighbours: [
+        { id: "a", score: 0.912 },
+        { id: "b", score: 0.874 },
+      ],
+    },
+  ]}
+/>
+```
+
+## Your data, your scores
+
+The component doesn't compute embeddings or scores. Your app passes the 3D positions, the neighbours
+and their scores, usually by reducing real embeddings to three dimensions and reading the scores
+from your search. Keep positions roughly within 4.5 of the centre, which is the edge of the frame.
+
+The positions and scores in the demo above are made up. They come from a seeded random cloud, so
+they show how the component looks, not how any real model ranks these questions.
+
+## Rotating
+
+Dragging sideways rotates the cloud, and a vertical swipe still scrolls the page on phones. Rotating
+has no keyboard control, because the query buttons and the ranked list carry all the data. The list
+is an ordered list, and each query change is announced to screen readers.
