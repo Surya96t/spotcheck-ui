@@ -34,6 +34,8 @@ export function Answer() {
 }
 ```
 
-`useStream` reads the AI SDK's UI message stream with no `ai` package on the client. Return `createUIMessageStreamResponse` or `toUIMessageStreamResponse` from your route and it works. Anything else is read as plain SSE, where each `data:` line is more text.
+`useStream` reads the AI SDK's UI message stream with no `ai` package on the client. Return `createUIMessageStreamResponse` or `toUIMessageStreamResponse` from your route and it works. Anything else is read as plain SSE, where each `data:` line is more text. It also returns `reset`, which cancels the stream and clears it.
+
+Use `SavedResponse` to show a finished reply again, with the same formatting and sources.
 
 Write `[1]` in the text to cite the first source. Screen readers hear one finished sentence at a time, not every token.

@@ -69,6 +69,10 @@ describe("linkCitations", () => {
   it("doesn't touch a link that's a number", () => {
     expect(linkCitations("[1](https://x.test)")).toBe("[1](https://x.test)")
   })
+
+  it("scopes citations so two responses can share a page", () => {
+    expect(linkCitations("See [1]", "r1")).toBe("See [1](#cite-r1-1)")
+  })
 })
 
 describe("finishedSentences", () => {

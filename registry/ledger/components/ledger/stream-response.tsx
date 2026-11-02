@@ -9,9 +9,17 @@ import type { StreamSource, StreamStatus } from "@/registry/ledger/hooks/use-str
 
 const CITE_PREFIX = "#cite-"
 
-/** Turns [1] into a link Streamdown can render, leaving markdown links alone. */
-export function linkCitations(text: string) {
-  return text.replace(/\[(\d+)\](?!\()/g, `[$1](${CITE_PREFIX}$1)`)
+/**
+ * Turns [1] into a link Streamdown can render, leaving markdown links alone. Pass a scope when
+ * several responses share a page, so each citation reaches its own source.
+ */
+export function linkCitations(text: string, scope?: string) {
+  const prefix = scope ? `${CITE_PREFIX}${scope}-` : CITE_PREFIX
+  return text.replace(/\[(\d+)\](?!\()/g, `[$1](${prefix}$1)`)
+}
+
+function useCiteScope() {
+  return React.useId().replace(/\W/g, "")
 }
 
 /** Sentences that have finished, so screen readers aren't sent every token. */
@@ -38,16 +46,77 @@ const MARKDOWN = {
     href.startsWith(CITE_PREFIX) ? (
       <a
         href={href}
-        aria-label={`Source ${href.slice(CITE_PREFIX.length)}`}
+        aria-label={`Source ${href.split("-").at(-1)}`}
         className="bg-ink text-paper hover:bg-accent-ink hover:text-on-accent ledger-focus mx-0.5 inline-flex h-[1.25em] min-w-[1.4em] items-center justify-center px-1 align-[2px] font-(family-name:--f-mono) text-[10.5px] no-underline"
       >
-        {href.slice(CITE_PREFIX.length)}
+        {href.split("-").at(-1)}
       </a>
     ) : (
       <a href={href} className="text-accent-ink underline underline-offset-2" {...props}>
         {children}
       </a>
     ),
+}
+
+type StreamMarkdownProps = {
+  text: string
+  scope: string
+  streaming?: boolean
+  className?: string
+  children?: React.ReactNode
+}
+
+function StreamMarkdown({ text, scope, streaming = false, className, children }: StreamMarkdownProps) {
+  return (
+    <div aria-busy={streaming} className={cn("max-w-[62ch] text-base leading-relaxed text-pretty", className)}>
+      <Streamdown
+        mode={streaming ? "streaming" : "static"}
+        controls={false}
+        linkSafety={{ enabled: false }}
+        components={MARKDOWN}
+      >
+        {linkCitations(text, scope)}
+      </Streamdown>
+      {children}
+    </div>
+  )
+}
+
+function StreamSources({ sources, scope }: { sources: StreamSource[]; scope: string }) {
+  if (sources.length === 0) return null
+
+  return (
+    <ol className="border-ink flex flex-wrap border-(length:--rule)">
+      {sources.map((source, index) => (
+        <li
+          key={source.id}
+          id={`cite-${scope}-${index + 1}`}
+          className="border-ink min-w-0 flex-[1_1_140px] border-r-(length:--rule) px-2.5 py-1.5 text-xs last:border-r-0"
+        >
+          <b className="text-mute block font-(family-name:--f-mono) text-[10.5px]">[{index + 1}]</b>
+          {source.url ? (
+            <a href={source.url} className="ledger-focus underline underline-offset-2">
+              {source.title}
+            </a>
+          ) : (
+            source.title
+          )}
+        </li>
+      ))}
+    </ol>
+  )
+}
+
+/** A finished response with nothing live about it, for showing saved replies. */
+export function SavedResponse({ text, sources = [], className }: { text: string; sources?: StreamSource[]; className?: string }) {
+  const scope = useCiteScope()
+
+  return (
+    <div className={cn("flex flex-col gap-3.5", className)}>
+      <StreamMarkdown text={text} scope={scope} />
+      <StreamSources sources={sources} scope={scope} />
+    </div>
+  )
 }
 
 type StreamResponseProps = {
@@ -67,18 +136,11 @@ type StreamResponseProps = {
 export function StreamResponse({ text, sources = [], status, onStop, onRegenerate, error, className }: StreamResponseProps) {
   const streaming = status === "streaming"
   const spoken = streaming ? finishedSentences(text).at(-1) : ""
+  const scope = useCiteScope()
 
   return (
     <div className={cn("flex flex-col gap-3.5", className)}>
-      <div aria-busy={streaming} className="min-h-[5em] max-w-[62ch] text-base leading-relaxed text-pretty">
-        <Streamdown
-          mode={streaming ? "streaming" : "static"}
-          controls={false}
-          linkSafety={{ enabled: false }}
-          components={MARKDOWN}
-        >
-          {linkCitations(text)}
-        </Streamdown>
+      <StreamMarkdown text={text} scope={scope} streaming={streaming} className="min-h-[5em]">
         {streaming && (
           <span
             aria-hidden
@@ -86,7 +148,7 @@ export function StreamResponse({ text, sources = [], status, onStop, onRegenerat
             className="bg-accent-ink inline-block h-[1.05em] w-[.55em] align-[-2px] motion-safe:[animation:ledger-blink_1s_steps(1)_infinite]"
           />
         )}
-      </div>
+      </StreamMarkdown>
       {/* One sentence at a time, because announcing tokens makes a screen reader unusable. */}
       <div role="status" className="sr-only">
         {streaming ? spoken : status === "done" ? "Response complete." : ""}
@@ -96,26 +158,7 @@ export function StreamResponse({ text, sources = [], status, onStop, onRegenerat
           {error}
         </p>
       )}
-      {sources.length > 0 && (
-        <ol className="border-ink flex flex-wrap border-(length:--rule)">
-          {sources.map((source, index) => (
-            <li
-              key={source.id}
-              id={`cite-${index + 1}`}
-              className="border-ink min-w-0 flex-[1_1_140px] border-r-(length:--rule) px-2.5 py-1.5 text-xs last:border-r-0"
-            >
-              <b className="text-mute block font-(family-name:--f-mono) text-[10.5px]">[{index + 1}]</b>
-              {source.url ? (
-                <a href={source.url} className="ledger-focus underline underline-offset-2">
-                  {source.title}
-                </a>
-              ) : (
-                source.title
-              )}
-            </li>
-          ))}
-        </ol>
-      )}
+      <StreamSources sources={sources} scope={scope} />
       <div className="flex flex-wrap items-center gap-4">
         {streaming
           ? onStop && <Button onClick={onStop}>Stop</Button>
