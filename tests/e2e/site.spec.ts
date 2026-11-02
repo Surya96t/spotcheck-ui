@@ -156,7 +156,7 @@ test.describe("search", () => {
 })
 
 test("choices survive a reload without a flash", async ({ page }) => {
-  await page.goto("/")
+  await page.goto("/components")
   await page.waitForLoadState("networkidle")
   await page.getByRole("group", { name: "Skin" }).getByRole("button", { name: "terminal" }).click()
   await page.getByRole("group", { name: "Theme" }).getByRole("button", { name: "dark" }).click()

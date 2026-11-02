@@ -30,9 +30,9 @@ const lanesAt = (tick: number): RaceLane[] =>
 
 const LAST_TICK = Math.ceil(ANSWER.length / Math.min(...MODELS.map((model) => model.charsPerTick)))
 
-export function ModelRaceDemo() {
+export function ModelRaceDemo({ autoStart = false }: { autoStart?: boolean }) {
   const [tick, setTick] = React.useState(0)
-  const [running, setRunning] = React.useState(false)
+  const [running, setRunning] = React.useState(autoStart)
 
   React.useEffect(() => {
     if (!running) return

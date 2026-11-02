@@ -36,7 +36,7 @@ export function ModelRace({ lanes, className, ...props }: ModelRaceProps) {
 
   return (
     <div className={cn("flex flex-col gap-2", className)} {...props}>
-      <div className="grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-3">
+      <div className="grid grid-cols-[repeat(auto-fit,minmax(180px,1fr))] gap-3">
         {lanes.map((lane) => {
           const place = places.get(lane.id)
           return (

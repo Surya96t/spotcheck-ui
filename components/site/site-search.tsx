@@ -58,14 +58,14 @@ export function SiteSearch({ components, guides }: { components: ComponentLink[]
   ]
 
   return (
-    <div className="flex min-w-0 grow items-center px-3.5 py-2 md:justify-end">
+    <div className="flex min-w-0 grow items-center justify-end px-2 py-2 md:px-3.5">
       <button
         type="button"
         onClick={() => setOpen(true)}
         className="border-ink hover:bg-ink hover:text-paper flex cursor-pointer items-center gap-3 border-(length:--rule) px-2.5 py-1"
       >
         Search
-        <kbd className="text-[11px]">⌘K</kbd>
+        <kbd className="hidden text-[11px] md:inline">⌘K</kbd>
       </button>
       <CommandPalette groups={groups} open={open} onOpenChange={setOpen} label="Search" placeholder="Search components" />
     </div>

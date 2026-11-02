@@ -18,6 +18,142 @@ body {
   outline-offset: 2px;
 }
 
+/* The landing headline fills the page edge to edge, so each skin's type needs its own size. */
+.landing-hero {
+  --hero-size: 16.1cqw;
+  --hero-leading: 0.8;
+  --hero-slip: 28%;
+}
+
+[data-skin="terminal"] .landing-hero {
+  --hero-size: 11.7cqw;
+  --hero-leading: 1;
+  --hero-slip: 20%;
+}
+
+[data-skin="folio"] .landing-hero {
+  --hero-size: 19.4cqw;
+  --hero-leading: 1.04;
+  --hero-slip: 22%;
+  z-index: 1;
+}
+
+.landing-line {
+  display: block;
+  overflow: hidden;
+  padding-inline: 0.04em;
+  font-size: var(--hero-size);
+  line-height: var(--hero-leading);
+  white-space: nowrap;
+}
+
+.landing-line > span {
+  display: block;
+  animation: landing-rise 800ms cubic-bezier(0.2, 0.8, 0.2, 1) backwards;
+  animation-delay: calc(var(--line, 0) * 120ms);
+}
+
+@media (width < 48rem) {
+  .landing-hero {
+    --hero-size: 25.6cqw;
+  }
+
+  [data-skin="terminal"] .landing-hero {
+    --hero-size: 20cqw;
+  }
+
+  [data-skin="folio"] .landing-hero {
+    --hero-size: 31cqw;
+  }
+}
+
+/* Folio's descenders cross the rules, so its lines can't clip. */
+[data-skin="folio"] .landing-line {
+  overflow: visible;
+}
+
+[data-skin="folio"] .landing-line > span {
+  animation-name: landing-fade;
+}
+
+.landing-slip {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: var(--hero-slip);
+  height: calc(var(--hero-size) * var(--hero-leading));
+}
+
+@keyframes landing-rise {
+  from {
+    transform: translateY(105%);
+  }
+}
+
+@keyframes landing-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .landing-line > span {
+    animation: none;
+  }
+}
+
+.landing-finale h2 {
+  padding-inline: 1.3cqw;
+  font-size: 12.8cqw;
+  line-height: 0.86;
+  white-space: nowrap;
+}
+
+[data-skin="terminal"] .landing-finale h2 {
+  font-size: 9cqw;
+}
+
+[data-skin="folio"] .landing-finale h2 {
+  font-size: 16.6cqw;
+  line-height: 1;
+}
+
+.landing-wordmark span {
+  display: block;
+  padding-inline: 0.03em;
+  font-size: 24.6cqw;
+  line-height: 0.8;
+  white-space: nowrap;
+}
+
+[data-skin="terminal"] .landing-wordmark span {
+  font-size: 18.2cqw;
+  line-height: 1;
+}
+
+[data-skin="folio"] .landing-wordmark span {
+  font-size: 29cqw;
+  line-height: 1;
+}
+
+/* Cells sit on a grid with no doubled rules at any width. */
+.landing-cell {
+  border-right: var(--rule) solid var(--ink);
+}
+
+/* A skin can sit inside another here, so each sheet starts from the defaults. */
+:where(.landing-skin) {
+  --f-body: "Archivo Variable", system-ui, sans-serif;
+  --f-display: var(--f-body);
+  --display-weight: 900;
+  --display-case: uppercase;
+  --display-style: normal;
+  --display-stretch: 62%;
+  --display-tracking: -0.01em;
+  --heading-weight: 800;
+  --heading-stretch: 75%;
+}
+
 /* Code sits on an ink panel. */
 :root,
 .dark,

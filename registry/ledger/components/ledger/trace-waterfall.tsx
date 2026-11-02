@@ -57,7 +57,7 @@ export function TraceWaterfall({ label, spans, className }: TraceWaterfallProps)
     })
 
   return (
-    <div tabIndex={0} role="region" aria-label={label} className={cn("ledger-focus overflow-x-auto", className)}>
+    <div tabIndex={0} role="region" aria-label={label} className={cn("ledger-focus relative overflow-x-auto", className)}>
       <div className="min-w-[520px] font-(family-name:--f-mono) text-xs">
         <div aria-hidden className="border-ink grid grid-cols-[13rem_minmax(0,1fr)_4.5rem] gap-2.5 border-b-(length:--rule) pb-1">
           <span className="ledger-label">Span</span>
