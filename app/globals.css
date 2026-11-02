@@ -1,5 +1,5 @@
 @import "tailwindcss";
-@import "../registry/ledger/base/ledger.css";
+@import "../registry/spotcheck/base/spotcheck.css";
 
 html {
   background: var(--paper);
@@ -104,35 +104,35 @@ body {
 
 .landing-finale h2 {
   padding-inline: 1.3cqw;
-  font-size: 12.8cqw;
+  font-size: 15.1cqw;
   line-height: 0.86;
   white-space: nowrap;
 }
 
 [data-skin="terminal"] .landing-finale h2 {
-  font-size: 9cqw;
+  font-size: 10.7cqw;
 }
 
 [data-skin="folio"] .landing-finale h2 {
-  font-size: 16.6cqw;
+  font-size: 19.1cqw;
   line-height: 1;
 }
 
 .landing-wordmark span {
   display: block;
   padding-inline: 0.03em;
-  font-size: 24.6cqw;
+  font-size: 18cqw;
   line-height: 0.8;
   white-space: nowrap;
 }
 
 [data-skin="terminal"] .landing-wordmark span {
-  font-size: 18.2cqw;
+  font-size: 13.6cqw;
   line-height: 1;
 }
 
 [data-skin="folio"] .landing-wordmark span {
-  font-size: 29cqw;
+  font-size: 21.5cqw;
   line-height: 1;
 }
 

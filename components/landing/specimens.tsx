@@ -1,7 +1,7 @@
 import Link from "next/link"
 
 import { Demo } from "@/components/site/demos"
-import { Tag } from "@/registry/ledger/components/ledger/tag"
+import { Tag } from "@/registry/spotcheck/components/spotcheck/tag"
 
 import type { PartLink } from "./case-file"
 import { WhenSeen } from "./when-seen"
@@ -21,7 +21,7 @@ export function Specimens({ parts }: { parts: Record<string, PartLink & { engine
   return (
     <section aria-labelledby="specimens-title">
       <div className="border-ink flex flex-col items-start justify-between gap-3 border-b-(length:--rule) px-4.5 pt-10 pb-3 md:flex-row md:items-end">
-        <h2 id="specimens-title" className="ledger-display text-[clamp(40px,7vw,104px)] leading-[.85]">
+        <h2 id="specimens-title" className="spotcheck-display text-[clamp(40px,7vw,104px)] leading-[.85]">
           Parts with weight
         </h2>
         <p className="text-mute max-w-[42ch] text-[13.5px] md:text-right">
@@ -40,7 +40,7 @@ export function Specimens({ parts }: { parts: Record<string, PartLink & { engine
               >
                 <div className="flex items-baseline gap-2.5 px-3.5 pt-3">
                   <span className="text-mute font-(family-name:--f-mono) text-[11px] tabular-nums">{part.no}</span>
-                  <h3 className="ledger-heading grow text-base leading-none">
+                  <h3 className="spotcheck-heading grow text-base leading-none">
                     <Link href={`/components/${slug}`} className="hover:text-accent-ink">
                       {part.title}
                     </Link>

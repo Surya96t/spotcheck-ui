@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from "@testing-library/react"
 import { describe, expect, it, vi } from "vitest"
 
-import { CommandPalette, filterCommands, type CommandGroup } from "@/registry/ledger/components/ledger/command-palette"
+import { CommandPalette, filterCommands, type CommandGroup } from "@/registry/spotcheck/components/spotcheck/command-palette"
 
 const noop = () => {}
 const GROUPS: CommandGroup[] = [

@@ -9,8 +9,8 @@ async function open(page: Page, slug: string) {
 test.describe("scramble text", () => {
   test("decodes to the real text without moving the layout", async ({ page }) => {
     const demo = await open(page, "scramble-text")
-    const text = demo.locator("span.ledger-display")
-    await expect(text.locator("span").last()).toHaveText("Ship the ledger")
+    const text = demo.locator("span.spotcheck-display")
+    await expect(text.locator("span").last()).toHaveText("Check the work")
     const settled = await text.boundingBox()
     await demo.getByRole("button", { name: "Replay" }).click()
     for (let sample = 0; sample < 6; sample++) {
@@ -19,7 +19,7 @@ test.describe("scramble text", () => {
       expect(during?.width).toBeCloseTo(settled?.width ?? 0, 0)
       expect(during?.height).toBeCloseTo(settled?.height ?? 0, 0)
     }
-    await expect(demo.locator("span.ledger-display > span").last()).toHaveText("Ship the ledger")
+    await expect(demo.locator("span.spotcheck-display > span").last()).toHaveText("Check the work")
   })
 })
 
@@ -243,7 +243,7 @@ test.describe("reduced motion", () => {
   test("scramble shows the text straight away", async ({ page }) => {
     const demo = await open(page, "scramble-text")
     await demo.getByRole("button", { name: "Replay" }).click()
-    await expect(demo.locator("span.ledger-display > span").last()).toHaveText("Ship the ledger", { timeout: 50 })
+    await expect(demo.locator("span.spotcheck-display > span").last()).toHaveText("Check the work", { timeout: 50 })
   })
 
   test("marquee stands still", async ({ page }) => {

@@ -1,12 +1,12 @@
 import { fireEvent, render, screen } from "@testing-library/react"
 import { describe, expect, it, vi } from "vitest"
 
-import { chartPoints } from "@/registry/ledger/components/ledger/draw-chart"
-import { moveCell } from "@/registry/ledger/components/ledger/ripple-heatmap"
-import { scrambleFrame } from "@/registry/ledger/components/ledger/scramble-text"
-import { ScrubInput, snapValue } from "@/registry/ledger/components/ledger/scrub-input"
-import { changedCells, padRow } from "@/registry/ledger/components/ledger/split-flap"
-import { swipeOutcome } from "@/registry/ledger/components/ledger/swipe-review"
+import { chartPoints } from "@/registry/spotcheck/components/spotcheck/draw-chart"
+import { moveCell } from "@/registry/spotcheck/components/spotcheck/ripple-heatmap"
+import { scrambleFrame } from "@/registry/spotcheck/components/spotcheck/scramble-text"
+import { ScrubInput, snapValue } from "@/registry/spotcheck/components/spotcheck/scrub-input"
+import { changedCells, padRow } from "@/registry/spotcheck/components/spotcheck/split-flap"
+import { swipeOutcome } from "@/registry/spotcheck/components/spotcheck/swipe-review"
 
 describe("scrambleFrame", () => {
   it("keeps spaces and settles from the left", () => {
@@ -16,7 +16,7 @@ describe("scrambleFrame", () => {
   })
 
   it("is fully settled by the end", () => {
-    expect(scrambleFrame("ledger", 100)).toBe("ledger")
+    expect(scrambleFrame("check", 100)).toBe("check")
   })
 })
 

@@ -30,7 +30,9 @@ The rename touches 196 tracked files and 658 lines, not counting docs and `refer
 | Keyframes | `ledger-blink`, `ledger-wave`, `ledger-marquee`, `ledger-grow`, `ledger-entry` | `spotcheck-...` |
 | Browser storage | `ledger-theme`, `ledger-skin` | `spotcheck-theme`, `spotcheck-skin` |
 | Build variable | `LEDGER_REGISTRY_URL` | `SPOTCHECK_REGISTRY_URL` |
-| Landing copy | "Start your ledger.", "Running ledger" | New wording, chosen in the PR |
+| Landing copy | "Start your ledger.", "Running ledger" | "Start checking.", "Running tally" |
+| 404 heading | "Not in the ledger" | "Not on file" |
+| Scramble Text sample | "Ship the ledger" | "Check the work" |
 
 Returning visitors lose a saved skin or theme once. That's harmless.
 
@@ -39,6 +41,7 @@ Returning visitors lose a saved skin or theme once. That's harmless.
 - The Ledger skin and `data-skin="ledger"`, because that's the name of a look.
 - `ledger-table`, `LedgerTable` and `LedgerColumn`, because that's a table style.
 - The headline "Keep the books on your AI."
+- The plain word in Entry List's description, "like entries posted to a ledger".
 - The Praxis project id `ledger-ui`, unless Surya decides otherwise.
 - Past history: git commits, `reference/`, and the dated results in `docs/PLAN.md`.
 
@@ -48,8 +51,7 @@ Owner: Claude. Surya approves the commit and the merge.
 
 1. Start from an up-to-date `main` with no open PRs and no other sessions running.
 2. Make the rename on a `chore/rename-spotcheck` branch, using the table above.
-3. Update `docs/PLAN.md`, `docs/LAUNCH-PLAN.md`, the Why Spotcheck UI document and the Praxis project
-   name.
+3. Update `docs/PLAN.md`, `docs/LAUNCH-PLAN.md` and the Why Spotcheck UI document.
 4. Run the leftover check, which should list only the items that stay:
 
    ```bash

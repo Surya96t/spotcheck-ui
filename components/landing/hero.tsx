@@ -2,7 +2,7 @@ import Link from "next/link"
 import type { CSSProperties, ReactNode } from "react"
 
 import { InstallCommand } from "@/components/site/install-command"
-import { BarTerrainDemo } from "@/registry/ledger/examples/bar-terrain-demo"
+import { BarTerrainDemo } from "@/registry/spotcheck/examples/bar-terrain-demo"
 
 const PITCH =
   "Open source React components for reviewing, grading and signing off AI work. Hard rules, real motion and no package to install. Copy a file in and it's yours."
@@ -10,8 +10,8 @@ const PITCH =
 function Stat({ value, label }: { value: number; label: string }) {
   return (
     <div className="border-ink flex flex-col justify-end border-r-(length:--rule) px-3.5 pt-2.5 pb-2 last:border-r-0">
-      <b className="ledger-display text-[34px] leading-none tabular-nums">{value}</b>
-      <small className="ledger-label">{label}</small>
+      <b className="spotcheck-display text-[34px] leading-none tabular-nums">{value}</b>
+      <small className="spotcheck-label">{label}</small>
     </div>
   )
 }
@@ -36,7 +36,7 @@ export function Hero({ count }: { count: number }) {
   return (
     <header className="@container">
       <div className="landing-hero border-ink relative border-b-(length:--rule)">
-        <h1 className="ledger-display">
+        <h1 className="spotcheck-display">
           <span className="hidden md:block">
             <Line ruled>Keep the books</Line>
             <Line index={1} last>
@@ -55,7 +55,7 @@ export function Hero({ count }: { count: number }) {
           </span>
         </h1>
         <div className="landing-slip border-ink hidden flex-col justify-end gap-0.5 border-l-(length:--rule) p-3.5 font-(family-name:--f-mono) text-xs md:flex">
-          <span className="ledger-label">File open</span>
+          <span className="spotcheck-label">File open</span>
           <span>Run R-2041</span>
           <span>atlas-l · 2.84 s</span>
           <Link href="#case-file" className="text-accent-ink mt-1.5 underline underline-offset-2">

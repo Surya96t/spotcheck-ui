@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react"
 import { describe, expect, it } from "vitest"
 
-import { RollNumber } from "@/registry/ledger/components/ledger/roll-number"
+import { RollNumber } from "@/registry/spotcheck/components/spotcheck/roll-number"
 
 describe("RollNumber", () => {
   it("exposes the formatted number as text and hides the columns", () => {

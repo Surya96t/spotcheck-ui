@@ -7,7 +7,7 @@ import { Demo } from "@/components/site/demos"
 import { InstallCommand } from "@/components/site/install-command"
 import { mdxComponents } from "@/components/site/mdx"
 import { getComponents, getProps, getRegistryItem } from "@/lib/catalog"
-import { Tag } from "@/registry/ledger/components/ledger/tag"
+import { Tag } from "@/registry/spotcheck/components/spotcheck/tag"
 
 type Params = { params: Promise<{ slug: string }> }
 
@@ -28,7 +28,7 @@ function Row({ title, children }: { title: string; children: ReactNode }) {
       aria-label={title}
       className="border-ink grid gap-3 border-b-(length:--rule) px-4 py-5 lg:grid-cols-[9rem_minmax(0,1fr)] lg:gap-6"
     >
-      <h2 className="ledger-label pt-1">{title}</h2>
+      <h2 className="spotcheck-label pt-1">{title}</h2>
       <div className="min-w-0">{children}</div>
     </section>
   )
@@ -60,7 +60,7 @@ export default async function ComponentPage({ params }: Params) {
           <span className="text-mute font-(family-name:--f-mono) text-[11px] tabular-nums">{no}</span>
           <Tag>{page.data.engine}</Tag>
         </div>
-        <h1 className="ledger-display text-[clamp(44px,7vw,96px)] leading-[.85]">{page.data.title}</h1>
+        <h1 className="spotcheck-display text-[clamp(44px,7vw,96px)] leading-[.85]">{page.data.title}</h1>
         <p className="text-mute mt-3 max-w-[62ch] text-pretty">{page.data.description}</p>
       </header>
 
@@ -91,10 +91,10 @@ export default async function ComponentPage({ params }: Params) {
           aria-hidden
           className={`${PROP_GRID} border-ink hidden border-b-(length:--rule) ${props.length ? "lg:grid" : ""}`}
         >
-          <span className="ledger-label py-1.5">Prop</span>
-          <span className="ledger-label py-1.5">Type</span>
-          <span className="ledger-label py-1.5">Default</span>
-          <span className="ledger-label py-1.5">What it does</span>
+          <span className="spotcheck-label py-1.5">Prop</span>
+          <span className="spotcheck-label py-1.5">Type</span>
+          <span className="spotcheck-label py-1.5">Default</span>
+          <span className="spotcheck-label py-1.5">What it does</span>
         </div>
         <ul>
           {props.map((prop) => (

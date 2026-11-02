@@ -7,12 +7,12 @@ import "./globals.css"
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  title: { default: "Ledger UI", template: "%s · Ledger UI" },
-  description: "Open source React components cut from a ledger.",
+  title: { default: "Spotcheck UI", template: "%s · Spotcheck UI" },
+  description: "Open source React components for checking AI work.",
 }
 
 // Runs before first paint, because static pages can't know the visitor's theme or skin.
-const restoreAppearance = `(function(){try{var d=document.documentElement,t=localStorage.getItem("ledger-theme"),s=localStorage.getItem("ledger-skin");if(t)d.dataset.theme=t;if(s)d.dataset.skin=s}catch(e){}})()`
+const restoreAppearance = `(function(){try{var d=document.documentElement,t=localStorage.getItem("spotcheck-theme"),s=localStorage.getItem("spotcheck-skin");if(t)d.dataset.theme=t;if(s)d.dataset.skin=s}catch(e){}})()`
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (

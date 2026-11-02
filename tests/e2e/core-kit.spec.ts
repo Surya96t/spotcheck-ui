@@ -226,7 +226,7 @@ test("toast can be dismissed from the keyboard", async ({ page }) => {
 })
 
 test.describe("settings screen, the Phase 2 exit check", () => {
-  test("every tab works with Ledger parts alone", async ({ page }) => {
+  test("every tab works with Spotcheck parts alone", async ({ page }) => {
     const errors: string[] = []
     page.on("pageerror", (error) => errors.push(error.message))
     page.on("console", (message) => message.type() === "error" && errors.push(message.text()))

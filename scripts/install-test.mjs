@@ -1,5 +1,5 @@
 // The Phase 0 exit check: install components over HTTP into a brand-new shadcn app, build it,
-// and assert that Ledger didn't disturb the app's own theme.
+// and assert that Spotcheck didn't disturb the app's own theme.
 import { spawn } from "node:child_process"
 import { existsSync, mkdtempSync, readFileSync, statSync, writeFileSync } from "node:fs"
 import { createServer } from "node:http"
@@ -12,15 +12,15 @@ const SHADCN_VERSION = "4.23.0"
 const PORT = 4310
 const APP_PORT = 4320
 const COMPONENTS = ["roll-number", "detent-slider", "bar-terrain", "command-palette", "settings-screen", "split-flap", "swipe-review", "stamp-approval", "chat-screen", "composer", "agent-trace", "trace-waterfall", "diff-review", "model-race", "run-receipt", "context-budget", "eval-matrix", "thinking"]
-const REGISTRY_URL = process.env.LEDGER_REGISTRY_URL?.replace(/\/$/, "") ?? `http://127.0.0.1:${PORT}`
-const serveLocally = !process.env.LEDGER_REGISTRY_URL
+const REGISTRY_URL = process.env.SPOTCHECK_REGISTRY_URL?.replace(/\/$/, "") ?? `http://127.0.0.1:${PORT}`
+const serveLocally = !process.env.SPOTCHECK_REGISTRY_URL
 const ROOT = process.cwd()
 
 // Asynchronous, because the registry server below runs in this same process.
 function run(command, args, cwd) {
   console.log(`\n$ ${command} ${args.join(" ")}`)
   return new Promise((done, fail) => {
-    spawn(command, args, { cwd, stdio: "inherit", env: { ...process.env, CI: "1", LEDGER_REGISTRY_URL: REGISTRY_URL } })
+    spawn(command, args, { cwd, stdio: "inherit", env: { ...process.env, CI: "1", SPOTCHECK_REGISTRY_URL: REGISTRY_URL } })
       .on("error", fail)
       .on("exit", (code) => (code === 0 ? done() : fail(new Error(`${command} exited with ${code}`))))
   })
@@ -66,7 +66,7 @@ async function checkInBrowser(app) {
     await page.goto(`http://127.0.0.1:${APP_PORT}`)
     await page.waitForSelector("canvas")
 
-    const background = () => page.locator("#ledger").evaluate((el) => getComputedStyle(el).backgroundColor)
+    const background = () => page.locator("#spotcheck").evaluate((el) => getComputedStyle(el).backgroundColor)
     const LIGHT = "rgb(237, 239, 236)"
     const DARK = "rgb(12, 13, 15)"
     assertEqual(await background(), LIGHT, "tokens are light by default")
@@ -77,7 +77,7 @@ async function checkInBrowser(app) {
     assertEqual(await background(), DARK, ".dark on <html> switches the tokens")
     await page.evaluate(() => {
       document.documentElement.classList.remove("dark")
-      document.querySelector("#ledger").dataset.theme = "dark"
+      document.querySelector("#spotcheck").dataset.theme = "dark"
     })
     assertEqual(await background(), DARK, "data-theme on an inner element switches the tokens")
 
@@ -94,7 +94,7 @@ async function checkInBrowser(app) {
       el.focus()
       return getComputedStyle(el).fontStretch
     })
-    assertEqual(outline, "75%", "ledger-heading reached the installed stylesheet")
+    assertEqual(outline, "75%", "spotcheck-heading reached the installed stylesheet")
 
     const stretch = await page.getByTestId("roll").evaluate((el) => getComputedStyle(el).fontStretch)
     assertEqual(stretch, "62%", "display type uses the condensed width")
@@ -120,7 +120,7 @@ const server = serveLocally ? await serveRegistry() : null
 try {
   if (serveLocally) await run("node", ["scripts/build-registry.mjs"], ROOT)
 
-  const workspace = mkdtempSync(join(tmpdir(), "ledger-install-"))
+  const workspace = mkdtempSync(join(tmpdir(), "spotcheck-install-"))
   const app = join(workspace, "app")
   await run(
     "pnpm",
@@ -142,9 +142,9 @@ try {
   assertIncludes(css, "@fontsource-variable/archivo/wdth.css", "the width axis of Archivo was imported")
   assertIncludes(css, shadcnAccent, "the app's own --accent is unchanged")
   for (const name of COMPONENTS) {
-    assertIncludes(readFileSync(join(app, `components/ledger/${name}.tsx`), "utf8"), "export", `${name} installed`)
+    assertIncludes(readFileSync(join(app, `components/spotcheck/${name}.tsx`), "utf8"), "export", `${name} installed`)
   }
-  const terrain = readFileSync(join(app, "components/ledger/bar-terrain.tsx"), "utf8")
+  const terrain = readFileSync(join(app, "components/spotcheck/bar-terrain.tsx"), "utf8")
   assertIncludes(terrain, '"@/hooks/use-gl-palette"', "registry imports were rewritten to the app's hooks")
   assertExcludes(terrain, "@/registry/", "no registry paths remain in installed code")
 
@@ -152,17 +152,17 @@ try {
     join(app, "app/page.tsx"),
     `"use client"
 import { useState } from "react"
-import { BarTerrain } from "@/components/ledger/bar-terrain"
-import { CommandPalette } from "@/components/ledger/command-palette"
-import { DetentSlider } from "@/components/ledger/detent-slider"
-import { RollNumber } from "@/components/ledger/roll-number"
-import { SettingsScreen } from "@/components/ledger/settings-screen"
+import { BarTerrain } from "@/components/spotcheck/bar-terrain"
+import { CommandPalette } from "@/components/spotcheck/command-palette"
+import { DetentSlider } from "@/components/spotcheck/detent-slider"
+import { RollNumber } from "@/components/spotcheck/roll-number"
+import { SettingsScreen } from "@/components/spotcheck/settings-screen"
 
 export default function Page() {
   const [dark, setDark] = useState(false)
   const [palette, setPalette] = useState(false)
   return (
-    <main id="ledger" className={dark ? "dark" : ""} style={{ background: "var(--paper)", color: "var(--ink)", padding: 24 }}>
+    <main id="spotcheck" className={dark ? "dark" : ""} style={{ background: "var(--paper)", color: "var(--ink)", padding: 24 }}>
       <button id="toggle" onClick={() => setDark(!dark)}>Toggle dark</button>
       <RollNumber data-testid="roll" value={1284903} style={{ fontSize: 64 }} />
       <DetentSlider label="Temperature" min={0} max={2} step={0.2} defaultValue={0.8} />

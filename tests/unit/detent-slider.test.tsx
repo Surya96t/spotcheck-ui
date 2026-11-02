@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from "@testing-library/react"
 import { describe, expect, it, vi } from "vitest"
 
-import { DetentSlider, findZone, snapToStep } from "@/registry/ledger/components/ledger/detent-slider"
+import { DetentSlider, findZone, snapToStep } from "@/registry/spotcheck/components/spotcheck/detent-slider"
 
 const ZONES = [
   { from: 0, to: 0.4, label: "Deterministic" },

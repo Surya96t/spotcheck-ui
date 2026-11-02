@@ -1,13 +1,13 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry.json",
-  "name": "ledger",
+  "name": "spotcheck",
   "homepage": "{{REGISTRY_URL}}",
   "items": [
     {
-      "name": "ledger-base",
+      "name": "spotcheck-base",
       "type": "registry:item",
-      "title": "Ledger base",
-      "description": "Tokens, skins, fonts and shared utilities used by every Ledger component.",
+      "title": "Spotcheck base",
+      "description": "Tokens, skins, fonts and shared utilities used by every Spotcheck component.",
       "dependencies": [
         "@fontsource-variable/archivo",
         "@fontsource/ibm-plex-mono",
@@ -24,7 +24,7 @@
       "description": "Tracks the prefers-reduced-motion setting without a motion engine.",
       "files": [
         {
-          "path": "registry/ledger/hooks/use-reduced-motion.ts",
+          "path": "registry/spotcheck/hooks/use-reduced-motion.ts",
           "type": "registry:hook"
         }
       ]
@@ -36,7 +36,7 @@
       "description": "Reports whether an element is on screen, for pausing render loops.",
       "files": [
         {
-          "path": "registry/ledger/hooks/use-in-view.ts",
+          "path": "registry/spotcheck/hooks/use-in-view.ts",
           "type": "registry:hook"
         }
       ]
@@ -48,7 +48,7 @@
       "description": "Reads CSS colour tokens for WebGL and follows theme and skin changes.",
       "files": [
         {
-          "path": "registry/ledger/hooks/use-gl-palette.ts",
+          "path": "registry/spotcheck/hooks/use-gl-palette.ts",
           "type": "registry:hook"
         }
       ]
@@ -60,7 +60,7 @@
       "description": "Reads an AI SDK UI message stream or plain SSE, with stop and regenerate.",
       "files": [
         {
-          "path": "registry/ledger/hooks/use-stream.ts",
+          "path": "registry/spotcheck/hooks/use-stream.ts",
           "type": "registry:hook"
         }
       ]
@@ -74,11 +74,11 @@
         "motion"
       ],
       "registryDependencies": [
-        "{{REGISTRY_URL}}/r/ledger-base.json"
+        "{{REGISTRY_URL}}/r/spotcheck-base.json"
       ],
       "files": [
         {
-          "path": "registry/ledger/components/ledger/roll-number.tsx",
+          "path": "registry/spotcheck/components/spotcheck/roll-number.tsx",
           "type": "registry:component"
         }
       ]
@@ -95,11 +95,11 @@
         "motion"
       ],
       "registryDependencies": [
-        "{{REGISTRY_URL}}/r/ledger-base.json"
+        "{{REGISTRY_URL}}/r/spotcheck-base.json"
       ],
       "files": [
         {
-          "path": "registry/ledger/components/ledger/detent-slider.tsx",
+          "path": "registry/spotcheck/components/spotcheck/detent-slider.tsx",
           "type": "registry:component"
         }
       ]
@@ -120,14 +120,14 @@
         "@types/three"
       ],
       "registryDependencies": [
-        "{{REGISTRY_URL}}/r/ledger-base.json",
+        "{{REGISTRY_URL}}/r/spotcheck-base.json",
         "{{REGISTRY_URL}}/r/use-gl-palette.json",
         "{{REGISTRY_URL}}/r/use-in-view.json",
         "{{REGISTRY_URL}}/r/use-reduced-motion.json"
       ],
       "files": [
         {
-          "path": "registry/ledger/components/ledger/bar-terrain.tsx",
+          "path": "registry/spotcheck/components/spotcheck/bar-terrain.tsx",
           "type": "registry:component"
         }
       ]
@@ -144,11 +144,11 @@
         "@base-ui/react"
       ],
       "registryDependencies": [
-        "{{REGISTRY_URL}}/r/ledger-base.json"
+        "{{REGISTRY_URL}}/r/spotcheck-base.json"
       ],
       "files": [
         {
-          "path": "registry/ledger/components/ledger/command-palette.tsx",
+          "path": "registry/spotcheck/components/spotcheck/command-palette.tsx",
           "type": "registry:component"
         }
       ]
@@ -162,11 +162,11 @@
         "core"
       ],
       "registryDependencies": [
-        "{{REGISTRY_URL}}/r/ledger-base.json"
+        "{{REGISTRY_URL}}/r/spotcheck-base.json"
       ],
       "files": [
         {
-          "path": "registry/ledger/components/ledger/ledger-table.tsx",
+          "path": "registry/spotcheck/components/spotcheck/ledger-table.tsx",
           "type": "registry:component"
         }
       ]
@@ -180,11 +180,11 @@
         "core"
       ],
       "registryDependencies": [
-        "{{REGISTRY_URL}}/r/ledger-base.json"
+        "{{REGISTRY_URL}}/r/spotcheck-base.json"
       ],
       "files": [
         {
-          "path": "registry/ledger/components/ledger/button.tsx",
+          "path": "registry/spotcheck/components/spotcheck/button.tsx",
           "type": "registry:component"
         }
       ]
@@ -198,12 +198,12 @@
         "core"
       ],
       "registryDependencies": [
-        "{{REGISTRY_URL}}/r/ledger-base.json",
+        "{{REGISTRY_URL}}/r/spotcheck-base.json",
         "{{REGISTRY_URL}}/r/button.json"
       ],
       "files": [
         {
-          "path": "registry/ledger/components/ledger/hold-button.tsx",
+          "path": "registry/spotcheck/components/spotcheck/hold-button.tsx",
           "type": "registry:component"
         }
       ]
@@ -220,11 +220,11 @@
         "@base-ui/react"
       ],
       "registryDependencies": [
-        "{{REGISTRY_URL}}/r/ledger-base.json"
+        "{{REGISTRY_URL}}/r/spotcheck-base.json"
       ],
       "files": [
         {
-          "path": "registry/ledger/components/ledger/field.tsx",
+          "path": "registry/spotcheck/components/spotcheck/field.tsx",
           "type": "registry:component"
         }
       ]
@@ -241,11 +241,11 @@
         "@base-ui/react"
       ],
       "registryDependencies": [
-        "{{REGISTRY_URL}}/r/ledger-base.json"
+        "{{REGISTRY_URL}}/r/spotcheck-base.json"
       ],
       "files": [
         {
-          "path": "registry/ledger/components/ledger/tabs.tsx",
+          "path": "registry/spotcheck/components/spotcheck/tabs.tsx",
           "type": "registry:component"
         }
       ]
@@ -262,11 +262,11 @@
         "@base-ui/react"
       ],
       "registryDependencies": [
-        "{{REGISTRY_URL}}/r/ledger-base.json"
+        "{{REGISTRY_URL}}/r/spotcheck-base.json"
       ],
       "files": [
         {
-          "path": "registry/ledger/components/ledger/switch.tsx",
+          "path": "registry/spotcheck/components/spotcheck/switch.tsx",
           "type": "registry:component"
         }
       ]
@@ -283,11 +283,11 @@
         "@base-ui/react"
       ],
       "registryDependencies": [
-        "{{REGISTRY_URL}}/r/ledger-base.json"
+        "{{REGISTRY_URL}}/r/spotcheck-base.json"
       ],
       "files": [
         {
-          "path": "registry/ledger/components/ledger/segmented.tsx",
+          "path": "registry/spotcheck/components/spotcheck/segmented.tsx",
           "type": "registry:component"
         }
       ]
@@ -304,11 +304,11 @@
         "@base-ui/react"
       ],
       "registryDependencies": [
-        "{{REGISTRY_URL}}/r/ledger-base.json"
+        "{{REGISTRY_URL}}/r/spotcheck-base.json"
       ],
       "files": [
         {
-          "path": "registry/ledger/components/ledger/checkbox.tsx",
+          "path": "registry/spotcheck/components/spotcheck/checkbox.tsx",
           "type": "registry:component"
         }
       ]
@@ -325,11 +325,11 @@
         "@base-ui/react"
       ],
       "registryDependencies": [
-        "{{REGISTRY_URL}}/r/ledger-base.json"
+        "{{REGISTRY_URL}}/r/spotcheck-base.json"
       ],
       "files": [
         {
-          "path": "registry/ledger/components/ledger/radio-group.tsx",
+          "path": "registry/spotcheck/components/spotcheck/radio-group.tsx",
           "type": "registry:component"
         }
       ]
@@ -346,11 +346,11 @@
         "@base-ui/react"
       ],
       "registryDependencies": [
-        "{{REGISTRY_URL}}/r/ledger-base.json"
+        "{{REGISTRY_URL}}/r/spotcheck-base.json"
       ],
       "files": [
         {
-          "path": "registry/ledger/components/ledger/select.tsx",
+          "path": "registry/spotcheck/components/spotcheck/select.tsx",
           "type": "registry:component"
         }
       ]
@@ -367,11 +367,11 @@
         "@base-ui/react"
       ],
       "registryDependencies": [
-        "{{REGISTRY_URL}}/r/ledger-base.json"
+        "{{REGISTRY_URL}}/r/spotcheck-base.json"
       ],
       "files": [
         {
-          "path": "registry/ledger/components/ledger/combobox.tsx",
+          "path": "registry/spotcheck/components/spotcheck/combobox.tsx",
           "type": "registry:component"
         }
       ]
@@ -380,7 +380,7 @@
       "name": "date-picker",
       "type": "registry:component",
       "title": "Date Picker",
-      "description": "A calendar on the ledger grid, inline or in a popover.",
+      "description": "A calendar on a ruled grid, inline or in a popover.",
       "categories": [
         "core"
       ],
@@ -388,11 +388,11 @@
         "@base-ui/react"
       ],
       "registryDependencies": [
-        "{{REGISTRY_URL}}/r/ledger-base.json"
+        "{{REGISTRY_URL}}/r/spotcheck-base.json"
       ],
       "files": [
         {
-          "path": "registry/ledger/components/ledger/date-picker.tsx",
+          "path": "registry/spotcheck/components/spotcheck/date-picker.tsx",
           "type": "registry:component"
         }
       ]
@@ -406,11 +406,11 @@
         "core"
       ],
       "registryDependencies": [
-        "{{REGISTRY_URL}}/r/ledger-base.json"
+        "{{REGISTRY_URL}}/r/spotcheck-base.json"
       ],
       "files": [
         {
-          "path": "registry/ledger/components/ledger/pagination.tsx",
+          "path": "registry/spotcheck/components/spotcheck/pagination.tsx",
           "type": "registry:component"
         }
       ]
@@ -427,11 +427,11 @@
         "@base-ui/react"
       ],
       "registryDependencies": [
-        "{{REGISTRY_URL}}/r/ledger-base.json"
+        "{{REGISTRY_URL}}/r/spotcheck-base.json"
       ],
       "files": [
         {
-          "path": "registry/ledger/components/ledger/dialog.tsx",
+          "path": "registry/spotcheck/components/spotcheck/dialog.tsx",
           "type": "registry:component"
         }
       ]
@@ -448,11 +448,11 @@
         "@base-ui/react"
       ],
       "registryDependencies": [
-        "{{REGISTRY_URL}}/r/ledger-base.json"
+        "{{REGISTRY_URL}}/r/spotcheck-base.json"
       ],
       "files": [
         {
-          "path": "registry/ledger/components/ledger/sheet.tsx",
+          "path": "registry/spotcheck/components/spotcheck/sheet.tsx",
           "type": "registry:component"
         }
       ]
@@ -469,11 +469,11 @@
         "@base-ui/react"
       ],
       "registryDependencies": [
-        "{{REGISTRY_URL}}/r/ledger-base.json"
+        "{{REGISTRY_URL}}/r/spotcheck-base.json"
       ],
       "files": [
         {
-          "path": "registry/ledger/components/ledger/dropdown-menu.tsx",
+          "path": "registry/spotcheck/components/spotcheck/dropdown-menu.tsx",
           "type": "registry:component"
         }
       ]
@@ -490,11 +490,11 @@
         "@base-ui/react"
       ],
       "registryDependencies": [
-        "{{REGISTRY_URL}}/r/ledger-base.json"
+        "{{REGISTRY_URL}}/r/spotcheck-base.json"
       ],
       "files": [
         {
-          "path": "registry/ledger/components/ledger/popover.tsx",
+          "path": "registry/spotcheck/components/spotcheck/popover.tsx",
           "type": "registry:component"
         }
       ]
@@ -511,11 +511,11 @@
         "@base-ui/react"
       ],
       "registryDependencies": [
-        "{{REGISTRY_URL}}/r/ledger-base.json"
+        "{{REGISTRY_URL}}/r/spotcheck-base.json"
       ],
       "files": [
         {
-          "path": "registry/ledger/components/ledger/tooltip.tsx",
+          "path": "registry/spotcheck/components/spotcheck/tooltip.tsx",
           "type": "registry:component"
         }
       ]
@@ -532,11 +532,11 @@
         "@base-ui/react"
       ],
       "registryDependencies": [
-        "{{REGISTRY_URL}}/r/ledger-base.json"
+        "{{REGISTRY_URL}}/r/spotcheck-base.json"
       ],
       "files": [
         {
-          "path": "registry/ledger/components/ledger/toast.tsx",
+          "path": "registry/spotcheck/components/spotcheck/toast.tsx",
           "type": "registry:component"
         }
       ]
@@ -550,11 +550,11 @@
         "core"
       ],
       "registryDependencies": [
-        "{{REGISTRY_URL}}/r/ledger-base.json"
+        "{{REGISTRY_URL}}/r/spotcheck-base.json"
       ],
       "files": [
         {
-          "path": "registry/ledger/components/ledger/status-pill.tsx",
+          "path": "registry/spotcheck/components/spotcheck/status-pill.tsx",
           "type": "registry:component"
         }
       ]
@@ -568,11 +568,11 @@
         "core"
       ],
       "registryDependencies": [
-        "{{REGISTRY_URL}}/r/ledger-base.json"
+        "{{REGISTRY_URL}}/r/spotcheck-base.json"
       ],
       "files": [
         {
-          "path": "registry/ledger/components/ledger/tag.tsx",
+          "path": "registry/spotcheck/components/spotcheck/tag.tsx",
           "type": "registry:component"
         }
       ]
@@ -586,11 +586,11 @@
         "core"
       ],
       "registryDependencies": [
-        "{{REGISTRY_URL}}/r/ledger-base.json"
+        "{{REGISTRY_URL}}/r/spotcheck-base.json"
       ],
       "files": [
         {
-          "path": "registry/ledger/components/ledger/chip.tsx",
+          "path": "registry/spotcheck/components/spotcheck/chip.tsx",
           "type": "registry:component"
         }
       ]
@@ -604,11 +604,11 @@
         "core"
       ],
       "registryDependencies": [
-        "{{REGISTRY_URL}}/r/ledger-base.json"
+        "{{REGISTRY_URL}}/r/spotcheck-base.json"
       ],
       "files": [
         {
-          "path": "registry/ledger/components/ledger/kbd.tsx",
+          "path": "registry/spotcheck/components/spotcheck/kbd.tsx",
           "type": "registry:component"
         }
       ]
@@ -622,11 +622,11 @@
         "core"
       ],
       "registryDependencies": [
-        "{{REGISTRY_URL}}/r/ledger-base.json"
+        "{{REGISTRY_URL}}/r/spotcheck-base.json"
       ],
       "files": [
         {
-          "path": "registry/ledger/components/ledger/kv-row.tsx",
+          "path": "registry/spotcheck/components/spotcheck/kv-row.tsx",
           "type": "registry:component"
         }
       ]
@@ -640,11 +640,11 @@
         "core"
       ],
       "registryDependencies": [
-        "{{REGISTRY_URL}}/r/ledger-base.json"
+        "{{REGISTRY_URL}}/r/spotcheck-base.json"
       ],
       "files": [
         {
-          "path": "registry/ledger/components/ledger/sparkline.tsx",
+          "path": "registry/spotcheck/components/spotcheck/sparkline.tsx",
           "type": "registry:component"
         }
       ]
@@ -658,11 +658,11 @@
         "core"
       ],
       "registryDependencies": [
-        "{{REGISTRY_URL}}/r/ledger-base.json"
+        "{{REGISTRY_URL}}/r/spotcheck-base.json"
       ],
       "files": [
         {
-          "path": "registry/ledger/components/ledger/progress.tsx",
+          "path": "registry/spotcheck/components/spotcheck/progress.tsx",
           "type": "registry:component"
         }
       ]
@@ -676,11 +676,11 @@
         "core"
       ],
       "registryDependencies": [
-        "{{REGISTRY_URL}}/r/ledger-base.json"
+        "{{REGISTRY_URL}}/r/spotcheck-base.json"
       ],
       "files": [
         {
-          "path": "registry/ledger/components/ledger/skeleton.tsx",
+          "path": "registry/spotcheck/components/spotcheck/skeleton.tsx",
           "type": "registry:component"
         }
       ]
@@ -694,11 +694,11 @@
         "core"
       ],
       "registryDependencies": [
-        "{{REGISTRY_URL}}/r/ledger-base.json"
+        "{{REGISTRY_URL}}/r/spotcheck-base.json"
       ],
       "files": [
         {
-          "path": "registry/ledger/components/ledger/app-frame.tsx",
+          "path": "registry/spotcheck/components/spotcheck/app-frame.tsx",
           "type": "registry:component"
         }
       ]
@@ -707,12 +707,12 @@
       "name": "settings-screen",
       "type": "registry:component",
       "title": "Settings Screen",
-      "description": "A full settings page built only from Ledger parts. Drop it in, then cut it down.",
+      "description": "A full settings page built only from Spotcheck parts. Drop it in, then cut it down.",
       "categories": [
         "screens"
       ],
       "registryDependencies": [
-        "{{REGISTRY_URL}}/r/ledger-base.json",
+        "{{REGISTRY_URL}}/r/spotcheck-base.json",
         "{{REGISTRY_URL}}/r/app-frame.json",
         "{{REGISTRY_URL}}/r/button.json",
         "{{REGISTRY_URL}}/r/checkbox.json",
@@ -732,7 +732,7 @@
       ],
       "files": [
         {
-          "path": "registry/ledger/components/ledger/settings-screen.tsx",
+          "path": "registry/spotcheck/components/spotcheck/settings-screen.tsx",
           "type": "registry:component"
         }
       ]
@@ -746,12 +746,12 @@
         "motion"
       ],
       "registryDependencies": [
-        "{{REGISTRY_URL}}/r/ledger-base.json",
+        "{{REGISTRY_URL}}/r/spotcheck-base.json",
         "{{REGISTRY_URL}}/r/use-reduced-motion.json"
       ],
       "files": [
         {
-          "path": "registry/ledger/components/ledger/scramble-text.tsx",
+          "path": "registry/spotcheck/components/spotcheck/scramble-text.tsx",
           "type": "registry:component"
         }
       ]
@@ -765,11 +765,11 @@
         "motion"
       ],
       "registryDependencies": [
-        "{{REGISTRY_URL}}/r/ledger-base.json"
+        "{{REGISTRY_URL}}/r/spotcheck-base.json"
       ],
       "files": [
         {
-          "path": "registry/ledger/components/ledger/marquee.tsx",
+          "path": "registry/spotcheck/components/spotcheck/marquee.tsx",
           "type": "registry:component"
         }
       ]
@@ -783,11 +783,11 @@
         "motion"
       ],
       "registryDependencies": [
-        "{{REGISTRY_URL}}/r/ledger-base.json"
+        "{{REGISTRY_URL}}/r/spotcheck-base.json"
       ],
       "files": [
         {
-          "path": "registry/ledger/components/ledger/entry-list.tsx",
+          "path": "registry/spotcheck/components/spotcheck/entry-list.tsx",
           "type": "registry:component"
         }
       ]
@@ -801,12 +801,12 @@
         "motion"
       ],
       "registryDependencies": [
-        "{{REGISTRY_URL}}/r/ledger-base.json",
+        "{{REGISTRY_URL}}/r/spotcheck-base.json",
         "{{REGISTRY_URL}}/r/roll-number.json"
       ],
       "files": [
         {
-          "path": "registry/ledger/components/ledger/scrub-input.tsx",
+          "path": "registry/spotcheck/components/spotcheck/scrub-input.tsx",
           "type": "registry:component"
         }
       ]
@@ -823,12 +823,12 @@
         "motion"
       ],
       "registryDependencies": [
-        "{{REGISTRY_URL}}/r/ledger-base.json",
+        "{{REGISTRY_URL}}/r/spotcheck-base.json",
         "{{REGISTRY_URL}}/r/button.json"
       ],
       "files": [
         {
-          "path": "registry/ledger/components/ledger/magnetic-button.tsx",
+          "path": "registry/spotcheck/components/spotcheck/magnetic-button.tsx",
           "type": "registry:component"
         }
       ]
@@ -845,13 +845,13 @@
         "motion"
       ],
       "registryDependencies": [
-        "{{REGISTRY_URL}}/r/ledger-base.json",
+        "{{REGISTRY_URL}}/r/spotcheck-base.json",
         "{{REGISTRY_URL}}/r/button.json",
         "{{REGISTRY_URL}}/r/tag.json"
       ],
       "files": [
         {
-          "path": "registry/ledger/components/ledger/stamp-approval.tsx",
+          "path": "registry/spotcheck/components/spotcheck/stamp-approval.tsx",
           "type": "registry:component"
         }
       ]
@@ -868,12 +868,12 @@
         "animejs"
       ],
       "registryDependencies": [
-        "{{REGISTRY_URL}}/r/ledger-base.json",
+        "{{REGISTRY_URL}}/r/spotcheck-base.json",
         "{{REGISTRY_URL}}/r/use-reduced-motion.json"
       ],
       "files": [
         {
-          "path": "registry/ledger/components/ledger/split-flap.tsx",
+          "path": "registry/spotcheck/components/spotcheck/split-flap.tsx",
           "type": "registry:component"
         }
       ]
@@ -890,12 +890,12 @@
         "animejs"
       ],
       "registryDependencies": [
-        "{{REGISTRY_URL}}/r/ledger-base.json",
+        "{{REGISTRY_URL}}/r/spotcheck-base.json",
         "{{REGISTRY_URL}}/r/use-reduced-motion.json"
       ],
       "files": [
         {
-          "path": "registry/ledger/components/ledger/ripple-heatmap.tsx",
+          "path": "registry/spotcheck/components/spotcheck/ripple-heatmap.tsx",
           "type": "registry:component"
         }
       ]
@@ -912,13 +912,13 @@
         "animejs"
       ],
       "registryDependencies": [
-        "{{REGISTRY_URL}}/r/ledger-base.json",
+        "{{REGISTRY_URL}}/r/spotcheck-base.json",
         "{{REGISTRY_URL}}/r/use-in-view.json",
         "{{REGISTRY_URL}}/r/use-reduced-motion.json"
       ],
       "files": [
         {
-          "path": "registry/ledger/components/ledger/draw-chart.tsx",
+          "path": "registry/spotcheck/components/spotcheck/draw-chart.tsx",
           "type": "registry:component"
         }
       ]
@@ -935,13 +935,13 @@
         "animejs"
       ],
       "registryDependencies": [
-        "{{REGISTRY_URL}}/r/ledger-base.json",
+        "{{REGISTRY_URL}}/r/spotcheck-base.json",
         "{{REGISTRY_URL}}/r/button.json",
         "{{REGISTRY_URL}}/r/use-reduced-motion.json"
       ],
       "files": [
         {
-          "path": "registry/ledger/components/ledger/swipe-review.tsx",
+          "path": "registry/spotcheck/components/spotcheck/swipe-review.tsx",
           "type": "registry:component"
         }
       ]
@@ -958,13 +958,13 @@
         "streamdown"
       ],
       "registryDependencies": [
-        "{{REGISTRY_URL}}/r/ledger-base.json",
+        "{{REGISTRY_URL}}/r/spotcheck-base.json",
         "{{REGISTRY_URL}}/r/button.json",
         "{{REGISTRY_URL}}/r/use-stream.json"
       ],
       "files": [
         {
-          "path": "registry/ledger/components/ledger/stream-response.tsx",
+          "path": "registry/spotcheck/components/spotcheck/stream-response.tsx",
           "type": "registry:component"
         }
       ]
@@ -973,16 +973,16 @@
       "name": "agent-trace",
       "type": "registry:component",
       "title": "Agent Trace",
-      "description": "Tool calls as ledger rows, with state, tool, argument and duration. Expand a row to see its output.",
+      "description": "Tool calls as ruled rows, with state, tool, argument and duration. Expand a row to see its output.",
       "categories": [
         "ai"
       ],
       "registryDependencies": [
-        "{{REGISTRY_URL}}/r/ledger-base.json"
+        "{{REGISTRY_URL}}/r/spotcheck-base.json"
       ],
       "files": [
         {
-          "path": "registry/ledger/components/ledger/agent-trace.tsx",
+          "path": "registry/spotcheck/components/spotcheck/agent-trace.tsx",
           "type": "registry:component"
         }
       ]
@@ -996,11 +996,11 @@
         "ai"
       ],
       "registryDependencies": [
-        "{{REGISTRY_URL}}/r/ledger-base.json"
+        "{{REGISTRY_URL}}/r/spotcheck-base.json"
       ],
       "files": [
         {
-          "path": "registry/ledger/components/ledger/trace-waterfall.tsx",
+          "path": "registry/spotcheck/components/spotcheck/trace-waterfall.tsx",
           "type": "registry:component"
         }
       ]
@@ -1014,13 +1014,13 @@
         "ai"
       ],
       "registryDependencies": [
-        "{{REGISTRY_URL}}/r/ledger-base.json",
+        "{{REGISTRY_URL}}/r/spotcheck-base.json",
         "{{REGISTRY_URL}}/r/chip.json",
         "{{REGISTRY_URL}}/r/select.json"
       ],
       "files": [
         {
-          "path": "registry/ledger/components/ledger/composer.tsx",
+          "path": "registry/spotcheck/components/spotcheck/composer.tsx",
           "type": "registry:component"
         }
       ]
@@ -1034,12 +1034,12 @@
         "ai"
       ],
       "registryDependencies": [
-        "{{REGISTRY_URL}}/r/ledger-base.json",
+        "{{REGISTRY_URL}}/r/spotcheck-base.json",
         "{{REGISTRY_URL}}/r/use-reduced-motion.json"
       ],
       "files": [
         {
-          "path": "registry/ledger/components/ledger/thinking.tsx",
+          "path": "registry/spotcheck/components/spotcheck/thinking.tsx",
           "type": "registry:component"
         }
       ]
@@ -1053,12 +1053,12 @@
         "ai"
       ],
       "registryDependencies": [
-        "{{REGISTRY_URL}}/r/ledger-base.json",
+        "{{REGISTRY_URL}}/r/spotcheck-base.json",
         "{{REGISTRY_URL}}/r/button.json"
       ],
       "files": [
         {
-          "path": "registry/ledger/components/ledger/context-budget.tsx",
+          "path": "registry/spotcheck/components/spotcheck/context-budget.tsx",
           "type": "registry:component"
         }
       ]
@@ -1072,11 +1072,11 @@
         "ai"
       ],
       "registryDependencies": [
-        "{{REGISTRY_URL}}/r/ledger-base.json"
+        "{{REGISTRY_URL}}/r/spotcheck-base.json"
       ],
       "files": [
         {
-          "path": "registry/ledger/components/ledger/eval-matrix.tsx",
+          "path": "registry/spotcheck/components/spotcheck/eval-matrix.tsx",
           "type": "registry:component"
         }
       ]
@@ -1093,13 +1093,13 @@
         "animejs"
       ],
       "registryDependencies": [
-        "{{REGISTRY_URL}}/r/ledger-base.json",
+        "{{REGISTRY_URL}}/r/spotcheck-base.json",
         "{{REGISTRY_URL}}/r/use-in-view.json",
         "{{REGISTRY_URL}}/r/use-reduced-motion.json"
       ],
       "files": [
         {
-          "path": "registry/ledger/components/ledger/run-receipt.tsx",
+          "path": "registry/spotcheck/components/spotcheck/run-receipt.tsx",
           "type": "registry:component"
         }
       ]
@@ -1116,13 +1116,13 @@
         "motion"
       ],
       "registryDependencies": [
-        "{{REGISTRY_URL}}/r/ledger-base.json",
+        "{{REGISTRY_URL}}/r/spotcheck-base.json",
         "{{REGISTRY_URL}}/r/button.json",
         "{{REGISTRY_URL}}/r/status-pill.json"
       ],
       "files": [
         {
-          "path": "registry/ledger/components/ledger/diff-review.tsx",
+          "path": "registry/spotcheck/components/spotcheck/diff-review.tsx",
           "type": "registry:component"
         }
       ]
@@ -1136,13 +1136,13 @@
         "ai"
       ],
       "registryDependencies": [
-        "{{REGISTRY_URL}}/r/ledger-base.json",
+        "{{REGISTRY_URL}}/r/spotcheck-base.json",
         "{{REGISTRY_URL}}/r/roll-number.json",
         "{{REGISTRY_URL}}/r/tag.json"
       ],
       "files": [
         {
-          "path": "registry/ledger/components/ledger/model-race.tsx",
+          "path": "registry/spotcheck/components/spotcheck/model-race.tsx",
           "type": "registry:component"
         }
       ]
@@ -1156,14 +1156,14 @@
         "screens"
       ],
       "registryDependencies": [
-        "{{REGISTRY_URL}}/r/ledger-base.json",
+        "{{REGISTRY_URL}}/r/spotcheck-base.json",
         "{{REGISTRY_URL}}/r/app-frame.json",
         "{{REGISTRY_URL}}/r/stream-response.json",
         "{{REGISTRY_URL}}/r/use-stream.json"
       ],
       "files": [
         {
-          "path": "registry/ledger/components/ledger/chat-screen.tsx",
+          "path": "registry/spotcheck/components/spotcheck/chat-screen.tsx",
           "type": "registry:component"
         }
       ]

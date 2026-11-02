@@ -4,167 +4,167 @@ import dynamic from "next/dynamic"
 
 const DEMOS = {
   "roll-number": dynamic(
-    () => import("@/registry/ledger/examples/roll-number-demo").then((module) => module.RollNumberDemo),
+    () => import("@/registry/spotcheck/examples/roll-number-demo").then((module) => module.RollNumberDemo),
   ),
   "detent-slider": dynamic(
-    () => import("@/registry/ledger/examples/detent-slider-demo").then((module) => module.DetentSliderDemo),
+    () => import("@/registry/spotcheck/examples/detent-slider-demo").then((module) => module.DetentSliderDemo),
   ),
   "bar-terrain": dynamic(
-    () => import("@/registry/ledger/examples/bar-terrain-demo").then((module) => module.BarTerrainDemo),
+    () => import("@/registry/spotcheck/examples/bar-terrain-demo").then((module) => module.BarTerrainDemo),
     { ssr: false },
   ),
   "command-palette": dynamic(
-    () => import("@/registry/ledger/examples/command-palette-demo").then((module) => module.CommandPaletteDemo),
+    () => import("@/registry/spotcheck/examples/command-palette-demo").then((module) => module.CommandPaletteDemo),
   ),
   "ledger-table": dynamic(
-    () => import("@/registry/ledger/examples/ledger-table-demo").then((module) => module.LedgerTableDemo),
+    () => import("@/registry/spotcheck/examples/ledger-table-demo").then((module) => module.LedgerTableDemo),
   ),
   "button": dynamic(
-    () => import("@/registry/ledger/examples/button-demo").then((module) => module.ButtonDemo),
+    () => import("@/registry/spotcheck/examples/button-demo").then((module) => module.ButtonDemo),
   ),
   "hold-button": dynamic(
-    () => import("@/registry/ledger/examples/hold-button-demo").then((module) => module.HoldButtonDemo),
+    () => import("@/registry/spotcheck/examples/hold-button-demo").then((module) => module.HoldButtonDemo),
   ),
   "field": dynamic(
-    () => import("@/registry/ledger/examples/field-demo").then((module) => module.FieldDemo),
+    () => import("@/registry/spotcheck/examples/field-demo").then((module) => module.FieldDemo),
   ),
   "tabs": dynamic(
-    () => import("@/registry/ledger/examples/tabs-demo").then((module) => module.TabsDemo),
+    () => import("@/registry/spotcheck/examples/tabs-demo").then((module) => module.TabsDemo),
   ),
   "switch": dynamic(
-    () => import("@/registry/ledger/examples/switch-demo").then((module) => module.SwitchDemo),
+    () => import("@/registry/spotcheck/examples/switch-demo").then((module) => module.SwitchDemo),
   ),
   "segmented": dynamic(
-    () => import("@/registry/ledger/examples/segmented-demo").then((module) => module.SegmentedDemo),
+    () => import("@/registry/spotcheck/examples/segmented-demo").then((module) => module.SegmentedDemo),
   ),
   "checkbox": dynamic(
-    () => import("@/registry/ledger/examples/checkbox-demo").then((module) => module.CheckboxDemo),
+    () => import("@/registry/spotcheck/examples/checkbox-demo").then((module) => module.CheckboxDemo),
   ),
   "radio-group": dynamic(
-    () => import("@/registry/ledger/examples/radio-group-demo").then((module) => module.RadioGroupDemo),
+    () => import("@/registry/spotcheck/examples/radio-group-demo").then((module) => module.RadioGroupDemo),
   ),
   "select": dynamic(
-    () => import("@/registry/ledger/examples/select-demo").then((module) => module.SelectDemo),
+    () => import("@/registry/spotcheck/examples/select-demo").then((module) => module.SelectDemo),
   ),
   "combobox": dynamic(
-    () => import("@/registry/ledger/examples/combobox-demo").then((module) => module.ComboboxDemo),
+    () => import("@/registry/spotcheck/examples/combobox-demo").then((module) => module.ComboboxDemo),
   ),
   "date-picker": dynamic(
-    () => import("@/registry/ledger/examples/date-picker-demo").then((module) => module.DatePickerDemo),
+    () => import("@/registry/spotcheck/examples/date-picker-demo").then((module) => module.DatePickerDemo),
   ),
   "pagination": dynamic(
-    () => import("@/registry/ledger/examples/pagination-demo").then((module) => module.PaginationDemo),
+    () => import("@/registry/spotcheck/examples/pagination-demo").then((module) => module.PaginationDemo),
   ),
   "dialog": dynamic(
-    () => import("@/registry/ledger/examples/dialog-demo").then((module) => module.DialogDemo),
+    () => import("@/registry/spotcheck/examples/dialog-demo").then((module) => module.DialogDemo),
   ),
   "sheet": dynamic(
-    () => import("@/registry/ledger/examples/sheet-demo").then((module) => module.SheetDemo),
+    () => import("@/registry/spotcheck/examples/sheet-demo").then((module) => module.SheetDemo),
   ),
   "dropdown-menu": dynamic(
-    () => import("@/registry/ledger/examples/dropdown-menu-demo").then((module) => module.DropdownMenuDemo),
+    () => import("@/registry/spotcheck/examples/dropdown-menu-demo").then((module) => module.DropdownMenuDemo),
   ),
   "popover": dynamic(
-    () => import("@/registry/ledger/examples/popover-demo").then((module) => module.PopoverDemo),
+    () => import("@/registry/spotcheck/examples/popover-demo").then((module) => module.PopoverDemo),
   ),
   "tooltip": dynamic(
-    () => import("@/registry/ledger/examples/tooltip-demo").then((module) => module.TooltipDemo),
+    () => import("@/registry/spotcheck/examples/tooltip-demo").then((module) => module.TooltipDemo),
   ),
   "toast": dynamic(
-    () => import("@/registry/ledger/examples/toast-demo").then((module) => module.ToastDemo),
+    () => import("@/registry/spotcheck/examples/toast-demo").then((module) => module.ToastDemo),
   ),
   "status-pill": dynamic(
-    () => import("@/registry/ledger/examples/status-pill-demo").then((module) => module.StatusPillDemo),
+    () => import("@/registry/spotcheck/examples/status-pill-demo").then((module) => module.StatusPillDemo),
   ),
   "tag": dynamic(
-    () => import("@/registry/ledger/examples/tag-demo").then((module) => module.TagDemo),
+    () => import("@/registry/spotcheck/examples/tag-demo").then((module) => module.TagDemo),
   ),
   "chip": dynamic(
-    () => import("@/registry/ledger/examples/chip-demo").then((module) => module.ChipDemo),
+    () => import("@/registry/spotcheck/examples/chip-demo").then((module) => module.ChipDemo),
   ),
   "kbd": dynamic(
-    () => import("@/registry/ledger/examples/kbd-demo").then((module) => module.KbdDemo),
+    () => import("@/registry/spotcheck/examples/kbd-demo").then((module) => module.KbdDemo),
   ),
   "kv-row": dynamic(
-    () => import("@/registry/ledger/examples/kv-row-demo").then((module) => module.KvRowDemo),
+    () => import("@/registry/spotcheck/examples/kv-row-demo").then((module) => module.KvRowDemo),
   ),
   "sparkline": dynamic(
-    () => import("@/registry/ledger/examples/sparkline-demo").then((module) => module.SparklineDemo),
+    () => import("@/registry/spotcheck/examples/sparkline-demo").then((module) => module.SparklineDemo),
   ),
   "progress": dynamic(
-    () => import("@/registry/ledger/examples/progress-demo").then((module) => module.ProgressDemo),
+    () => import("@/registry/spotcheck/examples/progress-demo").then((module) => module.ProgressDemo),
   ),
   "skeleton": dynamic(
-    () => import("@/registry/ledger/examples/skeleton-demo").then((module) => module.SkeletonDemo),
+    () => import("@/registry/spotcheck/examples/skeleton-demo").then((module) => module.SkeletonDemo),
   ),
   "app-frame": dynamic(
-    () => import("@/registry/ledger/examples/app-frame-demo").then((module) => module.AppFrameDemo),
+    () => import("@/registry/spotcheck/examples/app-frame-demo").then((module) => module.AppFrameDemo),
   ),
   "settings-screen": dynamic(
-    () => import("@/registry/ledger/examples/settings-screen-demo").then((module) => module.SettingsScreenDemo),
+    () => import("@/registry/spotcheck/examples/settings-screen-demo").then((module) => module.SettingsScreenDemo),
   ),
   "scramble-text": dynamic(
-    () => import("@/registry/ledger/examples/scramble-text-demo").then((module) => module.ScrambleTextDemo),
+    () => import("@/registry/spotcheck/examples/scramble-text-demo").then((module) => module.ScrambleTextDemo),
   ),
   "marquee": dynamic(
-    () => import("@/registry/ledger/examples/marquee-demo").then((module) => module.MarqueeDemo),
+    () => import("@/registry/spotcheck/examples/marquee-demo").then((module) => module.MarqueeDemo),
   ),
   "entry-list": dynamic(
-    () => import("@/registry/ledger/examples/entry-list-demo").then((module) => module.EntryListDemo),
+    () => import("@/registry/spotcheck/examples/entry-list-demo").then((module) => module.EntryListDemo),
   ),
   "scrub-input": dynamic(
-    () => import("@/registry/ledger/examples/scrub-input-demo").then((module) => module.ScrubInputDemo),
+    () => import("@/registry/spotcheck/examples/scrub-input-demo").then((module) => module.ScrubInputDemo),
   ),
   "magnetic-button": dynamic(
-    () => import("@/registry/ledger/examples/magnetic-button-demo").then((module) => module.MagneticButtonDemo),
+    () => import("@/registry/spotcheck/examples/magnetic-button-demo").then((module) => module.MagneticButtonDemo),
   ),
   "stamp-approval": dynamic(
-    () => import("@/registry/ledger/examples/stamp-approval-demo").then((module) => module.StampApprovalDemo),
+    () => import("@/registry/spotcheck/examples/stamp-approval-demo").then((module) => module.StampApprovalDemo),
   ),
   "split-flap": dynamic(
-    () => import("@/registry/ledger/examples/split-flap-demo").then((module) => module.SplitFlapDemo),
+    () => import("@/registry/spotcheck/examples/split-flap-demo").then((module) => module.SplitFlapDemo),
   ),
   "ripple-heatmap": dynamic(
-    () => import("@/registry/ledger/examples/ripple-heatmap-demo").then((module) => module.RippleHeatmapDemo),
+    () => import("@/registry/spotcheck/examples/ripple-heatmap-demo").then((module) => module.RippleHeatmapDemo),
   ),
   "draw-chart": dynamic(
-    () => import("@/registry/ledger/examples/draw-chart-demo").then((module) => module.DrawChartDemo),
+    () => import("@/registry/spotcheck/examples/draw-chart-demo").then((module) => module.DrawChartDemo),
   ),
   "swipe-review": dynamic(
-    () => import("@/registry/ledger/examples/swipe-review-demo").then((module) => module.SwipeReviewDemo),
+    () => import("@/registry/spotcheck/examples/swipe-review-demo").then((module) => module.SwipeReviewDemo),
   ),
   "stream-response": dynamic(
-    () => import("@/registry/ledger/examples/stream-response-demo").then((module) => module.StreamResponseDemo),
+    () => import("@/registry/spotcheck/examples/stream-response-demo").then((module) => module.StreamResponseDemo),
   ),
   "agent-trace": dynamic(
-    () => import("@/registry/ledger/examples/agent-trace-demo").then((module) => module.AgentTraceDemo),
+    () => import("@/registry/spotcheck/examples/agent-trace-demo").then((module) => module.AgentTraceDemo),
   ),
   "trace-waterfall": dynamic(
-    () => import("@/registry/ledger/examples/trace-waterfall-demo").then((module) => module.TraceWaterfallDemo),
+    () => import("@/registry/spotcheck/examples/trace-waterfall-demo").then((module) => module.TraceWaterfallDemo),
   ),
   "composer": dynamic(
-    () => import("@/registry/ledger/examples/composer-demo").then((module) => module.ComposerDemo),
+    () => import("@/registry/spotcheck/examples/composer-demo").then((module) => module.ComposerDemo),
   ),
   "thinking": dynamic(
-    () => import("@/registry/ledger/examples/thinking-demo").then((module) => module.ThinkingDemo),
+    () => import("@/registry/spotcheck/examples/thinking-demo").then((module) => module.ThinkingDemo),
   ),
   "context-budget": dynamic(
-    () => import("@/registry/ledger/examples/context-budget-demo").then((module) => module.ContextBudgetDemo),
+    () => import("@/registry/spotcheck/examples/context-budget-demo").then((module) => module.ContextBudgetDemo),
   ),
   "eval-matrix": dynamic(
-    () => import("@/registry/ledger/examples/eval-matrix-demo").then((module) => module.EvalMatrixDemo),
+    () => import("@/registry/spotcheck/examples/eval-matrix-demo").then((module) => module.EvalMatrixDemo),
   ),
   "run-receipt": dynamic(
-    () => import("@/registry/ledger/examples/run-receipt-demo").then((module) => module.RunReceiptDemo),
+    () => import("@/registry/spotcheck/examples/run-receipt-demo").then((module) => module.RunReceiptDemo),
   ),
   "diff-review": dynamic(
-    () => import("@/registry/ledger/examples/diff-review-demo").then((module) => module.DiffReviewDemo),
+    () => import("@/registry/spotcheck/examples/diff-review-demo").then((module) => module.DiffReviewDemo),
   ),
   "model-race": dynamic(
-    () => import("@/registry/ledger/examples/model-race-demo").then((module) => module.ModelRaceDemo),
+    () => import("@/registry/spotcheck/examples/model-race-demo").then((module) => module.ModelRaceDemo),
   ),
   "chat-screen": dynamic(
-    () => import("@/registry/ledger/examples/chat-screen-demo").then((module) => module.ChatScreenDemo),
+    () => import("@/registry/spotcheck/examples/chat-screen-demo").then((module) => module.ChatScreenDemo),
   ),
 }
 

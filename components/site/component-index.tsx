@@ -2,8 +2,8 @@
 
 import Link from "next/link"
 
-import { LedgerTable, type LedgerColumn } from "@/registry/ledger/components/ledger/ledger-table"
-import { Tag } from "@/registry/ledger/components/ledger/tag"
+import { LedgerTable, type LedgerColumn } from "@/registry/spotcheck/components/spotcheck/ledger-table"
+import { Tag } from "@/registry/spotcheck/components/spotcheck/tag"
 
 export type IndexRow = { no: string; name: string; href: string; group: string; engine: string; description: string }
 

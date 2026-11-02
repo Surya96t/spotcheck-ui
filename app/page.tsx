@@ -9,7 +9,7 @@ import { Specimens } from "@/components/landing/specimens"
 import { getNavLinks } from "@/components/site/shell"
 import { TopBar } from "@/components/site/top-bar"
 import { getComponents } from "@/lib/catalog"
-import { Marquee } from "@/registry/ledger/components/ledger/marquee"
+import { Marquee } from "@/registry/spotcheck/components/spotcheck/marquee"
 
 export default function Home() {
   const components = getComponents()
@@ -24,14 +24,14 @@ export default function Home() {
         <TopBar components={links.components} guides={links.guides} compact>
           <Link
             href="/"
-            className="ledger-display border-ink flex items-center border-r-(length:--rule) px-2.5 text-2xl leading-none md:px-3.5"
+            className="spotcheck-display border-ink flex items-center border-r-(length:--rule) px-2.5 text-xl leading-none md:px-3.5 md:text-2xl"
           >
-            Ledger<em className="text-accent-ink not-italic">/</em>UI
+            Spotcheck<em className="text-accent-ink not-italic">/</em>UI
           </Link>
           <Link href="/components" className="border-ink hover:bg-ink hover:text-paper flex items-center border-r-(length:--rule) px-2.5 py-2 md:px-3.5">
             Components
           </Link>
-          <Link href="/docs/installation" className="border-ink hover:bg-ink hover:text-paper flex items-center border-r-(length:--rule) px-2.5 py-2 md:px-3.5">
+          <Link href="/docs/installation" className="border-ink hover:bg-ink hover:text-paper hidden items-center border-r-(length:--rule) px-2.5 py-2 sm:flex md:px-3.5">
             Docs
           </Link>
         </TopBar>
