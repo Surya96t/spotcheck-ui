@@ -65,6 +65,8 @@ crowded. Tickmark is already audit software.
 
 ## What the rename changes
 
+The steps, in order and with checks, are in [RENAME.md](RENAME.md).
+
 | Area | Change |
 |---|---|
 | Site | Name, metadata and description in `app/layout.tsx`, the rail, top bar, footer, 404 and landing page |
