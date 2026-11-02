@@ -23,6 +23,7 @@ export function Rail({ components, guides }: { components: ComponentLink[]; guid
         <br />
         UI
       </Link>
+      <RailLink no="All" name="All components" href="/components" />
       <GroupLabel>Guides</GroupLabel>
       {guides.map((guide) => (
         <RailLink key={guide.href} {...guide} />

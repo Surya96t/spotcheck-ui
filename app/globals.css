@@ -18,12 +18,12 @@ body {
   outline-offset: 2px;
 }
 
-/* Code sits on an ink panel, so it takes the accent meant for the opposite colour mode. */
+/* Code sits on an ink panel. */
 :root,
 .dark,
 [data-theme],
 [data-skin] {
-  --code-accent: light-dark(var(--accent-dark), var(--accent-light));
+  --code-accent: var(--accent-on-ink);
   --code-foreground: var(--paper);
   --code-background: transparent;
   --code-token-constant: var(--paper);

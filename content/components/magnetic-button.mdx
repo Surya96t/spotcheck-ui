@@ -1,0 +1,21 @@
+---
+title: Magnetic Button
+description: "Leans toward the pointer from outside its edges, while the label lags behind."
+group: springs
+order: 2
+engine: motion.dev
+keyboard:
+  - { keys: "Enter", action: "Press the button" }
+  - { keys: "Space", action: "Press the button" }
+reducedMotion: "The button stays still."
+---
+
+## Usage
+
+```tsx
+import { MagneticButton } from "@/components/ledger/magnetic-button"
+
+<MagneticButton variant="accent" onClick={startRun}>Start a run</MagneticButton>
+```
+
+The pull only happens with a mouse or trackpad, not on touch.

@@ -1,0 +1,26 @@
+---
+title: Draw Chart
+description: "One timeline: the line draws, points drop in and the headline number counts up."
+group: timelines
+order: 3
+engine: anime.js
+keyboard: []
+reducedMotion: "The finished chart appears at once."
+---
+
+## Usage
+
+```tsx
+import { DrawChart } from "@/components/ledger/draw-chart"
+
+<DrawChart
+  title="Answer accuracy, 14 weeks"
+  label="Accuracy rose from 38% to 83% over 14 weeks"
+  series={accuracy}
+  max={90}
+  ticks={[0, 30, 60, 90]}
+  format={(value) => `${Math.round(value)}%`}
+/>
+```
+
+It plays the first time it scrolls into view. Change its `key` to play it again.

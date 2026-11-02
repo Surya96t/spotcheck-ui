@@ -1,0 +1,22 @@
+---
+title: Swipe Review
+description: "A card queue for grading model answers. Drag right to accept, left to reject."
+group: timelines
+order: 4
+engine: anime.js
+wide: true
+keyboard:
+  - { keys: "Tab", action: "Reach the Reject and Accept buttons" }
+  - { keys: "Enter", action: "Grade the top card" }
+reducedMotion: "Cards leave at once, and a short drag returns without a spring."
+---
+
+## Usage
+
+```tsx
+import { SwipeReview } from "@/components/ledger/swipe-review"
+
+<SwipeReview items={queue} threshold={110} onAccept={markGood} onReject={markBad} />
+```
+
+The buttons do everything a drag does, so nobody needs to swipe. A vertical swipe still scrolls the page on phones.

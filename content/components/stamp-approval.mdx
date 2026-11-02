@@ -1,0 +1,32 @@
+---
+title: Stamp Approval
+description: "Human sign-off for an agent's tool call. The decision lands as a rubber stamp."
+group: springs
+order: 3
+engine: motion.dev
+wide: true
+keyboard:
+  - { keys: "Tab", action: "Move between arguments and buttons" }
+  - { keys: "Enter", action: "Approve or deny" }
+reducedMotion: "The stamp appears at once, and the card doesn't jolt."
+---
+
+## Usage
+
+```tsx
+import { StampApproval } from "@/components/ledger/stamp-approval"
+
+<StampApproval
+  call={{
+    name: "send_email",
+    args: { to: "finance@example.com", subject: "Q3 refund summary" },
+    resolved: "Emails 41 refund rows to finance@example.com.",
+    risk: "high",
+  }}
+  editable={["subject"]}
+  onApprove={(args) => release(args)}
+  onDeny={halt}
+/>
+```
+
+Show what the call will really do in `resolved`, not just its arguments, because people rubber-stamp a bare Approve button. Mark an argument `editable` so someone can fix it without denying the whole call.

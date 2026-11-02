@@ -136,7 +136,7 @@ shadcn files such as `components/ui/button.tsx`. Groups like Motion and Depth ar
 | 1 | Site shell | Rail, top bar, hero, component page template, generated props, search, `command-palette` | One finished component page at 390px and 1440px |
 | 2 | Core kit | Brief's Core, Base UI primitives, extracted atoms, `settings-screen` | A sample settings screen can be built from Ledger parts alone |
 | 3 | Motion | Motion, Springs and Timelines groups, `/components` index | Each passes its smoke test and the axe check |
-| 4 | AI and review | AI group, reworked `stamp-approval`, `run-receipt`, `trace-waterfall`, `diff-review`, `model-race`, `chat-screen` | A demo works against a real AI SDK stream |
+| 4 | AI and review | AI group, `run-receipt`, `trace-waterfall`, `diff-review`, `model-race`, `chat-screen` | A demo works against a real AI SDK stream |
 | 5 | Landing page | A real landing page at `/`, with the catalog moved to `/components` | A first-time visitor can tell what Ledger is, see it work and reach the install step without opening the catalog |
 | 6 | Public launch, v0.1 | `dashboard`, field notes, SEO, name, domain, shadcn directory PR | Live on the real domain and listed |
 | 7 | Depth, v0.2 onward | WebGL and Depth groups, `configurator` as a block, one release at a time | Each release ships with its demo and tests |
@@ -219,6 +219,23 @@ Added after Phase 2, because the home page is a catalog and no phase covered sel
 - **Base UI behaviour to remember:** tooltips are hidden from screen readers, and a toast's dismiss
   button is only reachable after F6 moves focus into the toast.
 - **Table width:** minimum width now comes from the column count, not a fixed 620px.
+
+## Phase 3 results
+
+- **Shipped:** 10 components, for 43 in the catalog: `scramble-text`, `marquee`, `entry-list`,
+  `scrub-input`, `magnetic-button`, `stamp-approval`, `split-flap`, `ripple-heatmap`, `draw-chart` and
+  `swipe-review`. Also the `/components` index.
+- **Brought forward:** the `stamp-approval` rework came from Phase 4, because building the plain
+  version first would have been wasted. It shows the resolved action and a risk level, and named
+  arguments can be edited before approving.
+- **Prototype bugs fixed:** the heatmap is one tab stop, split-flap headings sit on their columns,
+  swipe leaves vertical scrolling on, and the marquee also pauses on keyboard focus.
+- **Split-flap state:** cells are set directly rather than through React, so a render can't fight
+  a running animation.
+- **New token:** `--accent-on-ink`, for accents on an ink panel. The light accent is unreadable there.
+- **anime.js:** `createSpring` is deprecated in v4.5, so components use `spring`.
+- **Bugs the tests caught:** glyphs widened Scramble Text by 84px, and Scrub Input lost keyboard
+  focus after typing a value.
 
 ## Design language
 
@@ -326,7 +343,7 @@ surfaces are where it has no direct equivalent by name. I compared filenames, no
 
 **Stack claims in the brief:** the anime.js three.js adapter and 3D grids are confirmed in the
 v4.5.0 release notes. `scrambleText` in v4.4 is confirmed by a secondary source. `createSpring`
-is still the documented name. `scramble-text` stays on rAF anyway, so it doesn't need anime.js.
+is deprecated in v4.5, so use `spring`. `scramble-text` stays on rAF, so it doesn't need anime.js.
 
 **Approval research:** agent-UX guides warn that a bare Approve button invites rubber-stamping,
 and that gating every action causes approval fatigue. People should approve the resolved action
