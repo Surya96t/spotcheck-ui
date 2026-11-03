@@ -67,6 +67,7 @@ export function HeroTerrain({ parts, label }: { parts?: TerrainPart[]; label: st
         peak={PEAK}
         pointerRadius={0.9}
         pointerLift={5}
+        pauseWhenSlow
         autoPick={Boolean(parts)}
         onPick={parts ? onPick : undefined}
         label={label}

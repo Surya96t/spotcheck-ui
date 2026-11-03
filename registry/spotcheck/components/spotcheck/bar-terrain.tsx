@@ -27,9 +27,20 @@ const LIFT_EASE = 0.06
 const COLOR_HEIGHT = 1.5
 const AUTO_PICK_SECONDS = 3
 const AUTO_REST_SECONDS = 0.7
+// Skips the first frames, which are slow on every device, then judges on the median so one hitch doesn't count.
+const PACE_SKIP_FRAMES = 5
+const PACE_SAMPLES = 7
+const SLOW_FRAME_SECONDS = 1 / 15
+const SOFTWARE_RENDERER = /swiftshader|llvmpipe|softpipe|software|basic render/i
 const PALETTE_TOKENS = ["--ink", "--wash", "--accent-ink", "--paper"] as const
 const CAMERA: TerrainCamera = { fov: 26, position: [12.5, 11, 13.5], near: 0.1, far: 200 }
 const LOOK_AT: [number, number, number] = [0, 0.9, 0]
+
+/** True when the browser draws WebGL on the CPU, because there's no usable graphics card. */
+export function usesSoftwareRenderer(context: WebGLRenderingContext | WebGL2RenderingContext) {
+  const info = context.getExtension("WEBGL_debug_renderer_info")
+  return Boolean(info) && SOFTWARE_RENDERER.test(String(context.getParameter(info?.UNMASKED_RENDERER_WEBGL ?? 0)))
+}
 
 export type TerrainCamera = { fov: number; position: [x: number, y: number, z: number]; near?: number; far?: number }
 export type HeightSource = (col: number, row: number, time: number) => number
@@ -56,12 +67,14 @@ type FieldProps = {
   fade?: { near: number; far: number }
   autoPick: boolean
   onPick?: (pick: BarPick | null) => void
+  onSlow?: () => void
 }
 
-function Field({ cols, rows, source, radius, lift, still, palette, pointer, peak, fade, autoPick, onPick }: FieldProps) {
+function Field({ cols, rows, source, radius, lift, still, palette, pointer, peak, fade, autoPick, onPick, onSlow }: FieldProps) {
   const mesh = React.useRef<InstancedMesh>(null)
   const invalidate = useThree((state) => state.invalidate)
   const scene = useThree((state) => state.scene)
+  const gl = useThree((state) => state.gl)
 
   const [geometry, material] = React.useMemo(() => {
     const box = new BoxGeometry(SPACING * BAR_WIDTH, 1, SPACING * BAR_WIDTH)
@@ -83,6 +96,7 @@ function Field({ cols, rows, source, radius, lift, still, palette, pointer, peak
       tip: new Vector3(),
       bump: { x: 0, z: 0, target: { x: 0, z: 0 }, amount: 0, placed: false },
       auto: { on: false, next: 1.5 },
+      pace: { frames: 0, samples: [] as number[] },
     }),
     [],
   )
@@ -103,12 +117,34 @@ function Field({ cols, rows, source, radius, lift, still, palette, pointer, peak
     invalidate()
   }, [fade, invalidate, palette, scene, scratch])
 
+  React.useEffect(() => {
+    if (onSlow && usesSoftwareRenderer(gl.getContext())) onSlow()
+  }, [gl, onSlow])
+
+  React.useEffect(() => {
+    if (!still) return
+    onPick?.(null)
+    invalidate()
+  }, [invalidate, onPick, still])
+
   const center = (cols: number, index: number) => (index - (cols - 1) / 2) * SPACING
   const nearest = (cols: number, value: number) => Math.max(0, Math.min(cols - 1, Math.round(value / SPACING + (cols - 1) / 2)))
 
-  useFrame(({ camera, clock, size }) => {
+  useFrame(({ camera, clock, size }, delta) => {
     const bars = mesh.current
     if (!bars) return
+
+    if (onSlow && !still) {
+      const { pace } = scratch
+      pace.frames += 1
+      if (pace.frames > PACE_SKIP_FRAMES) pace.samples.push(delta)
+      if (pace.samples.length === PACE_SAMPLES) {
+        const median = pace.samples.toSorted((a, b) => a - b)[Math.floor(PACE_SAMPLES / 2)] ?? 0
+        if (median > SLOW_FRAME_SECONDS) onSlow()
+        scratch.pace = { frames: PACE_SKIP_FRAMES, samples: [] }
+      }
+    }
+
     const { dummy, color, ink, accent, wash, ray, ndc, floor, hit, tip, bump, auto } = scratch
     const time = still ? 0 : clock.elapsedTime
     const over = pointer.current.over && !still
@@ -205,6 +241,8 @@ type BarTerrainProps = Omit<React.ComponentProps<"div">, "children"> & {
   autoPick?: boolean
   /** Runs every frame with the lifted bar, or `null` when there isn't one. Snaps the bump to one bar. */
   onPick?: (pick: BarPick | null) => void
+  /** Holds a still frame if the device can't keep up, so the page around it stays responsive. */
+  pauseWhenSlow?: boolean
   /** Describes the data for screen readers. */
   label?: string
 }
@@ -221,6 +259,7 @@ export function BarTerrain({
   lookAt = LOOK_AT,
   autoPick = false,
   onPick,
+  pauseWhenSlow = false,
   label = "3D bar field",
   className,
   ...props
@@ -229,6 +268,8 @@ export function BarTerrain({
   const pointer = React.useRef<Pointer>({ x: 0, y: 0, over: false })
   const reduced = useReducedMotion()
   const palette = useGlPalette(host, PALETTE_TOKENS)
+  const [slow, setSlow] = React.useState(false)
+  const onSlow = React.useCallback(() => setSlow(true), [])
 
   const onPointerMove = (event: React.PointerEvent<HTMLDivElement>) => {
     const rect = event.currentTarget.getBoundingClientRect()
@@ -245,6 +286,8 @@ export function BarTerrain({
       label={label}
       camera={camera}
       lookAt={lookAt}
+      animate={!slow}
+      data-paused={slow || undefined}
       className={cn("h-64 cursor-crosshair", className)}
       onPointerMove={onPointerMove}
       onPointerLeave={() => (pointer.current.over = false)}
@@ -256,13 +299,14 @@ export function BarTerrain({
         source={source}
         radius={pointerRadius}
         lift={pointerLift}
-        still={reduced}
+        still={reduced || slow}
         palette={palette}
         pointer={pointer}
         peak={peak}
         fade={fade}
         autoPick={autoPick}
         onPick={onPick}
+        onSlow={pauseWhenSlow ? onSlow : undefined}
       />
     </GlStage>
   )

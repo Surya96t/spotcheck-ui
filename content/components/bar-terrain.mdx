@@ -46,7 +46,8 @@ const source = (col: number, row: number, time: number) =>
 
 Pass `camera` and `lookAt` for a wider view, `fade` to dissolve the far bars into the page, and
 `peak` to turn the tallest bars the accent colour. `autoPick` lifts a bar every few seconds, and
-`onPick` tells you where it is, so you can label it.
+`onPick` tells you where it is, so you can label it. `pauseWhenSlow` holds a still frame on a device
+that can't keep up, so a large field doesn't make the page around it slow to respond.
 
 ```tsx
 <BarTerrain
@@ -57,6 +58,7 @@ Pass `camera` and `lookAt` for a wider view, `fade` to dissolve the far bars int
   fade={{ near: 16, far: 52 }}
   peak={2.4}
   autoPick
+  pauseWhenSlow
   onPick={(pick) => moveLabel(pick)}
   className="absolute inset-0 h-auto"
 />

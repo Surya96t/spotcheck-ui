@@ -71,6 +71,11 @@ test.describe("landing page", () => {
     expect(copy.trim().split(/\s+/).length).toBeLessThanOrEqual(150)
   })
 
+  test("the hero holds still on a device that can't keep up", async ({ page }) => {
+    await page.goto("/")
+    await expect(page.locator("[data-paused]")).toBeAttached({ timeout: 15000 })
+  })
+
   test("has the roadmap, and no running tally", async ({ page }) => {
     await page.goto("/")
     await expect(page.getByRole("heading", { name: "What's next" })).toBeAttached()
