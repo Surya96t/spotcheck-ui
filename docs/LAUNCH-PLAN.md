@@ -162,7 +162,7 @@ Order matters. The rename comes before Depth, so new files get the right names f
 
 | # | Step | Owner |
 |---|---|---|
-| 1 | Check that `spotcheckui.com` and the social handles you want are free (domain done; handles not checked) | Surya |
+| 1 | Check that `spotcheckui.com` and the social handles you want are free (done: domain, then `@spotcheckui` on Instagram and YouTube on 2026-11-03) | Surya |
 | 2 | Optional: an hour with a trademark attorney on Spotcheck | Surya |
 | 3 | Buy `spotcheckui.com` (done on 2026-11-02, at Hostinger) | Surya |
 
@@ -221,12 +221,12 @@ Order matters. The rename comes before Depth, so new files get the right names f
 |---|---|---|
 | 27 | Draft every post | Claude |
 | 28 | Read the current self-promotion rules for r/reactjs, r/nextjs, r/webdev and r/web_design | Claude |
-| 29 | Launch reel from the real components: a 20 to 30 second vertical cut and a wide cut | Claude builds, Surya approves |
-| 30 | Soft launch on Friday: post on X with the wide cut, and share with a few developers | Surya |
+| 29 | Three vertical clips of 15 to 30 seconds from the real components, for the Shorts and the Reel. A wide cut can wait for week 2 | Claude builds, Surya approves |
+| 30 | Soft launch on Friday: 2 or 3 YouTube Shorts, 1 Instagram Reel, and direct messages or emails with the link to a few developers | Surya, from Claude's drafts |
 | 31 | Fix what they find, for about a week | Claude |
 | 32 | Show HN, and stay available to answer comments | Surya |
 | 33 | Reddit, a day or two later, with a different angle for each subreddit | Surya |
-| 34 | Post the vertical cut on Instagram Reels, TikTok and YouTube Shorts | Surya |
+| 34 | More Shorts and Reels in week 2, planned once Friday's have run | Surya |
 | 35 | List 15 to 20 creators who post about React, UI or motion design, with their public contact details | Claude |
 | 36 | A personal email to each, linking one component rather than the homepage | Claude drafts, Surya sends or approves each one |
 | 37 | Optional: Product Hunt | Surya |
@@ -234,8 +234,10 @@ Order matters. The rename comes before Depth, so new files get the right names f
 
 ## What each post says
 
-- **X, soft launch:** a short clip of `diff-review` or `stamp-approval`, one line on the idea, the link.
-  Ask for bugs, not praise.
+- **Direct messages and emails:** a few lines to each developer, the link, and one clip. Ask for
+  bugs, not praise.
+- **YouTube Shorts and the Instagram Reel:** one component per clip, no voice, a word or two on
+  screen. The link goes in the description or the bio.
 - **Show HN:** the title starts with "Show HN". Say what it is, why you built it, and how it works,
   with a link people can try with no signup. [The rules][show-hn] exclude plain landing pages, so
   lead with the live demos and a real install command. Don't ask friends to upvote.
@@ -259,13 +261,20 @@ once the first bugs are fixed, because creators and Show HN judge on the first t
 
 | Channel | What | When |
 |---|---|---|
-| X | Soft launch post with the wide cut of the reel | Friday 6 November |
+| Direct | Messages or emails with the link and a clip, to a few developers | Friday 6 November |
+| YouTube, @spotcheckui | 2 or 3 Shorts, then more in week 2 | Friday 6 November |
 | Show HN | Live demos and a real install command, not the landing page alone | Week 2 |
 | Reddit | r/reactjs, r/nextjs, r/webdev, r/web_design, each within its rules | Week 2, after Show HN |
-| Instagram, TikTok, Shorts | The vertical cut of the reel | Week 2 |
+| Instagram, @spotcheckui | 1 Reel, then more in week 2 | Friday 6 November |
 | Creators | 15 to 20 personal emails | Week 2 |
 | Search | Search Console, sitemap, a title and description on every component page, field notes | From Tuesday 3 November. Results take weeks to months |
 | Directories | shadcn directory PR at launch, 21st.dev in Phase 8 | Friday, then Phase 8 |
+
+**Accounts:** Instagram and YouTube are `@spotcheckui`, under the Mihira Studios Google account.
+Reddit and Show HN post from Surya's personal accounts, because subreddits remove brand posts.
+
+**Not planned: X or TikTok.** Dropped on 2026-11-03: X by Surya's choice, with no brand account and
+no personal post, and TikTok because it's banned in India.
 
 **Not planned: Google Ads.** The kit is free, so ads can't pay for themselves, searches like "react
 component library" are costly, and many developers block ads. Worth another look if there's ever

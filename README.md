@@ -2,6 +2,8 @@
 
 Open source React components with hard edges, real motion and 3D, built for reviewing AI work. See
 every component live at [spotcheckui.com](https://spotcheckui.com).
+Short demos go up on [Instagram](https://www.instagram.com/spotcheckui/) and
+[YouTube](https://www.youtube.com/@spotcheckui).
 
 There's no npm package. Each component installs through the shadcn CLI, which copies its source into
 your project, so the code is yours to read and change.
