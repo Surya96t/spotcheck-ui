@@ -138,20 +138,21 @@ exit check becomes "PR open", with the listing following when it merges.
 
 ## Going public
 
-| Item | State on 2026-11-02 |
+| Item | State on 2026-11-03 |
 |---|---|
-| `LICENSE` | Missing |
-| `README.md` | Missing |
-| `CREDITS.md` | Missing. List fonts (OFL-1.1), Apache-2.0 packages (`streamdown`, `ai`) and any borrowed patterns. A grep found no credit notes in the code |
+| `LICENSE` | Added: MIT, in Surya's name |
+| `README.md` | Added |
+| `CREDITS.md` | Added: the three OFL-1.1 fonts, the Apache-2.0 packages (`ai`, `streamdown`) and the MIT ones. No borrowed patterns were found |
 | Secrets | No committed env files, and no matches for common key patterns in the history. This was a pattern scan, so run gitleaks before going public |
 | Personal data | Gmail address on commits (accepted). No home paths in tracked files |
-| Working files | `reference/`, `docs/`, `TASKS.md` and `STATE.md` go public. The prototype still has one `northwind.in` mention |
-| Competitor table | "Not checked" licences for AI Elements and Tool UI need checking before any public comparison |
+| Working files | `reference/` and `docs/` go public. Praxis's `STATE.md` and `TASKS.md` stopped being tracked on 2026-11-03, so they stay local, though their history until then is public. The prototype's `northwind.in` address is now `example.com` |
+| Competitor table | The live `/compare` page makes no licence claims. Check the "Not checked" licences for AI Elements and Tool UI before adding any |
 
 ## Site gaps
 
-Checked on the live site on 2026-11-02: `robots.txt`, `sitemap.xml`, `llms.txt` and `/field-notes` all
-return 404. There's no `dashboard` component, no OG images and no analytics yet.
+Checked on the live site on 2026-11-03: `robots.txt`, `sitemap.xml`, `llms.txt` and the share card
+are live. `/field-notes` still returns 404 until the notes are written. Analytics is in the code,
+but records nothing until it's enabled in Vercel. `dashboard` moved to Phase 8.
 
 ## Steps
 
