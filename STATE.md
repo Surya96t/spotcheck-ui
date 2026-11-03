@@ -21,15 +21,15 @@ _none_
 - Device-test the two WebGL Depth pieces on Surya's iPhone and Mac Safari
 
 ## Recent decisions
-- Moved Depth ahead of public launch so v0.1 ships the full kit; order is 5 Landing, 6 Depth, 7 Public launch, 8 Ongoing
-- Chose a single live audited case file for the landing page over a grid of unrelated demos
-- Chose 'Pick any part. Look closely.' as the headline over 'Keep the books on your AI'; later kept 'Keep the books on your AI' with 'Start checking.' and 'Running tally' wording
-- Broadened positioning from AI-only to a general component kit with AI review as its strongest chapter
-- Chose 'Run a spot check' with five questions as the landing story
-- Dropped the calm minimal landing direction; kept the ruled, condensed look across Components, Docs and new pages with one shared nav and footer
-- Launch target set to Friday 2026-11-06 for the public repo and soft launch
-- Launch will not wait for the shadcn directory PR to merge; the exit check becomes PR open
-- Renames the local folder in place as the last rename step rather than copying to a new folder
-- Ships seven Depth pieces for launch (linked-bars, embedding-space, drum-picker, coverflow, fold-report, cube-tabs, tilt-card); region-globe, voice-orb and configurator held for Phase 8
+- Headline is 'Pick any part. Look closely.' over 'Keep the books on your AI', because only 10 of 61 components are AI and it states what a spot check is
+- Hero holds on a still frame on software graphics or under 15fps, because a full-width Bar Terrain delayed nav clicks past 5 seconds on slow machines and failed CI
+- Chose Spotcheck UI as the launch name over Inloop UI and Ledger UI, because a TMview search found no live US, UK or EU software mark for it
+- Surya Prakash Madichetti is the MIT copyright holder
+- spotcheckui.com is the only domain, with www 308-redirecting to it as the canonical host
+- ledger-ui-pied.vercel.app redirects to spotcheckui.com via a Vercel project-domain 308, not a next.config redirect
+- Goes public with full history and all files, because the secret scan was clean and the build record has value
+- Real device testing on Surya's iPhone and Mac Safari with a Claude-written checklist, over a paid device cloud or WebKit in CI
+- Kept the Ledger skin and ledger-table after the rename, because they describe a look and table style, not the brand
+- Two field notes for launch: why AI review needs its own components, and one build story
 
 ## Notes
