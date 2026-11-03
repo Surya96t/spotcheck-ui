@@ -860,7 +860,7 @@ function StampApproval(){
     <div className="t-h"><span className="kick">Agent request · needs approval</span><span className="kick">14:02:11</span></div>
     <div className="t-call">send_email<span>(</span></div>
     <table className="t-args"><tbody>
-      <tr><td>to</td><td>finance@northwind.in</td></tr><tr><td>subject</td><td>Q3 refund summary</td></tr><tr><td>attach</td><td>refunds-q3.csv · 41 rows</td></tr></tbody></table>
+      <tr><td>to</td><td>finance@example.com</td></tr><tr><td>subject</td><td>Q3 refund summary</td></tr><tr><td>attach</td><td>refunds-q3.csv · 41 rows</td></tr></tbody></table>
     <div className="t-call">)</div>
     ${st!=='pending'&&html`<div ref=${stamp} className=${'stamp '+st}>${st}</div>`}
   </div>

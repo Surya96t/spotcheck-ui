@@ -18,18 +18,18 @@ _none set_
 _none_
 
 ## Next actions
-_none_
+- Device-test the two WebGL Depth pieces on Surya's iPhone and Mac Safari
 
 ## Recent decisions
-- Spotcheck UI chosen as launch name over Inloop UI after a TMview search found no live US, UK or EU software mark; Ledger SAS overlap ruled out Ledger UI earlier
-- Surya Prakash Madichetti set as MIT copyright holder
-- spotcheckui.com is the only domain; it is canonical, with www 308-redirecting to it
-- ledger-ui-pied.vercel.app 308-redirects via a Vercel project-domain rule, not next.config
-- Repo goes public with full history and all files; secret scan was clean and the Gmail address on commits is accepted
+- Launch name Spotcheck UI, replacing Inloop UI after a TMview search found no live US, UK or EU software mark in the first 30 of 80 results
+- MIT copyright holder is Surya Prakash Madichetti, matching the git identity
+- spotcheckui.com is the only domain and the canonical host, with www 308-redirecting to it
+- Public repo goes out with full history and all files; the secrets scan was clean and the Gmail address on commits is accepted
 - Device testing uses Surya's iPhone and Mac Safari with a Claude-written checklist, not a paid device cloud or WebKit in CI
-- Vercel Web Analytics chosen over Plausible for launch analytics
-- Ledger skin and ledger-table kept after the rename because they describe a look, not the brand
-- Launch includes two field notes: why AI review needs its own components, and one build story
-- Launch sequence: soft launch, Show HN about a week later, then r/reactjs and r/nextjs
+- Kept the Ledger skin and ledger-table after the rename because they describe a look and table style, not the brand
+- Two launch field notes: why AI review needs its own components, and one build story
+- Launch sequence: soft launch, then Show HN about a week later, then r/reactjs and r/nextjs
+- Vercel Web Analytics over Plausible: already on the host, no cookie banner, no subscription
+- Build WebGL before CSS 3D in Depth so the riskiest work lands first and the launch can be trimmed from the cheap end
 
 ## Notes
