@@ -115,9 +115,8 @@ new site code:
 
 | Effect | Engine |
 |---|---|
-| Hero headline and intro | anime.js |
+| Hero headline and intro | CSS, so it plays before any script loads |
 | Headings, grid cells and roadmap rows arriving | anime.js |
-| Letters in "Start checking." and the wordmark | anime.js |
 | Chapter stamps | Motion |
 | Progress line and scroll-reactive ticker | Motion `scroll` |
 
@@ -131,11 +130,11 @@ it's needed, and step 6 measures the result on a real phone.
 
 **`/components`** keeps its URL and has one list only.
 
-- The rail and the table both go. The live grid stays, because seeing components work is the point.
+- A 3D band sits behind the title, using `bar-terrain`.
+- The rail and the table both go. A grid of small cards replaces them, and each card links to the
+  component's own page, where the live demo runs.
 - A sticky row of group links sits under the title, and Products menu entries jump to the same groups.
 - Groups run best first: AI, Screens, WebGL, Depth, Springs, Timelines, Motion, Core.
-- Demos load as they near the screen using the existing `WhenSeen`, so 61 live demos don't all start
-  at once.
 
 **`/components/[slug]`** keeps its content, and gains a sidebar listing only the current group, plus
 a breadcrumb. Phones get no sidebar.

@@ -8,7 +8,7 @@ import "./globals.css"
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: { default: "Spotcheck UI", template: "%s · Spotcheck UI" },
-  description: "Open source React components for checking AI work.",
+  description: "Open source React components with hard edges, real motion and 3D.",
 }
 
 // Runs before first paint, because static pages can't know the visitor's theme or skin.

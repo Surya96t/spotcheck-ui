@@ -2,41 +2,26 @@ import Link from "next/link"
 
 import { InstallCommand } from "@/components/site/install-command"
 
-const STEPS = [
-  { no: "01", text: "Run one command. It uses the shadcn CLI you already have." },
-  { no: "02", text: "The source lands in components/spotcheck, in your repo." },
-  { no: "03", text: "It's yours. Change it, cut it down, ship it." },
-]
-
-export function Finale({ count }: { count: number }) {
+export function Finale() {
   return (
     <section aria-labelledby="finale-title" className="bg-accent-ink text-on-accent border-ink @container border-b-(length:--rule)">
       <div className="landing-finale">
-        <h2 id="finale-title" className="spotcheck-display pt-12 pb-2">
-          Start checking<span>.</span>
+        <h2 id="finale-title" className="landing-mask spotcheck-display pt-10 pb-2 md:pt-13">
+          <span data-rise>
+            Start checking<span>.</span>
+          </span>
         </h2>
       </div>
-      <ol className="grid border-t-(length:--rule) border-current md:grid-cols-3">
-        {STEPS.map((step) => (
-          <li
-            key={step.no}
-            className="flex flex-col gap-1 border-b-(length:--rule) border-current px-4.5 py-3.5 md:border-r-(length:--rule) md:border-b-0 md:last:border-r-0"
-          >
-            <span className="font-(family-name:--f-mono) text-xs">{step.no}</span>
-            <span className="text-pretty">{step.text}</span>
-          </li>
-        ))}
-      </ol>
-      <div className="border-t-(length:--rule) border-current p-4.5">
-        <InstallCommand name="chat-screen" />
-        <div className="mt-4 flex flex-wrap gap-x-6 gap-y-2 font-(family-name:--f-mono) text-sm">
-          <Link href="/components" className="underline underline-offset-4">
-            Browse all {count} components
-          </Link>
-          <Link href="/docs/installation" className="underline underline-offset-4">
-            Read the install guide
-          </Link>
+      <div className="flex flex-wrap items-center gap-x-6 gap-y-3 px-4 pt-4 pb-7 md:px-8">
+        <div className="bg-paper text-ink min-w-0 flex-[1_1_520px]">
+          <InstallCommand name="chat-screen" plain />
         </div>
+        <Link href="/components" className="flex min-h-11 items-center font-(family-name:--f-mono) text-sm underline underline-offset-4">
+          Browse components
+        </Link>
+        <Link href="/docs" className="flex min-h-11 items-center font-(family-name:--f-mono) text-sm underline underline-offset-4">
+          Read the docs
+        </Link>
       </div>
     </section>
   )

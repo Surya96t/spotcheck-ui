@@ -7,7 +7,7 @@ test.describe("landing page", () => {
       await page.addInitScript((choice) => localStorage.setItem("spotcheck-skin", choice), skin)
       await page.goto("/")
       await page.waitForLoadState("networkidle")
-      await expect(page.getByRole("heading", { level: 1 })).toContainText(/keep the books/i)
+      await expect(page.getByRole("heading", { level: 1 })).toContainText(/pick any part/i)
 
       const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)
       expect(overflow).toBe(0)
@@ -28,29 +28,58 @@ test.describe("landing page", () => {
 
   test("reaches the install step without opening the catalog", async ({ page }) => {
     await page.goto("/")
+    const copy = page.getByRole("button", { name: "Copy" }).first()
     await expect(page.getByText(/npx shadcn@latest add .*chat-screen\.json/).first()).toBeVisible()
-    await expect(page.getByRole("link", { name: "Components", exact: true })).toHaveAttribute("href", "/components")
+    await expect(copy).toBeInViewport({ ratio: 1 })
+    await expect(page.getByRole("link", { name: /Browse components/ }).first()).toBeInViewport({ ratio: 1 })
   })
 
   test("the answer streams when you reach it", async ({ page }) => {
     await page.goto("/")
-    await page.getByTestId("entry-1").scrollIntoViewIfNeeded()
-    await expect(page.getByTestId("entry-1").getByTestId("stream-status")).toHaveText("done", { timeout: 15000 })
-    await expect(page.getByTestId("entry-1").locator("strong")).toHaveText("manager approval")
+    await page.getByTestId("check-4").getByTestId("stream-status").scrollIntoViewIfNeeded()
+    await expect(page.getByTestId("check-4").getByTestId("stream-status")).toHaveText("done", { timeout: 15000 })
+    await expect(page.getByTestId("check-4").locator("strong").first()).toHaveText("manager approval")
   })
 
-  test("signing closes the books and prints the receipt", async ({ page, isMobile }) => {
+  test("a chapter is stamped when you reach it", async ({ page }) => {
     await page.goto("/")
-    const entry = page.getByTestId("entry-5")
-    await entry.scrollIntoViewIfNeeded()
-    await expect(page.getByText("The receipt prints when you sign")).toBeVisible()
-    await entry.getByRole("button", { name: "Approve" }).click()
-    await expect(entry.getByText("Run R-2041")).toBeVisible({ timeout: 5000 })
-    if (!isMobile) await expect(page.getByTestId("spotcheck-state")).toHaveText("Books closed")
-    await expect(page.getByRole("complementary", { name: "Running tally" })).toContainText("0")
+    const check = page.getByTestId("check-1")
+    await expect(check.getByTestId("checked")).toHaveAttribute("data-checked", "false")
+    await check.getByRole("heading").scrollIntoViewIfNeeded()
+    await page.evaluate(() => window.scrollBy(0, 300))
+    await expect(check.getByTestId("checked")).toHaveAttribute("data-checked", "true")
+  })
 
-    await entry.getByRole("button", { name: "Reopen the file" }).click()
+  test("signing prints the receipt and stamps the last chapter", async ({ page }) => {
+    await page.goto("/")
+    const check = page.getByTestId("check-5")
+    await check.scrollIntoViewIfNeeded()
     await expect(page.getByText("The receipt prints when you sign")).toBeVisible()
+    await check.getByRole("button", { name: "Approve" }).click()
+    await expect(check.getByText("5 of 5")).toBeVisible({ timeout: 5000 })
+    await expect(check.getByTestId("checked")).toHaveAttribute("data-checked", "true")
+
+    await check.getByRole("button", { name: "Reopen the file" }).click()
+    await expect(page.getByText("The receipt prints when you sign")).toBeVisible()
+  })
+
+  test("keeps to the word limit", async ({ page }) => {
+    await page.goto("/")
+    const copy = await page.evaluate(() =>
+      [...document.querySelectorAll("main h1, main h2, [data-copy]")].map((element) => element.textContent).join(" "),
+    )
+    expect(copy.trim().split(/\s+/).length).toBeLessThanOrEqual(150)
+  })
+
+  test("the hero holds still on a device that can't keep up", async ({ page }) => {
+    await page.goto("/")
+    await expect(page.locator("[data-paused]")).toBeAttached({ timeout: 15000 })
+  })
+
+  test("has the roadmap, and no running tally", async ({ page }) => {
+    await page.goto("/")
+    await expect(page.getByRole("heading", { name: "What's next" })).toBeAttached()
+    await expect(page.getByText(/running tally/i)).toHaveCount(0)
   })
 
   test("a skin sheet switches the whole page", async ({ page }) => {
@@ -68,10 +97,19 @@ test.describe("landing page", () => {
     expect(await display("Folio")).toContain("Instrument Serif")
   })
 
-  test("passes axe", async ({ page }) => {
-    await page.goto("/")
-    await page.waitForLoadState("networkidle")
-    const results = await new AxeBuilder({ page }).analyze()
-    expect(results.violations.map((violation) => violation.id)).toEqual([])
-  })
+  for (const theme of ["light", "dark"]) {
+    test(`passes axe in ${theme}, once the hero has finished arriving`, async ({ page }) => {
+      await page.addInitScript((choice) => localStorage.setItem("spotcheck-theme", choice), theme)
+      await page.goto("/")
+      await page.waitForLoadState("networkidle")
+      // Text that's still fading in has a lower contrast than it settles at.
+      await page.evaluate(() =>
+        Promise.all(
+          [...document.querySelectorAll(".landing-enter")].flatMap((element) => element.getAnimations().map((animation) => animation.finished)),
+        ),
+      )
+      const results = await new AxeBuilder({ page }).analyze()
+      expect(results.violations.map((violation) => violation.id)).toEqual([])
+    })
+  }
 })

@@ -2,7 +2,7 @@
 project: ledger-ui
 focus: ''
 blockers: []
-synced: '2026-11-02'
+synced: '2026-11-03'
 kind: frontend
 tags:
 - nextjs
@@ -21,15 +21,15 @@ _none_
 _none_
 
 ## Recent decisions
-- moved Depth ahead of the public launch so v0.1 ships the full kit; order is now 5 Landing, 6 Depth, 7 Public launch, 8 Ongoing
-- chose a single live case file for the landing page over a grid of unrelated demos
-- chose Spotcheck UI as the launch name over Inloop UI after a TMview search found no live US, UK or EU software mark
-- chose Surya Prakash Madichetti as MIT copyright holder
-- chose spotcheckui.com as the only domain
-- chose to publish with full history and all files after the secrets scan found nothing
-- chose real device testing on Surya's iPhone and Mac Safari with a Claude-written checklist over a paid device cloud or WebKit in CI
-- kept the Ledger skin and ledger-table class names after the rename
-- kept 'Keep the books on your AI' as the headline and chose 'Start checking.' and 'Running tally' as landing wording
-- chose seven Depth pieces for launch over all ten; region-globe, voice-orb and configurator held for Phase 8
+- Spotcheck UI chosen as launch name over Inloop UI after a TMview search found no live US, UK or EU software mark; Ledger SAS overlap ruled out Ledger UI earlier
+- Surya Prakash Madichetti set as MIT copyright holder
+- spotcheckui.com is the only domain; it is canonical, with www 308-redirecting to it
+- ledger-ui-pied.vercel.app 308-redirects via a Vercel project-domain rule, not next.config
+- Repo goes public with full history and all files; secret scan was clean and the Gmail address on commits is accepted
+- Device testing uses Surya's iPhone and Mac Safari with a Claude-written checklist, not a paid device cloud or WebKit in CI
+- Vercel Web Analytics chosen over Plausible for launch analytics
+- Ledger skin and ledger-table kept after the rename because they describe a look, not the brand
+- Launch includes two field notes: why AI review needs its own components, and one build story
+- Launch sequence: soft launch, Show HN about a week later, then r/reactjs and r/nextjs
 
 ## Notes

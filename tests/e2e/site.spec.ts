@@ -29,6 +29,12 @@ async function expectClean(page: Page) {
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)
   expect(overflow).toBeLessThanOrEqual(0)
 
+  // Text that's still fading in has a lower contrast than it settles at.
+  await page.evaluate(() =>
+    Promise.all(
+      [...document.querySelectorAll(".landing-enter")].flatMap((element) => element.getAnimations().map((animation) => animation.finished)),
+    ),
+  )
   const { violations } = await new AxeBuilder({ page }).analyze()
   const serious = violations.filter((v) => v.impact === "serious" || v.impact === "critical")
   expect(serious.map((v) => `${v.id}: ${v.nodes.map((n) => n.target).join(" | ")}`)).toEqual([])
