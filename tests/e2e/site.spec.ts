@@ -264,3 +264,34 @@ test("unknown pages get the styled 404", async ({ page }) => {
   await page.goto("/components/nope")
   await expect(page.getByRole("heading", { name: "Not on file" })).toBeVisible()
 })
+
+test.describe("search engines and share cards", () => {
+  test("robots.txt points at the sitemap", async ({ request }) => {
+    const robots = await (await request.get("/robots.txt")).text()
+    expect(robots).toContain("Allow: /")
+    expect(robots).toMatch(/Sitemap: .+\/sitemap\.xml/)
+  })
+
+  test("the sitemap lists every page", async ({ request }) => {
+    const sitemap = await (await request.get("/sitemap.xml")).text()
+    const paths = [...sitemap.matchAll(/<loc>https?:\/\/[^/<]+(\/[^<]*)?<\/loc>/g)].map((match) => match[1] ?? "/")
+    expect(paths.toSorted()).toEqual(ROUTES.toSorted())
+  })
+
+  test("llms.txt links every component's source", async ({ request }) => {
+    const response = await request.get("/llms.txt")
+    expect(response.headers()["content-type"]).toContain("text/plain")
+    const text = await response.text()
+    expect(text.startsWith("# Spotcheck UI\n")).toBe(true)
+    for (const slug of slugs("content/components")) expect(text).toContain(`/r/${slug}.json)`)
+  })
+
+  test("pages carry a large share card that loads", async ({ page, request }) => {
+    await page.goto("/components/roll-number")
+    await expect(page.locator('meta[property="og:title"]')).toHaveAttribute("content", "Roll Number · Spotcheck UI")
+    await expect(page.locator('meta[name="twitter:card"]')).toHaveAttribute("content", "summary_large_image")
+    const image = await page.locator('meta[property="og:image"]').getAttribute("content")
+    const response = await request.get(new URL(image ?? "", page.url()).pathname)
+    expect(response.headers()["content-type"]).toBe("image/jpeg")
+  })
+})

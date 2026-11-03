@@ -1,3 +1,4 @@
+import { Analytics } from "@vercel/analytics/next"
 import type { Metadata } from "next"
 import type { ReactNode } from "react"
 
@@ -9,6 +10,8 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: { default: "Spotcheck UI", template: "%s · Spotcheck UI" },
   description: "Open source React components with hard edges, real motion and 3D.",
+  openGraph: { type: "website", siteName: "Spotcheck UI" },
+  twitter: { card: "summary_large_image" },
 }
 
 // Runs before first paint, because static pages can't know the visitor's theme or skin.
@@ -28,6 +31,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           Skip to content
         </a>
         {children}
+        {/* Its script is only served on Vercel, and would 404 in local and CI builds. */}
+        {process.env.VERCEL && <Analytics />}
       </body>
     </html>
   )
