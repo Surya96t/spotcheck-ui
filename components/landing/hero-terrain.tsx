@@ -75,7 +75,7 @@ export function HeroTerrain({ parts, label }: { parts?: TerrainPart[]; label: st
       />
       {parts && (
         <div ref={tag} aria-hidden className="pointer-events-none absolute top-0 left-0 opacity-0 will-change-transform">
-          <div className="border-ink bg-paper absolute bottom-0 left-0 -translate-x-1/2 -translate-y-5.5 border-(length:--rule) px-2.5 py-1.5 font-(family-name:--f-mono) text-[12.5px] whitespace-nowrap shadow-[4px_4px_0_var(--accent-ink)]">
+          <div data-pick-label className="border-ink bg-paper absolute bottom-0 left-0 -translate-x-1/2 -translate-y-5.5 border-(length:--rule) px-2.5 py-1.5 font-(family-name:--f-mono) text-[12.5px] whitespace-nowrap shadow-[4px_4px_0_var(--accent-ink)]">
             <span ref={name} className="font-semibold" />
             <span ref={engine} className="text-mute ml-2" />
           </div>

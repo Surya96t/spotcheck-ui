@@ -3,7 +3,8 @@
 Written 2026-11-02. This is the plan for the public launch, which is Phase 7 in the current order:
 5 Landing page, 6 Depth, 7 Public launch, 8 Ongoing.
 
-Nothing here has happened yet: no domain is bought, the repo is still private, and nothing is posted.
+On 2026-11-03 the name, domain, rename, Depth and redesign are done and live at `spotcheckui.com`.
+The repo is still private, and nothing is posted.
 Where this note and [PLAN.md](PLAN.md) disagree about the launch, this note wins.
 
 ## Decisions
@@ -180,10 +181,11 @@ Order matters. The rename comes before Depth, so new files get the right names f
 | # | Step | Owner |
 |---|---|---|
 | 10 | Phase 6, Depth, to the scope in [DEPTH-PLAN.md](DEPTH-PLAN.md) (done on 2026-11-02) | Claude |
-| 11 | `dashboard` component | Claude |
+| 11 | `dashboard` component. Moved to Phase 8 on 2026-11-03, so the time goes to device fixes | Claude |
 | 12 | Field note: why AI review needs its own components | Claude drafts, Surya edits |
 | 13 | Field note: one build story, such as streaming without `ai` on the client | Claude drafts, Surya edits |
 | 14 | `/field-notes` route, `robots.txt`, `sitemap.xml`, `llms.txt`, OG images | Claude |
+| 14a | Google Search Console: verify the domain with a DNS TXT record, then submit the sitemap | Surya signs in, Claude shows the DNS change first |
 | 15 | Vercel Web Analytics | Claude builds, Surya enables it in Vercel |
 
 ### 4. Prepare the repo
@@ -198,7 +200,7 @@ Order matters. The rename comes before Depth, so new files get the right names f
 
 | # | Step | Owner |
 |---|---|---|
-| 19 | Write the device checklist: touch drag, swipe, sheets, WebGL, Safari fonts, reduced motion, plus `linked-bars`, `embedding-space`, the `drum-picker` gutter, the `coverflow` flick and the CSS 3D pieces in Safari | Claude |
+| 19 | Write the device checklist. Done on 2026-11-03 in [DEVICE-CHECKLIST.md](DEVICE-CHECKLIST.md) | Claude |
 | 20 | Run it on an iPhone and Mac Safari | Surya |
 | 21 | Fix what's found and re-check | Claude, then Surya |
 | 22 | Compare Motion 14 springs with the prototype, which is still unverified | Claude |
@@ -217,13 +219,17 @@ Order matters. The rename comes before Depth, so new files get the right names f
 | # | Step | Owner |
 |---|---|---|
 | 27 | Draft every post | Claude |
-| 28 | Read each subreddit's current self-promotion rules, which aren't checked yet | Claude |
-| 29 | Soft launch: post on X and share with a few developers | Surya |
-| 30 | Fix what they find, for about a week | Claude |
-| 31 | Show HN, and stay available to answer comments | Surya |
-| 32 | r/reactjs and r/nextjs, a day or two later | Surya |
-| 33 | Optional: Product Hunt | Surya |
-| 34 | Close `4botz9` and read analytics to plan Phase 8 | Claude |
+| 28 | Read the current self-promotion rules for r/reactjs, r/nextjs, r/webdev and r/web_design | Claude |
+| 29 | Launch reel from the real components: a 20 to 30 second vertical cut and a wide cut | Claude builds, Surya approves |
+| 30 | Soft launch on Friday: post on X with the wide cut, and share with a few developers | Surya |
+| 31 | Fix what they find, for about a week | Claude |
+| 32 | Show HN, and stay available to answer comments | Surya |
+| 33 | Reddit, a day or two later, with a different angle for each subreddit | Surya |
+| 34 | Post the vertical cut on Instagram Reels, TikTok and YouTube Shorts | Surya |
+| 35 | List 15 to 20 creators who post about React, UI or motion design, with their public contact details | Claude |
+| 36 | A personal email to each, linking one component rather than the homepage | Claude drafts, Surya sends or approves each one |
+| 37 | Optional: Product Hunt | Surya |
+| 38 | Close `4botz9` and read analytics to plan Phase 8 | Claude |
 
 ## What each post says
 
@@ -235,11 +241,34 @@ Order matters. The rename comes before Depth, so new files get the right names f
 - **r/reactjs:** the technical angle, which is the shadcn registry, no npm package, and the source
   in your own project. Link the build story.
 - **r/nextjs:** server and client boundaries, and the AI SDK stream demo with no API key.
+- **r/webdev and r/web_design:** the look and the motion, with the reel.
+- **Instagram reel:** the motion with no voice, a word or two on screen, and the link in the bio.
+- **Creator email:** a few lines, naming the post of theirs it relates to and one component they
+  could try. No template blast, and no paid ask.
 - **Product Hunt:** the visual version, with the review components first.
 
 All posts lead with reviewing and auditing AI work, not chat parts, where Vercel's AI Elements is
 the main rival. Mention honest limits, such as Safari findings. The bookkeeping look is the design
 hook, so the rename doesn't change that.
+
+## Marketing
+
+Added on 2026-11-03. Launch week is the soft launch. The wider push is week 2, 9 to 13 November,
+once the first bugs are fixed, because creators and Show HN judge on the first try.
+
+| Channel | What | When |
+|---|---|---|
+| X | Soft launch post with the wide cut of the reel | Friday 6 November |
+| Show HN | Live demos and a real install command, not the landing page alone | Week 2 |
+| Reddit | r/reactjs, r/nextjs, r/webdev, r/web_design, each within its rules | Week 2, after Show HN |
+| Instagram, TikTok, Shorts | The vertical cut of the reel | Week 2 |
+| Creators | 15 to 20 personal emails | Week 2 |
+| Search | Search Console, sitemap, a title and description on every component page, field notes | From Tuesday 3 November. Results take weeks to months |
+| Directories | shadcn directory PR at launch, 21st.dev in Phase 8 | Friday, then Phase 8 |
+
+**Not planned: Google Ads.** The kit is free, so ads can't pay for themselves, searches like "react
+component library" are costly, and many developers block ads. Worth another look if there's ever
+a paid product.
 
 ## Open questions
 
