@@ -21,15 +21,15 @@ _none_
 _none_
 
 ## Recent decisions
-- kept 'Start checking.' and 'Running tally' as landing wording; headline changed to 'Pick any part. Look closely.' because only 10 of 61 components are AI
-- chose seven Depth pieces for launch and held region-globe, voice-orb and configurator for Phase 8
-- build WebGL before CSS 3D in Depth so the riskiest work lands first and launch can be trimmed from the cheap end
-- embedding-space takes positions, neighbours and scores from the app rather than computing embeddings
-- embedding-space camera pulled back to z=16 and query marker uses the ink token
-- drum-picker keeps touch-action none on the wheel only, with a 390px gutter; rows fade out by the third row
-- linked-bars uses a row-header button plus hover, with focus highlight only on :focus-visible
-- tilt-card flattens under (hover: hover) and (pointer: fine) so layers sit on the surface on phones
-- cube-tabs takes a faces tuple of exactly four instead of children
-- one --highlight token shared by all three skins, light-dark only
+- Spotcheck UI chosen as launch name over Inloop UI after a TMview search found no live US, UK or EU software mark; Ledger SAS overlap ruled out Ledger UI earlier
+- Surya Prakash Madichetti set as MIT copyright holder
+- spotcheckui.com is the only domain; it is canonical, with www 308-redirecting to it
+- ledger-ui-pied.vercel.app 308-redirects via a Vercel project-domain rule, not next.config
+- Repo goes public with full history and all files; secret scan was clean and the Gmail address on commits is accepted
+- Device testing uses Surya's iPhone and Mac Safari with a Claude-written checklist, not a paid device cloud or WebKit in CI
+- Vercel Web Analytics chosen over Plausible for launch analytics
+- Ledger skin and ledger-table kept after the rename because they describe a look, not the brand
+- Launch includes two field notes: why AI review needs its own components, and one build story
+- Launch sequence: soft launch, Show HN about a week later, then r/reactjs and r/nextjs
 
 ## Notes
