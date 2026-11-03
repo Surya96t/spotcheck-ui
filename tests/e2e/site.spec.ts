@@ -294,4 +294,13 @@ test.describe("search engines and share cards", () => {
     const response = await request.get(new URL(image ?? "", page.url()).pathname)
     expect(response.headers()["content-type"]).toBe("image/jpeg")
   })
+
+  test("the tab icon and the iPhone home screen icon load", async ({ page, request }) => {
+    await page.goto("/")
+    for (const [rel, type] of [["icon", "image/svg+xml"], ["apple-touch-icon", "image/png"]] as const) {
+      const href = await page.locator(`link[rel="${rel}"]`).first().getAttribute("href")
+      const response = await request.get(new URL(href ?? "", page.url()).pathname)
+      expect(response.headers()["content-type"]).toBe(type)
+    }
+  })
 })
