@@ -2,13 +2,20 @@ import Link from "next/link"
 
 import { InstallCommand } from "@/components/site/install-command"
 
+const FINALE = "Start checking."
+
 export function Finale() {
   return (
     <section aria-labelledby="finale-title" className="bg-accent-ink text-on-accent border-ink @container border-b-(length:--rule)">
       <div className="landing-finale">
-        <h2 id="finale-title" className="landing-mask spotcheck-display pt-10 pb-2 md:pt-13">
-          <span data-rise>
-            Start checking<span>.</span>
+        <h2 id="finale-title" aria-label={FINALE} className="landing-mask spotcheck-display pt-10 pb-2 md:pt-13">
+          {/* Each letter rises in turn, so the heading is named once instead of letter by letter. */}
+          <span data-letters aria-hidden>
+            {[...FINALE].map((letter, index) => (
+              <span key={index} data-letter className="inline-block whitespace-pre">
+                {letter}
+              </span>
+            ))}
           </span>
         </h2>
       </div>
