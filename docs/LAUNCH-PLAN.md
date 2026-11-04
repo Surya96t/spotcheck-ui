@@ -143,7 +143,7 @@ exit check becomes "PR open", with the listing following when it merges.
 | `LICENSE` | Added: MIT, in Surya's name |
 | `README.md` | Added |
 | `CREDITS.md` | Added: the three OFL-1.1 fonts, the Apache-2.0 packages (`ai`, `streamdown`) and the MIT ones. No borrowed patterns were found |
-| Secrets | No committed env files, and no matches for common key patterns in the history. This was a pattern scan, so run gitleaks before going public |
+| Secrets | No committed env files, and no matches for common key patterns in the history. gitleaks scanned the full history on 2026-11-03 and found no leaks |
 | Personal data | Gmail address on commits (accepted). No home paths in tracked files |
 | Working files | `reference/` and `docs/` go public. Praxis's `STATE.md` and `TASKS.md` stopped being tracked on 2026-11-03, so they stay local, though their history until then is public. The prototype's `northwind.in` address is now `example.com` |
 | Competitor table | The live `/compare` page makes no licence claims. Check the "Not checked" licences for AI Elements and Tool UI before adding any |
@@ -151,7 +151,7 @@ exit check becomes "PR open", with the listing following when it merges.
 ## Site gaps
 
 Checked on the live site on 2026-11-03: `robots.txt`, `sitemap.xml`, `llms.txt` and the share card
-are live. `/field-notes` still returns 404 until the notes are written. Analytics is in the code,
+are live. `/field-notes` lists the two notes from 2026-11-04, linked from the footer. Analytics is in the code,
 but records nothing until it's enabled in Vercel. `dashboard` moved to Phase 8.
 
 ## Steps
@@ -195,7 +195,7 @@ Order matters. The rename comes before Depth, so new files get the right names f
 |---|---|---|
 | 16 | `LICENSE`, `README.md`, `CREDITS.md`, and `northwind.in` replaced | Claude |
 | 17 | Check the "Not checked" licences | Claude |
-| 18 | Run gitleaks across the full history | Claude |
+| 18 | Run gitleaks across the full history (done on 2026-11-03: no leaks) | Claude |
 
 ### 5. Test
 
@@ -291,7 +291,7 @@ a paid product.
 5. **Does the landing page still say enough once "ledger" comes out?** Owner: Surya and the landing
    page session.
 6. **Are the social handles free?** Not checked. Owner: Surya.
-7. **What version does launch carry?** PLAN.md said v0.1 before Depth moved ahead. Owner: Surya.
+7. **What version does launch carry?** Answered on 2026-11-04: v0.1, as the footer already says.
 
 [wipo-2025]: https://www.wipo.int/amc/en/domains/decisions/pdf/2025/d2025-0472.pdf
 [wipo-ph]: https://www.wipo.int/amc/en/domains/search/text.jsp?case=DPH2024-0004
