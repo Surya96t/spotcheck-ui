@@ -50,13 +50,16 @@ test.describe("landing page", () => {
     await expect(check.getByTestId("checked")).toHaveAttribute("data-checked", "true")
   })
 
-  test("signing prints the receipt and stamps the last chapter", async ({ page }) => {
+  test("signing with nothing tried prints five picks and stamps the last chapter", async ({ page }) => {
     await page.goto("/")
     const check = page.getByTestId("check-5")
     await check.scrollIntoViewIfNeeded()
     await expect(page.getByText("The receipt prints when you sign")).toBeVisible()
+    await expect(check.getByText("Adds 5 components to your project.")).toBeVisible()
     await check.getByRole("button", { name: "Approve" }).click()
-    await expect(check.getByText("5 of 5")).toBeVisible({ timeout: 5000 })
+    const receipt = check.getByTestId("tried-receipt")
+    await expect(receipt).toContainText("nothing tried yet", { timeout: 5000 })
+    await expect(receipt).toContainText("0 tried")
     await expect(check.getByTestId("checked")).toHaveAttribute("data-checked", "true")
 
     await check.getByRole("button", { name: "Reopen the file" }).click()
@@ -85,6 +88,50 @@ test.describe("landing page", () => {
       hidden: [...document.querySelectorAll("[data-cells] > *")].filter((element) => getComputedStyle(element).opacity === "0").length,
     }))
     expect(state).toEqual({ moved: 0, hidden: 0 })
+  })
+
+  test("the receipt lists the parts you tried, with their install commands", async ({ page }) => {
+    await page.goto("/")
+    for (const slug of ["diff-review", "detent-slider"]) {
+      const part = page.locator(`[data-tried="${slug}"]`)
+      await part.scrollIntoViewIfNeeded()
+      await part.click({ position: { x: 8, y: 8 } })
+    }
+
+    const check = page.getByTestId("check-5")
+    await check.scrollIntoViewIfNeeded()
+    await expect(check.getByText("Adds the 2 parts you tried to your project.")).toBeVisible()
+    await check.getByRole("button", { name: "Approve" }).click()
+
+    const receipt = check.getByTestId("tried-receipt")
+    await expect(receipt).toContainText("2 parts tried", { timeout: 5000 })
+    // Page order, not the order they were tried in.
+    await expect(receipt.locator("li").first()).toContainText("Detent Slider")
+    await expect(receipt.locator("li").nth(1)).toContainText("Diff Review")
+    await expect(receipt.locator("code").first()).toHaveText(/^npx shadcn@latest add \S+\/r\/detent-slider\.json$/)
+    await expect(check.getByRole("button", { name: "Copy all 2 as one command" })).toBeVisible()
+  })
+
+  test("a part that plays on its own counts only when you press its button", async ({ page }) => {
+    await page.goto("/")
+    const race = page.locator('[data-tried="model-race"]')
+    await race.scrollIntoViewIfNeeded()
+    await race.click({ position: { x: 8, y: 60 } })
+    const check = page.getByTestId("check-5")
+    await check.scrollIntoViewIfNeeded()
+    await expect(check.getByText("Adds 5 components to your project.")).toBeVisible()
+  })
+
+  test("never scrolls sideways on a phone, all the way down", async ({ page, isMobile }) => {
+    test.skip(!isMobile, "Phones only")
+    await page.goto("/")
+    const height = await page.evaluate(() => document.documentElement.scrollHeight)
+    for (let top = 0; top < height; top += 500) {
+      await page.mouse.wheel(0, 500)
+      await page.waitForTimeout(120)
+      const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)
+      expect(overflow, `at ${top}px`).toBeLessThanOrEqual(0)
+    }
   })
 
   test("keeps to the word limit", async ({ page }) => {
