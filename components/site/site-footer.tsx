@@ -14,6 +14,7 @@ const COLUMNS = [
     links: [
       { label: "Roadmap", href: "/roadmap" },
       { label: "Compare", href: "/compare" },
+      { label: "Field notes", href: "/field-notes" },
     ],
   },
   {
@@ -24,6 +25,11 @@ const COLUMNS = [
     ],
   },
   { title: "Support", links: [{ label: "Get help", href: "/support" }] },
+]
+
+const FOLLOW = [
+  { label: "Instagram", href: "https://www.instagram.com/spotcheckui/" },
+  { label: "YouTube", href: "https://www.youtube.com/@spotcheckui" },
 ]
 
 export function SiteFooter() {
@@ -41,6 +47,14 @@ export function SiteFooter() {
             ))}
           </div>
         ))}
+        <div className="flex-[1_1_130px]">
+          <h2 className="spotcheck-label mb-2">Follow</h2>
+          {FOLLOW.map((link) => (
+            <a key={link.href} href={link.href} rel="me" className="hover:text-accent-ink block py-1">
+              {link.label} <span aria-hidden>↗</span>
+            </a>
+          ))}
+        </div>
       </div>
       <div aria-hidden className="landing-wordmark spotcheck-display border-ink @container overflow-hidden border-t-(length:--rule)">
         <span>

@@ -1,0 +1,71 @@
+---
+title: Why AI review needs its own components
+description: Chat parts help people talk to a model. Review parts help them decide whether to trust what it did.
+date: 2026-11-06
+order: 1
+---
+
+Most AI component kits are chat kits. They give you message bubbles, a prompt box, a reasoning
+panel and a list of sources. That makes sense, because chat is where most AI products started, and
+Vercel's AI Elements covers it well. When I looked through its 49 component files, nearly all of
+them were about the conversation.
+
+The conversation isn't where the risk is, though. The risk comes after the answer, when someone
+has to decide whether to rely on it. Did the agent change the right file? Which tool call failed?
+Was the cheaper model good enough? Can I sign this off and move on?
+
+Those are review questions, and they don't fit in a chat log.
+
+## Review has its own shapes
+
+Each review question has a different shape, and a message bubble fits none of them.
+
+- **An edit needs a decision per change.** An agent that touches four places in a file might be
+  right about three of them. [Diff Review](/components/diff-review) takes each hunk on its own,
+  with accept, reject and undo.
+- **A run is a tree on a clock.** An agent plans, retrieves, calls tools and answers, often in
+  parallel. A chat log flattens that into a list, so the slow step and the failed call disappear.
+  [Trace Waterfall](/components/trace-waterfall) puts every span on one timeline, and
+  [Agent Trace](/components/agent-trace) shows each tool call as a row you can open.
+- **Comparing models is a grid.** One prompt across three models is a race, and many prompts across
+  many models is a table. [Model Race](/components/model-race) and
+  [Eval Matrix](/components/eval-matrix) show both.
+- **Grading is a queue.** Reading a hundred answers one by one is tiring, so
+  [Swipe Review](/components/swipe-review) puts them in a stack you can clear with a flick.
+- **Sign-off is an act.** Approving a refund or a deploy shouldn't feel like dismissing a toast.
+  [Stamp Approval](/components/stamp-approval) asks for a press and hold, and the decision lands as
+  a stamp.
+
+## What makes a review component different
+
+While building these, I kept coming back to the same few rules.
+
+1. **Show the evidence beside the claim.** [Stream Response](/components/stream-response) puts
+   citation numbers inline and the sources underneath, so checking a claim is one glance away.
+2. **Make failure loud.** A failed tool call is red, at its place on the timeline, not buried in a
+   log.
+3. **Match the effort to the risk.** A low-risk change can take a click. A risky one asks you to
+   hold the button, and letting go early cancels it.
+4. **Leave a record.** [Run Receipt](/components/run-receipt) prints what a run cost in tokens,
+   time and tools, so there's something to point at later.
+5. **Work at the pace of a decision.** A screen reader hears one finished sentence at a time, never
+   a stream of tokens, because announcing every token makes it unusable.
+
+None of this is hard to build once you decide it matters. The point is to decide it up front,
+rather than adding review on top of a chat UI later.
+
+## Why components and not an app
+
+Review happens inside your product, next to your data and your users. A hosted review tool can't
+see that, and a package you can't edit won't match it. Spotcheck components install through the
+shadcn CLI, which copies the source into your project, so you can change any of it.
+
+<InstallCommand name="diff-review" />
+
+## What's not done
+
+[Surya: add honest limits here, such as what the iPhone and Safari check found on Thursday, and
+which review parts are still missing.]
+
+The fastest way to see the idea is the [spot check on the home page](/#spot-check): five questions,
+with the real components to try on each.

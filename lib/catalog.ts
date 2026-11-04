@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs"
 
-import { components, guides } from "@/.source/server"
+import { components, fieldNotes, guides } from "@/.source/server"
 import { loader } from "fumadocs-core/source"
 
 export const GROUPS = [
@@ -16,6 +16,7 @@ export const GROUPS = [
 
 export const componentSource = loader({ baseUrl: "/components", source: components.toFumadocsSource() })
 export const guideSource = loader({ baseUrl: "/docs", source: guides.toFumadocsSource() })
+export const fieldNoteSource = loader({ baseUrl: "/field-notes", source: fieldNotes.toFumadocsSource() })
 
 const groupOrder = (id: string) => GROUPS.findIndex((group) => group.id === id)
 
@@ -40,6 +41,17 @@ export function getGuides() {
       page,
       slug: page.slugs[0] ?? "",
       no: `D-${String(index + 1).padStart(2, "0")}`,
+    }))
+}
+
+export function getFieldNotes() {
+  return fieldNoteSource
+    .getPages()
+    .toSorted((a, b) => a.data.order - b.data.order)
+    .map((page, index) => ({
+      page,
+      slug: page.slugs[0] ?? "",
+      no: `F-${String(index + 1).padStart(2, "0")}`,
     }))
 }
 

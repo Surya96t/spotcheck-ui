@@ -1,4 +1,4 @@
-import { GROUPS, getComponents, getGuides } from "@/lib/catalog"
+import { GROUPS, getComponents, getFieldNotes, getGuides } from "@/lib/catalog"
 import { installCommand, siteUrl } from "@/lib/site"
 
 export const dynamic = "force-static"
@@ -18,6 +18,10 @@ export function GET() {
     "## Docs",
     "",
     ...getGuides().map(({ slug, page }) => `- [${page.data.title}](${siteUrl}/docs/${slug}): ${page.data.description}`),
+    "",
+    "## Field notes",
+    "",
+    ...getFieldNotes().map(({ slug, page }) => `- [${page.data.title}](${siteUrl}/field-notes/${slug}): ${page.data.description}`),
     ...GROUPS.flatMap((group) => [
       "",
       `## ${group.name}`,

@@ -1,0 +1,86 @@
+---
+title: Reading an AI SDK stream without the SDK
+description: How use-stream reads the AI SDK's message stream in about 130 lines, and the test that keeps it honest.
+date: 2026-11-06
+order: 2
+---
+
+[Stream Response](/components/stream-response) shows an answer as it arrives, with citations and a
+stop button. The usual way to feed it is the AI SDK's React hooks. I wanted it to work without
+them, for two reasons.
+
+- **Installing a component shouldn't add a runtime.** Someone who adds one streaming panel
+  shouldn't also take on a chat state library they didn't choose.
+- **Not everyone streams from the AI SDK.** Some people have their own server that sends plain
+  text. The component should work with both.
+
+So Spotcheck has its own hook, `use-stream`, and it's about 130 lines with no dependencies.
+
+## What the stream looks like
+
+On the server, the AI SDK's `createUIMessageStreamResponse` sends Server-Sent Events. That's a plain
+HTTP response that stays open, where each event is a `data:` line followed by a blank line. Each
+event holds one JSON part:
+
+```json
+{ "type": "text-delta", "id": "answer", "delta": "Refunds " }
+```
+
+There are parts for text, sources, tool calls and errors, and the stream ends with `[DONE]`. The
+response also carries an `x-vercel-ai-ui-message-stream` header, which is how the hook tells an AI
+SDK stream from a plain one.
+
+## Three small jobs
+
+The hook does three things.
+
+1. **Read the body as it arrives.** It posts to the endpoint, then reads the response through a
+   `TextDecoderStream`, so each chunk arrives as text.
+2. **Split it into events.** A chunk can end halfway through an event, so the splitter returns the
+   finished events and keeps the rest for the next chunk:
+
+```ts
+export function readSseEvents(buffer: string) {
+  const blocks = buffer.split(/\r?\n\r?\n/)
+  const rest = blocks.pop() ?? ""
+  const events = blocks.flatMap((block) => {
+    const data = block
+      .split(/\r?\n/)
+      .filter((line) => line.startsWith("data:"))
+      .map((line) => line.slice(5).replace(/^ /, ""))
+    return data.length > 0 ? [data.join("\n")] : []
+  })
+  return { events, rest }
+}
+```
+
+3. **Apply each part to the state.** Text deltas add to the text, sources add to the source list,
+   and tool parts update their tool by its id. Any part it doesn't know is ignored, so a new part
+   type in a later AI SDK release doesn't break the page.
+
+Without the AI SDK header, every `data:` line is just more text, so any server that sends plain
+Server-Sent Events works too.
+
+Stop and regenerate use an `AbortController`. A stopped stream ends quietly instead of showing an
+error, because stopping is something you chose.
+
+## Keeping it honest
+
+The risk with parsing someone else's format is that it changes. To catch that, the unit tests run
+the hook on output from the real `ai` package, not on a hand-written copy of it. The site itself
+depends on `ai` at an exact version, so an upgrade that changes the format fails the tests before
+it reaches anyone's project.
+
+The same package powers the demo. `/api/demo/chat` builds a real AI SDK stream on the server with
+scripted text, one word every 22 milliseconds. The answer on the home page is a real stream, but
+it needs no model and no API key. It's also the only server code in the project.
+
+## What's left
+
+The hook reads text, sources and tool calls. Reasoning, files and custom data parts are ignored for
+now, which is fine for Stream Response but not for every app. If you need them, the parser is one
+`switch` in your own copy of the file.
+
+<InstallCommand name="stream-response" />
+
+[Surya: add a line on what surprised you while building this, if anything did.]

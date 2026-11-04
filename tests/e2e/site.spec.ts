@@ -12,8 +12,10 @@ const ROUTES = [
   "/roadmap",
   "/compare",
   "/support",
+  "/field-notes",
   ...slugs("content/components").map((slug) => `/components/${slug}`),
   ...slugs("content/docs").map((slug) => `/docs/${slug}`),
+  ...slugs("content/field-notes").map((slug) => `/field-notes/${slug}`),
 ]
 
 function watchErrors(page: Page) {
@@ -99,7 +101,7 @@ test("install command copies", async ({ page, context, browserName }) => {
 })
 
 test.describe("site structure", () => {
-  const PAGES = ["/", "/components", "/components/diff-review", "/docs", "/docs/theming", "/roadmap", "/compare", "/support"]
+  const PAGES = ["/", "/components", "/components/diff-review", "/docs", "/docs/theming", "/roadmap", "/compare", "/support", "/field-notes"]
 
   for (const route of PAGES) {
     test(`${route} has the nav, a way home and the footer`, async ({ page }) => {
@@ -110,6 +112,14 @@ test.describe("site structure", () => {
       await expect(nav.getByText(/pricing|account/i)).toHaveCount(0)
     })
   }
+
+  test("the footer links the field notes and the social accounts", async ({ page }) => {
+    await page.goto("/")
+    const footer = page.getByRole("contentinfo")
+    await expect(footer.getByRole("link", { name: "Field notes" })).toHaveAttribute("href", "/field-notes")
+    await expect(footer.getByRole("link", { name: "Instagram" })).toHaveAttribute("href", "https://www.instagram.com/spotcheckui/")
+    await expect(footer.getByRole("link", { name: "YouTube" })).toHaveAttribute("href", "https://www.youtube.com/@spotcheckui")
+  })
 
   test("the nav has the four sections", async ({ page, isMobile }) => {
     test.skip(isMobile, "Phones use the menu")
@@ -284,6 +294,15 @@ test.describe("search engines and share cards", () => {
     const text = await response.text()
     expect(text.startsWith("# Spotcheck UI\n")).toBe(true)
     for (const slug of slugs("content/components")) expect(text).toContain(`/r/${slug}.json)`)
+  })
+
+  test("llms.txt and the field notes page list every note", async ({ page, request }) => {
+    const text = await (await request.get("/llms.txt")).text()
+    await page.goto("/field-notes")
+    for (const slug of slugs("content/field-notes")) {
+      expect(text).toContain(`/field-notes/${slug})`)
+      await expect(page.locator(`a[href="/field-notes/${slug}"]`)).toBeVisible()
+    }
   })
 
   test("pages carry a large share card that loads", async ({ page, request }) => {

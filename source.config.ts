@@ -23,6 +23,11 @@ export const guides = defineDocs({
   docs: { schema: pageSchema.extend({ description: z.string(), order: z.number() }) },
 })
 
+export const fieldNotes = defineDocs({
+  dir: "content/field-notes",
+  docs: { schema: pageSchema.extend({ description: z.string(), date: z.string(), order: z.number() }) },
+})
+
 // Colours come from CSS variables, so code blocks follow the skin and theme.
 const codeTheme = createCssVariablesTheme({ name: "spotcheck", variablePrefix: "--code-", fontStyle: true })
 
