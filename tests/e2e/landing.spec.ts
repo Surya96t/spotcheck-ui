@@ -63,6 +63,30 @@ test.describe("landing page", () => {
     await expect(page.getByText("The receipt prints when you sign")).toBeVisible()
   })
 
+  test("Start checking. rises a letter at a time and settles", async ({ page }) => {
+    await page.goto("/")
+    const heading = page.getByRole("heading", { name: "Start checking." })
+    const letters = heading.locator("[data-letter]")
+    await expect(letters).toHaveCount(15)
+    await heading.scrollIntoViewIfNeeded()
+    await expect
+      .poll(() => letters.evaluateAll((all) => all.every((letter) => new DOMMatrix(getComputedStyle(letter).transform).f === 0)))
+      .toBe(true)
+  })
+
+  test("under reduced motion, every heading and cell is in place from the start", async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: "reduce" })
+    await page.goto("/")
+    await page.waitForLoadState("networkidle")
+    const state = await page.evaluate(() => ({
+      moved: [...document.querySelectorAll("[data-rise], [data-letter]")].filter(
+        (element) => new DOMMatrix(getComputedStyle(element).transform).f !== 0,
+      ).length,
+      hidden: [...document.querySelectorAll("[data-cells] > *")].filter((element) => getComputedStyle(element).opacity === "0").length,
+    }))
+    expect(state).toEqual({ moved: 0, hidden: 0 })
+  })
+
   test("keeps to the word limit", async ({ page }) => {
     await page.goto("/")
     const copy = await page.evaluate(() =>

@@ -28,15 +28,33 @@ export function PageMotion() {
   const progress = React.useRef<HTMLDivElement>(null)
 
   React.useEffect(() => {
-    if (reduced) return
+    // The hook reads false while the page hydrates, so ask the browser directly before hiding anything.
+    if (reduced || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return
     const stops: (() => void)[] = []
+    const hidden: HTMLElement[] = []
+    const running: { pause: () => unknown }[] = []
+    const play = (animation: { pause: () => unknown }) => void running.push(animation)
 
     for (const element of document.querySelectorAll<HTMLElement>("[data-rise]")) {
       if (element.getBoundingClientRect().top < window.innerHeight * 0.9) continue
       element.style.transform = "translateY(108%)"
+      hidden.push(element)
       stops.push(
         once(element.parentElement ?? element, () =>
-          animate(element, { translateY: ["108%", "0%"], duration: 900, ease: "outExpo" }),
+          play(animate(element, { translateY: ["108%", "0%"], duration: 900, ease: "outExpo" })),
+        ),
+      )
+    }
+
+    // The closing line rises a letter at a time, each one overshooting a little.
+    for (const box of document.querySelectorAll<HTMLElement>("[data-letters]")) {
+      if (box.getBoundingClientRect().top < window.innerHeight * 0.9) continue
+      const letters = [...box.querySelectorAll<HTMLElement>("[data-letter]")]
+      for (const letter of letters) letter.style.transform = "translateY(110%)"
+      hidden.push(...letters)
+      stops.push(
+        once(box.parentElement ?? box, () =>
+          play(animate(letters, { translateY: ["110%", "0%"], duration: 900, delay: stagger(38), ease: "outBack(1.3)" })),
         ),
       )
     }
@@ -45,18 +63,19 @@ export function PageMotion() {
       const items = [...box.children] as HTMLElement[]
       if (box.getBoundingClientRect().top < window.innerHeight * 0.9) continue
       for (const item of items) item.style.opacity = "0"
+      hidden.push(...items)
       stops.push(
         once(
           box,
           () =>
-            animate(items, {
+            play(animate(items, {
               opacity: [0, 1],
               translateY: [34, 0],
               duration: 650,
               delay: stagger(70),
               ease: "outQuad",
               onComplete: () => items.forEach((item) => (item.style.transform = "")),
-            }),
+            })),
           0.05,
         ),
       )
@@ -83,6 +102,15 @@ export function PageMotion() {
     }
     if (loop) frame = requestAnimationFrame(tick)
     stops.push(() => cancelAnimationFrame(frame))
+
+    // A teardown, such as Reduce Motion being turned on, puts back anything still waiting to arrive.
+    stops.push(() => {
+      for (const animation of running) animation.pause()
+      for (const element of hidden) {
+        element.style.transform = ""
+        element.style.opacity = ""
+      }
+    })
 
     return () => stops.forEach((stop) => stop())
   }, [reduced])
