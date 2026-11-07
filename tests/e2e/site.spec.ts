@@ -121,6 +121,14 @@ test.describe("site structure", () => {
     await expect(footer.getByRole("link", { name: "YouTube" })).toHaveAttribute("href", "https://www.youtube.com/@spotcheckui")
   })
 
+  test("support links to the repo's issues and discussions", async ({ page }) => {
+    await page.goto("/support")
+    const main = page.getByRole("main")
+    await expect(main.getByRole("link", { name: /Report a bug/ })).toHaveAttribute("href", "https://github.com/Surya96t/spotcheck-ui/issues")
+    await expect(main.getByRole("link", { name: /Ask a question/ })).toHaveAttribute("href", "https://github.com/Surya96t/spotcheck-ui/discussions")
+    await expect(main.getByText("Opens at launch")).toHaveCount(0)
+  })
+
   test("the nav has the four sections", async ({ page, isMobile }) => {
     test.skip(isMobile, "Phones use the menu")
     await page.goto("/")
