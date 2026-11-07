@@ -36,7 +36,7 @@
     "streamdown": "2.7.1",
     "tailwind-merge": "3.7.0",
     "three": "0.187.0",
-    "zod": "4.1.13"
+    "zod": "4.6.6"
   },
   "devDependencies": {
     "@axe-core/playwright": "4.14.0",
