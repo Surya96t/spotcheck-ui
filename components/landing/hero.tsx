@@ -14,7 +14,7 @@ export function Hero({ parts }: { parts: TerrainPart[] }) {
       <HeroTerrain parts={parts} label="Bar Terrain, a 3D bar field. One bar lifts out and shows a component name." />
       <div aria-hidden className="landing-shade pointer-events-none absolute inset-0" />
 
-      <div className="pointer-events-none absolute inset-x-0 bottom-0">
+      <div data-hero-copy className="pointer-events-none absolute inset-x-0 bottom-0">
         <div className="max-w-[1100px] px-4 pb-6 md:px-8">
           <p data-copy className="landing-enter spotcheck-label text-ink mb-4" style={{ "--line": 2 } as CSSProperties}>
             Open source · {parts.length} components · 3 skins

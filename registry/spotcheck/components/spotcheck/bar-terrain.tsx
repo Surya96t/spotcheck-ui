@@ -27,6 +27,9 @@ const LIFT_EASE = 0.06
 const COLOR_HEIGHT = 1.5
 const AUTO_PICK_SECONDS = 3
 const AUTO_REST_SECONDS = 0.7
+const AUTO_PICK_TRIES = 24
+// The bars keep moving while one is picked, so a pick is checked at this many moments of its time up.
+const PICK_LOOKAHEAD_STEPS = 8
 // Skips the first frames, which are slow on every device, then judges on the median so one hitch doesn't count.
 const PACE_SKIP_FRAMES = 5
 const PACE_SAMPLES = 7
@@ -51,6 +54,9 @@ const defaultSource: HeightSource = (col, row, time) =>
 /** Where the lifted bar is. `x` and `y` are pixels inside the stage. */
 export type BarPick = { col: number; row: number; x: number; y: number; strength: number }
 
+/** Pixels from each edge of the stage that an automatic pick's lifted tip stays clear of. */
+export type PickInset = { top?: number; right?: number; bottom?: number; left?: number }
+
 type Pointer = { x: number; y: number; over: boolean }
 type Palette = Record<(typeof PALETTE_TOKENS)[number], string>
 
@@ -66,11 +72,12 @@ type FieldProps = {
   peak?: number
   fade?: { near: number; far: number }
   autoPick: boolean
+  pickInset?: PickInset
   onPick?: (pick: BarPick | null) => void
   onSlow?: () => void
 }
 
-function Field({ cols, rows, source, radius, lift, still, palette, pointer, peak, fade, autoPick, onPick, onSlow }: FieldProps) {
+function Field({ cols, rows, source, radius, lift, still, palette, pointer, peak, fade, autoPick, pickInset, onPick, onSlow }: FieldProps) {
   const mesh = React.useRef<InstancedMesh>(null)
   const invalidate = useThree((state) => state.invalidate)
   const scene = useThree((state) => state.scene)
@@ -149,24 +156,52 @@ function Field({ cols, rows, source, radius, lift, still, palette, pointer, peak
     const time = still ? 0 : clock.elapsedTime
     const over = pointer.current.over && !still
 
-    const aim = (x: number, y: number) => {
+    // The floor point under a spot on screen, snapped to a bar when picks are shown.
+    const floorAt = (x: number, y: number) => {
       ndc.set(x, y)
       ray.setFromCamera(ndc, camera)
-      if (!ray.ray.intersectPlane(floor, hit)) return
-      const target = onPick || autoPick ? { x: center(cols, nearest(cols, hit.x)), z: center(rows, nearest(rows, hit.z)) } : { x: hit.x, z: hit.z }
+      if (!ray.ray.intersectPlane(floor, hit)) return null
+      return onPick || autoPick ? { x: center(cols, nearest(cols, hit.x)), z: center(rows, nearest(rows, hit.z)) } : { x: hit.x, z: hit.z }
+    }
+    const place = (target: { x: number; z: number }) => {
       bump.target = target
       if (!bump.placed) Object.assign(bump, { ...target, placed: true })
     }
+    // How many pixels a bar's fully lifted tip could land outside the stage, less the inset, while it's picked.
+    const overshoot = (target: { x: number; z: number }) => {
+      const col = nearest(cols, target.x)
+      const row = nearest(rows, target.z)
+      let tallest = 0
+      for (let step = 0; step <= PICK_LOOKAHEAD_STEPS; step++) {
+        tallest = Math.max(tallest, source(col, row, time + (step / PICK_LOOKAHEAD_STEPS) * (AUTO_PICK_SECONDS + 1)))
+      }
+      const height = tallest + lift
+      tip.set(target.x, height, target.z).project(camera)
+      const x = ((tip.x + 1) / 2) * size.width
+      const y = ((1 - tip.y) / 2) * size.height
+      const { top = 0, right = 0, bottom = 0, left = 0 } = pickInset ?? {}
+      return Math.max(0, top - y) + Math.max(0, y - (size.height - bottom)) + Math.max(0, left - x) + Math.max(0, x - (size.width - right))
+    }
 
     if (over) {
-      aim(pointer.current.x, pointer.current.y)
+      const target = floorAt(pointer.current.x, pointer.current.y)
+      if (target) place(target)
       Object.assign(auto, { on: false, next: time + AUTO_PICK_SECONDS })
     } else if (autoPick && !still && time > auto.next) {
       auto.on = !auto.on
       auto.next = time + (auto.on ? AUTO_PICK_SECONDS : AUTO_REST_SECONDS)
       if (auto.on) {
         bump.placed = false
-        aim(0.05 + Math.random() * 0.75, -0.25 + Math.random() * 0.75)
+        // Tries a few spots and keeps the one whose lifted tip, and anything drawn at it, fits best.
+        let best: { x: number; z: number } | null = null
+        let bestMiss = Infinity
+        for (let attempt = 0; attempt < AUTO_PICK_TRIES && bestMiss > 0; attempt++) {
+          const target = floorAt(0.05 + Math.random() * 0.75, -0.25 + Math.random() * 0.75)
+          if (!target) continue
+          const miss = overshoot(target)
+          if (miss < bestMiss) [best, bestMiss] = [target, miss]
+        }
+        if (best) place(best)
       }
     }
     bump.x += (bump.target.x - bump.x) * POINTER_EASE
@@ -239,6 +274,8 @@ type BarTerrainProps = Omit<React.ComponentProps<"div">, "children"> & {
   lookAt?: [x: number, y: number, z: number]
   /** Lifts a bar every few seconds when nobody's pointing. */
   autoPick?: boolean
+  /** Keeps an automatic pick's lifted tip this many pixels inside the stage, so a label drawn there stays in view. */
+  pickInset?: PickInset
   /** Runs every frame with the lifted bar, or `null` when there isn't one. Snaps the bump to one bar. */
   onPick?: (pick: BarPick | null) => void
   /** Holds a still frame if the device can't keep up, so the page around it stays responsive. */
@@ -258,6 +295,7 @@ export function BarTerrain({
   camera = CAMERA,
   lookAt = LOOK_AT,
   autoPick = false,
+  pickInset,
   onPick,
   pauseWhenSlow = false,
   label = "3D bar field",
@@ -305,6 +343,7 @@ export function BarTerrain({
         peak={peak}
         fade={fade}
         autoPick={autoPick}
+        pickInset={pickInset}
         onPick={onPick}
         onSlow={pauseWhenSlow ? onSlow : undefined}
       />
