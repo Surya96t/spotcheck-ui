@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 import Link from "next/link"
 
 import { PageTitle } from "@/components/site/page-title"
-import { repoIsPublic, repoUrl } from "@/lib/site"
+import { repoUrl } from "@/lib/site"
 
 export const metadata: Metadata = {
   title: "Support",
@@ -34,17 +34,11 @@ export default function SupportPage() {
     <>
       <PageTitle trail={[{ label: "Support" }]} title="Get help" />
       <div className="grid md:grid-cols-3">
-        {CHANNELS.map((channel) =>
-          repoIsPublic ? (
-            <a key={channel.href} href={channel.href} className={`${CARD} ${CARD_LINK}`}>
-              <CardBody {...channel} />
-            </a>
-          ) : (
-            <div key={channel.href} className={CARD}>
-              <CardBody {...channel} where="Opens at launch" />
-            </div>
-          ),
-        )}
+        {CHANNELS.map((channel) => (
+          <a key={channel.href} href={channel.href} className={`${CARD} ${CARD_LINK}`}>
+            <CardBody {...channel} />
+          </a>
+        ))}
         <Link href="/docs" className={`${CARD} ${CARD_LINK}`}>
           <CardBody where="Docs" title="Read the docs" note="Installation and theming guides." />
         </Link>

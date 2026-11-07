@@ -7,8 +7,6 @@ function resolveUrl() {
 export const siteUrl = resolveUrl()
 
 export const repoUrl = "https://github.com/Surya96t/spotcheck-ui"
-// The repo is private until launch, and GitHub links would 404 for visitors. Flip this when it goes public.
-export const repoIsPublic = false
 
 export function registryItemUrl(name: string) {
   return `${siteUrl}/r/${name}.json`
