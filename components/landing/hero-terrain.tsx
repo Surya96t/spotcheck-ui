@@ -3,7 +3,7 @@
 import * as React from "react"
 import dynamic from "next/dynamic"
 
-import type { BarPick, HeightSource, TerrainCamera } from "@/registry/spotcheck/components/spotcheck/bar-terrain"
+import type { BarPick, HeightSource, PickInset, TerrainCamera } from "@/registry/spotcheck/components/spotcheck/bar-terrain"
 
 const BarTerrain = dynamic(
   () => import("@/registry/spotcheck/components/spotcheck/bar-terrain").then((module) => module.BarTerrain),
@@ -17,6 +17,12 @@ const PEAK = 2.4
 const WIDE_GRID = { cols: 110, rows: 64 }
 const SMALL_GRID = { cols: 60, rows: 40 }
 const SMALL_SCREEN = "(width < 48rem)"
+// The label box and its stem stand this tall above the lifted bar's tip.
+const LABEL_RISE = 52
+const EDGE = 12
+// Roughly how wide a character of the label's 12.5px mono type is, plus the box's padding.
+const CHAR_WIDTH = 7.6
+const LABEL_PADDING = 22
 
 const source: HeightSource = (col, row, time) =>
   0.12 +
@@ -33,6 +39,20 @@ export function HeroTerrain({ parts, label }: { parts?: TerrainPart[]; label: st
   const name = React.useRef<HTMLSpanElement>(null)
   const engine = React.useRef<HTMLSpanElement>(null)
   const shown = React.useRef(-1)
+  const [inset, setInset] = React.useState<PickInset>()
+
+  // Keeps picked bars where their label is readable: below the top edge, inside the sides, and above the headline.
+  React.useEffect(() => {
+    const copy = tag.current?.closest("section")?.querySelector<HTMLElement>("[data-hero-copy]")
+    if (!copy || !parts?.length) return
+    const longest = Math.max(...parts.map((part) => part.title.length + part.engine.length + 1))
+    const side = (longest * CHAR_WIDTH + LABEL_PADDING) / 2 + EDGE
+    const measure = () => setInset({ top: LABEL_RISE + EDGE, right: side, bottom: copy.offsetHeight + EDGE, left: side })
+    measure()
+    const observer = new ResizeObserver(measure)
+    observer.observe(copy)
+    return () => observer.disconnect()
+  }, [parts])
 
   const onPick = React.useCallback(
     (pick: BarPick | null) => {
@@ -69,6 +89,7 @@ export function HeroTerrain({ parts, label }: { parts?: TerrainPart[]; label: st
         pointerLift={5}
         pauseWhenSlow
         autoPick={Boolean(parts)}
+        pickInset={inset}
         onPick={parts ? onPick : undefined}
         label={label}
         className="absolute inset-0 h-auto"
