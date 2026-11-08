@@ -3,7 +3,7 @@
 Written 2026-11-02 and revised the same day after design review on the canvas. **This is a plan for
 review. No code gets built until Surya approves it.**
 
-Where this note and [PLAN.md](PLAN.md) disagree about the landing page or site layout, this note
+Where this note and [PLAN.md](../PLAN.md) disagree about the landing page or site layout, this note
 wins once it's approved.
 
 ## Goal
@@ -121,7 +121,7 @@ new site code:
 | Progress line and scroll-reactive ticker | Motion `scroll` |
 
 Under reduced motion there's no animation and every piece shows its finished state. WebGL renders one
-frame per state change, as [PLAN.md](PLAN.md#rules-for-every-component) requires.
+frame per state change, as [PLAN.md](../PLAN.md#rules-for-every-component) requires.
 
 **Cost to check:** the landing page loads three.js, Motion and anime.js. Each should load only when
 it's needed, and step 6 measures the result on a real phone.
@@ -232,7 +232,7 @@ The nav, the separate Components and Docs pages, the hero and "Run a spot check"
 |---|---|
 | Landing direction: "one live case file" with a running ledger in the margin | Replaced by "Run a spot check", with no margin ledger |
 | "Keep the books on your AI" stays as the headline | Replaced by "Pick any part. Look closely." |
-| Positioning around reviewing AI work | Done in [PLAN.md](PLAN.md#whats-were-publishing) and the Why Spotcheck UI doc |
+| Positioning around reviewing AI work | Done in [PLAN.md](../PLAN.md#whats-were-publishing) and the Why Spotcheck UI doc |
 | Site description in `app/layout.tsx` says "checking AI work" | Changes in step 4 |
 
 The design language and the rules for every component don't change.

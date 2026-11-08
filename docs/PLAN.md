@@ -141,7 +141,7 @@ shadcn files such as `components/ui/button.tsx`. Groups like Motion and Depth ar
 | 3 | Motion | Motion, Springs and Timelines groups, `/components` index | Each passes its smoke test and the axe check |
 | 4 | AI and review | AI group, `run-receipt`, `trace-waterfall`, `diff-review`, `model-race`, `chat-screen` | A demo works against a real AI SDK stream |
 | 5 | Landing page | A real landing page at `/`, with the catalog moved to `/components` | A first-time visitor can tell what Ledger is, see it work and reach the install step without opening the catalog |
-| 6 | Depth | Shared WebGL groundwork and seven pieces, scoped in `docs/DEPTH-PLAN.md` | Each piece ships with its demo and tests |
+| 6 | Depth | Shared WebGL groundwork and seven pieces, scoped in `docs/archive/DEPTH-PLAN.md` | Each piece ships with its demo and tests |
 | 7 | Public launch, v0.1 | `dashboard`, field notes, SEO, name, domain, shadcn directory PR | Live on the real domain and listed |
 | 8 | Ongoing | `region-globe`, `voice-orb`, `configurator`, next-tier components, 21st.dev submission | Driven by what people use |
 
@@ -149,12 +149,12 @@ AI moved ahead of WebGL and Depth because it carries the positioning. Depth then
 the public launch at Surya's request. Surya scoped it to seven pieces on 2026-11-02, so the launch
 ships those, and `region-globe`, `voice-orb` and `configurator` wait for Phase 8. `bar-terrain`
 still lands in Phase 0, so the hero and the WebGL path are proven early. The launch plan is written
-in `docs/LAUNCH-PLAN.md`, and Depth's scope is in `docs/DEPTH-PLAN.md`.
+in `docs/archive/LAUNCH-PLAN.md`, and Depth's scope is in `docs/archive/DEPTH-PLAN.md`.
 
 ### Landing page
 
 Added after Phase 2, because the home page is a catalog and no phase covered selling the idea.
-[REDESIGN-PLAN.md](REDESIGN-PLAN.md) replaces the direction below once it's approved.
+[REDESIGN-PLAN.md](archive/REDESIGN-PLAN.md) replaces the direction below once it's approved.
 
 - **What it needs:** what Ledger is for and who it's for, a showcase, how it compares with other
   libraries, a clear next step, and the prototype's footer.
@@ -170,7 +170,7 @@ Added after Phase 2, because the home page is a catalog and no phase covered sel
 
 1. **The name is settled: Spotcheck UI.** Ledger SAS publishes a React UI library and holds LEDGER
    marks for software in the EU and UK, so the project moved away from the name. The reasons are in
-   `docs/LAUNCH-PLAN.md`, and the steps are in `docs/RENAME.md`.
+   `docs/archive/LAUNCH-PLAN.md`, and the steps are in `docs/archive/RENAME.md`.
 2. **Licence holder.** The repo needs an MIT `LICENSE` with a copyright holder before it goes
    public.
 
