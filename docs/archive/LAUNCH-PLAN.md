@@ -5,7 +5,7 @@ Written 2026-11-02. This is the plan for the public launch, which is Phase 7 in 
 
 On 2026-11-03 the name, domain, rename, Depth and redesign are done and live at `spotcheckui.com`.
 The repo is still private, and nothing is posted.
-Where this note and [PLAN.md](PLAN.md) disagree about the launch, this note wins.
+Where this note and [PLAN.md](../PLAN.md) disagree about the launch, this note wins.
 
 ## Decisions
 
@@ -201,7 +201,7 @@ Order matters. The rename comes before Depth, so new files get the right names f
 
 | # | Step | Owner |
 |---|---|---|
-| 19 | Write the device checklist. Done on 2026-11-03 in [DEVICE-CHECKLIST.md](DEVICE-CHECKLIST.md) | Claude |
+| 19 | Write the device checklist. Done on 2026-11-03 in [DEVICE-CHECKLIST.md](../DEVICE-CHECKLIST.md) | Claude |
 | 20 | Run it on an iPhone and Mac Safari | Surya |
 | 21 | Fix what's found and re-check | Claude, then Surya |
 | 22 | Compare Motion 14 springs with the prototype, which is still unverified | Claude |

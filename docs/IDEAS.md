@@ -10,7 +10,7 @@ Each idea records four things:
 - **Clash with the design rules:** anything that conflicts with the
   [design language](PLAN.md#design-language) or the
   [rules for every component](PLAN.md#rules-for-every-component), or "None found".
-- **Rough effort:** an estimate using the sizes in [DEPTH-PLAN.md](DEPTH-PLAN.md#build-order). Small
+- **Rough effort:** an estimate using the sizes in [DEPTH-PLAN.md](archive/DEPTH-PLAN.md#build-order). Small
   (S) is 1 unit, Medium (M) is about 2, and Large (L) is three or four.
 
 ## Landing page
@@ -27,9 +27,9 @@ Each idea records four things:
   components show up in the same page. They must be separate pages." Guardrails: "No Pricing for
   now. No Account for now." "The landing page must reuse our existing components." "Show our best
   components first."
-- **What it would need:** see [REDESIGN-PLAN.md](REDESIGN-PLAN.md).
+- **What it would need:** see [REDESIGN-PLAN.md](archive/REDESIGN-PLAN.md).
 - **Clash with the design rules:** yes, on site pages only. See
-  [the clashes](REDESIGN-PLAN.md#clashes-with-the-design-rules).
+  [the clashes](archive/REDESIGN-PLAN.md#clashes-with-the-design-rules).
 - **Rough effort:** about 12 units, the same size as Depth.
 
 ### A 3D hero background from the library
@@ -48,7 +48,7 @@ Each idea records four things:
   like, it's good, but I feel it could be better."
 - **What it would need:** a new headline and a new positioning line. That means updating the Why
   Spotcheck UI doc, the positioning in [PLAN.md](PLAN.md#whats-were-publishing), the site metadata
-  and [RENAME.md](RENAME.md), which says the current headline stays.
+  and [RENAME.md](archive/RENAME.md), which says the current headline stays.
 - **Clash with the design rules:** none in the design language. It does change a logged decision: to
   keep "Keep the books on your AI" as the headline.
 - **Rough effort:** S for the copy. A rebuilt scroll story is about M.
