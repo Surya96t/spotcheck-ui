@@ -1,6 +1,6 @@
 import { NextResponse, type NextFetchEvent, type NextRequest } from "next/server"
 
-import { componentFromPath, countRegistryFetch } from "@/lib/install-count"
+import { componentFromPath, countRegistryFetch } from "@/lib/counts"
 
 // Runs only for /r/*, the files `npx shadcn add` downloads. The count is sent after the response,
 // so installs are never slowed down.
