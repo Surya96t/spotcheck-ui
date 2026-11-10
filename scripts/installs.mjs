@@ -1,4 +1,5 @@
-// Prints how often each registry file was fetched, from the Upstash database the site counts into.
+// Prints Surya's private counts from the Upstash database the site counts into (see lib/counts.ts):
+// downloads of each component's registry file, and Copy clicks on the site.
 // Get the variables first with `vercel env pull .env.local`, then run `pnpm installs`.
 // Pass a number of days to see recent ones only: `pnpm installs 7`.
 import { Redis } from "@upstash/redis"
@@ -12,25 +13,35 @@ if (!url || !token) {
 const redis = new Redis({ url, token })
 const days = Number(process.argv[2]) || 0
 
-async function totals(kind) {
-  if (!days) return (await redis.hgetall(`registry:${kind}`)) ?? {}
+async function totals(key) {
+  if (!days) return (await redis.hgetall(key)) ?? {}
   const sum = {}
   for (let i = 0; i < days; i++) {
     const day = new Date(Date.now() - i * 86_400_000).toISOString().slice(0, 10)
-    for (const [name, n] of Object.entries((await redis.hgetall(`registry:${kind}:${day}`)) ?? {})) {
+    for (const [name, n] of Object.entries((await redis.hgetall(`${key}:${day}`)) ?? {})) {
       sum[name] = (sum[name] ?? 0) + Number(n)
     }
   }
   return sum
 }
 
-const cli = await totals("cli")
-const browser = await totals("browser")
-const names = [...new Set([...Object.keys(cli), ...Object.keys(browser)])]
-const rows = names
-  .map((name) => ({ component: name, cli: Number(cli[name] ?? 0), browser: Number(browser[name] ?? 0) }))
-  .sort((a, b) => b.cli - a.cli || b.browser - a.browser)
+function table(columns, label) {
+  const names = [...new Set(columns.flatMap(([, counts]) => Object.keys(counts)))]
+  const rows = names
+    .map((name) => Object.fromEntries([[label, name], ...columns.map(([title, counts]) => [title, Number(counts[name] ?? 0)])]))
+    .sort((a, b) => columns.reduce((diff, [title]) => diff || b[title] - a[title], 0))
+  if (rows.length === 0) console.log("  Nothing yet.\n")
+  else console.table(rows)
+}
 
-console.log(days ? `Last ${days} day(s), India and UTC days may differ by one.` : "All time.")
-console.log("cli = the shadcn CLI and other tools. browser = someone opened the JSON in a browser.\n")
-console.table(rows)
+console.log(days ? `Last ${days} day(s), counted in UTC days.\n` : "All time.\n")
+
+console.log("Downloads: cli = `npx shadcn add` and other tools, browser = someone opened the JSON.")
+console.log("Installing one component also downloads the files it depends on.")
+table([["cli", await totals("registry:cli")], ["browser", await totals("registry:browser")]], "component")
+
+console.log("Copy clicks on an install command, per component:")
+table([["copies", await totals("copies:install")]], "component")
+
+console.log("Copy clicks on a code block, per page:")
+table([["copies", await totals("copies:code")]], "page")
