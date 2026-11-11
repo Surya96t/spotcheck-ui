@@ -163,6 +163,14 @@ test("waterfall bars sit on the shared timeline", async ({ page, isMobile }) => 
   expect(tickets?.width ?? 0).toBeGreaterThan(kb?.width ?? 0)
 })
 
+test("waterfall tick labels stay on one line", async ({ page }) => {
+  const demo = await open(page, "trace-waterfall")
+  const ticks = demo.locator("[data-tick]")
+  await expect(ticks.last()).toHaveText("2.84 s")
+  const heights = await ticks.evaluateAll((labels) => labels.map((label) => label.getBoundingClientRect().height))
+  expect(new Set(heights).size, `tick heights ${heights.join(", ")}`).toBe(1)
+})
+
 test.describe("composer", () => {
   test("sends with the keyboard and tracks context", async ({ page }) => {
     const demo = await open(page, "composer")

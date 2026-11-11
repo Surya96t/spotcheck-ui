@@ -210,7 +210,7 @@ export function DetentSlider({
         {marks.map((mark) => (
           <span
             key={mark}
-            className="absolute -translate-x-1/2"
+            className="absolute -translate-x-1/2 whitespace-nowrap"
             style={{ left: `${fractionOf(mark) * 100}%` }}
           >
             {format(mark)}
