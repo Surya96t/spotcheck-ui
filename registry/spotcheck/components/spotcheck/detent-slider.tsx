@@ -150,7 +150,7 @@ export function DetentSlider({
   const reached = Math.round((shown - min) / step)
 
   return (
-    <div className={cn("flex flex-col gap-3.5", className)}>
+    <div className={cn("flex flex-col gap-3.5 font-(family-name:--f-body)", className)}>
       <div className="flex items-end justify-between gap-4">
         <div>
           <div className="spotcheck-label">{label}</div>

@@ -94,7 +94,7 @@ export function RippleHeatmap({
       role="grid"
       aria-label={label}
       onKeyDown={onKeyDown}
-      className={cn("grid items-center gap-[3px] overflow-x-auto", className)}
+      className={cn("grid items-center gap-[3px] overflow-x-auto font-(family-name:--f-body)", className)}
       style={{ gridTemplateColumns: `auto repeat(${cols}, minmax(12px, 1fr))` }}
     >
       {rowLabels.map((rowLabel, row) => (

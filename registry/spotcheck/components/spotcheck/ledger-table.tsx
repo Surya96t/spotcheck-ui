@@ -52,7 +52,7 @@ export function LedgerTable<Row>({ title, rows, columns, rowKey, defaultSort, cl
   }
 
   return (
-    <div tabIndex={0} role="region" aria-label={title} className={cn("spotcheck-focus overflow-x-auto", className)}>
+    <div tabIndex={0} role="region" aria-label={title} className={cn("spotcheck-focus overflow-x-auto font-(family-name:--f-body)", className)}>
       <table className="w-full border-collapse tabular-nums" style={{ minWidth: columns.length * MIN_COLUMN_WIDTH }}>
         <caption className="sr-only">{title}</caption>
         <thead>

@@ -37,7 +37,7 @@ export function Combobox({
       onValueChange={(next) => onValueChange?.(next as string | null)}
     >
       <BaseCombobox.InputGroup
-        className={cn("border-ink relative flex min-w-40 border-(length:--rule)", className)}
+        className={cn("border-ink relative flex min-w-40 border-(length:--rule) font-(family-name:--f-body)", className)}
       >
         <BaseCombobox.Input
           aria-label={label}
@@ -53,7 +53,7 @@ export function Combobox({
       </BaseCombobox.InputGroup>
       <BaseCombobox.Portal>
         <BaseCombobox.Positioner sideOffset={4} className="z-50">
-          <BaseCombobox.Popup className="border-ink bg-paper text-ink w-(--anchor-width) border-(length:--rule) shadow-[6px_6px_0_var(--ink)]">
+          <BaseCombobox.Popup className="border-ink bg-paper text-ink w-(--anchor-width) border-(length:--rule) font-(family-name:--f-body) shadow-[6px_6px_0_var(--ink)]">
             <BaseCombobox.Empty className="text-mute empty:hidden px-3 py-2 font-(family-name:--f-mono) text-xs">
               {emptyText}
             </BaseCombobox.Empty>

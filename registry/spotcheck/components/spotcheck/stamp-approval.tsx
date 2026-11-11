@@ -56,7 +56,7 @@ export function StampApproval({ call, editable = [], onApprove, onDeny, classNam
   }, [decision])
 
   return (
-    <div className={cn("flex flex-col gap-3.5", className)}>
+    <div className={cn("flex flex-col gap-3.5 font-(family-name:--f-body)", className)}>
       <div
         ref={card}
         className="border-ink bg-raise relative max-w-160 overflow-hidden border-(length:--rule) px-4 pt-3.5 pb-4 font-(family-name:--f-mono) text-[13px]"

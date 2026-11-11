@@ -32,6 +32,33 @@ Skins change the accent and the display type. Set `data-skin` on `<html>` or on 
 | `terminal` | IBM Plex Mono throughout |
 | `folio` | Instrument Serif italic |
 
+## Fonts
+
+Every component sets its own font, so it looks the same whatever font the rest of your app uses.
+Three variables in your stylesheet decide which fonts those are.
+
+| Variable | Used for | Default |
+| --- | --- | --- |
+| `--f-body` | Running text | Archivo |
+| `--f-mono` | Labels, code and numbers in tables | IBM Plex Mono |
+| `--f-serif` | The `folio` skin's display type | Instrument Serif |
+
+To use your own font, point the variable at it. This makes Spotcheck's running text match your app:
+
+```css
+:root {
+  --f-body: var(--font-sans);
+}
+```
+
+Leave a variable alone and the component keeps the Spotcheck default. You can also set a variable on
+one section, or change a single component with `className`:
+
+```tsx
+<section style={{ "--f-body": "Georgia, serif" }}>
+<ModelRace lanes={lanes} className="font-serif" />
+```
+
 ## Tokens
 
 Everything comes from CSS variables in your stylesheet, so you can edit them there.

@@ -76,7 +76,7 @@ export function Calendar({ value, onValueChange, defaultMonth, locale = "en-GB",
   }
 
   return (
-    <div className={cn("w-[17.5rem] max-w-full", className)}>
+    <div className={cn("w-[17.5rem] max-w-full font-(family-name:--f-body)", className)}>
       <div className="mb-2 flex items-center justify-between">
         <button
           type="button"
@@ -175,7 +175,7 @@ export function DatePicker({
       <Popover.Trigger
         aria-label={`${label}: ${text}`}
         className={cn(
-          "spotcheck-focus border-ink flex min-w-40 cursor-pointer items-center justify-between gap-3 border-(length:--rule) px-3 py-2 text-left text-sm",
+          "spotcheck-focus border-ink flex min-w-40 cursor-pointer items-center justify-between gap-3 border-(length:--rule) px-3 py-2 text-left font-(family-name:--f-body) text-sm",
           className,
         )}
       >
@@ -186,7 +186,7 @@ export function DatePicker({
       </Popover.Trigger>
       <Popover.Portal>
         <Popover.Positioner sideOffset={6} align="start" className="z-50">
-          <Popover.Popup className="border-ink bg-paper text-ink border-(length:--rule) p-3 shadow-[6px_6px_0_var(--ink)] outline-none">
+          <Popover.Popup className="border-ink bg-paper text-ink border-(length:--rule) p-3 font-(family-name:--f-body) shadow-[6px_6px_0_var(--ink)] outline-none">
             <Calendar
               value={current}
               defaultMonth={defaultMonth}

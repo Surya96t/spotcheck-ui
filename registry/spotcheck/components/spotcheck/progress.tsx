@@ -14,7 +14,7 @@ export function Progress({ label, value, max = 100, className, ...props }: Progr
   const percent = value === undefined ? null : Math.round((Math.min(max, Math.max(0, value)) / max) * 100)
 
   return (
-    <div className={cn("flex flex-col gap-1", className)} {...props}>
+    <div className={cn("flex flex-col gap-1 font-(family-name:--f-body)", className)} {...props}>
       <div className="flex justify-between">
         <span className="spotcheck-label">{label}</span>
         {percent !== null && <span className="spotcheck-label tabular-nums">{percent}%</span>}

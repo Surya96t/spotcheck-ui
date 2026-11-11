@@ -105,7 +105,7 @@ export function DrawChart({
   }, [duration, inView, last, reduced])
 
   return (
-    <div ref={host} className={cn("flex flex-col gap-3.5", className)}>
+    <div ref={host} className={cn("flex flex-col gap-3.5 font-(family-name:--f-body)", className)}>
       <div>
         {title && <div className="spotcheck-label">{title}</div>}
         <div ref={headline} data-testid="draw-chart-value" className="spotcheck-display text-[64px] leading-[.9] tabular-nums">

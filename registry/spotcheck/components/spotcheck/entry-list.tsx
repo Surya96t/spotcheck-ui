@@ -14,7 +14,7 @@ type EntryListProps = Omit<React.ComponentProps<"ul">, "children"> & {
 
 export function EntryList({ entries, stagger = STAGGER_MS, className, ...props }: EntryListProps) {
   return (
-    <ul className={cn("m-0 list-none p-0", className)} {...props}>
+    <ul className={cn("m-0 list-none p-0 font-(family-name:--f-body)", className)} {...props}>
       {entries.map((entry, index) => (
         <li
           key={entry.id}

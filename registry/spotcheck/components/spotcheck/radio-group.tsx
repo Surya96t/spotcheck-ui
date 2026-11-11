@@ -26,7 +26,7 @@ export function RadioGroup({ label, options, value, defaultValue, onValueChange,
       value={value}
       defaultValue={defaultValue}
       onValueChange={(next) => onValueChange?.(next as string)}
-      className={cn("flex flex-col gap-2", className)}
+      className={cn("flex flex-col gap-2 font-(family-name:--f-body)", className)}
     >
       {options.map((option) => (
         <label key={option.value} className="inline-flex cursor-pointer items-center gap-2.5 text-sm">

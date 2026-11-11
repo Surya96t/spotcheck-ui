@@ -36,5 +36,5 @@ export function TabsTab({ className, ...props }: Omit<BaseTabs.Tab.Props, "class
 }
 
 export function TabsPanel({ className, ...props }: Omit<BaseTabs.Panel.Props, "className"> & ClassName) {
-  return <BaseTabs.Panel className={cn("spotcheck-focus pt-3.5", className)} {...props} />
+  return <BaseTabs.Panel className={cn("spotcheck-focus pt-3.5 font-(family-name:--f-body)", className)} {...props} />
 }

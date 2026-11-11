@@ -25,7 +25,7 @@ export function ContextBudget({ limit, segments, onCompact, compactLabel = "Comp
   const summary = segments.map((segment) => `${segment.label} ${compact(segment.tokens)}`).join(", ")
 
   return (
-    <div className={cn("flex flex-col gap-3.5", className)}>
+    <div className={cn("flex flex-col gap-3.5 font-(family-name:--f-body)", className)}>
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <div className="spotcheck-label">Context window</div>

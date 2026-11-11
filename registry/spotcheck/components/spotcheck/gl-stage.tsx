@@ -101,7 +101,7 @@ export function GlStage({
       ref={host}
       role={broken ? undefined : "img"}
       aria-label={broken ? undefined : label}
-      className={cn("relative min-w-0 touch-pan-y overflow-hidden", className)}
+      className={cn("relative min-w-0 touch-pan-y overflow-hidden font-(family-name:--f-body)", className)}
       {...props}
     >
       {broken ? (

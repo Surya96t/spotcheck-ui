@@ -135,7 +135,7 @@ export function CubeTabs({ label, faces, value, defaultValue, onValueChange, cla
   }
 
   return (
-    <div className={cn("flex min-w-0 flex-col gap-3.5", className)}>
+    <div className={cn("flex min-w-0 flex-col gap-3.5 font-(family-name:--f-body)", className)}>
       <div
         role="tablist"
         aria-label={label}

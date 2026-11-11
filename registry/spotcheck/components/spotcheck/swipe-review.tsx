@@ -83,7 +83,7 @@ export function SwipeReview({ items, threshold = THRESHOLD_PX, onAccept, onRejec
   }
 
   return (
-    <div className={cn("flex flex-col gap-3.5", className)}>
+    <div className={cn("flex flex-col gap-3.5 font-(family-name:--f-body)", className)}>
       <div className="relative isolate grid h-75 place-items-center">
         {current ? (
           queue

@@ -38,7 +38,7 @@ export function Select({
       <BaseSelect.Trigger
         aria-label={label}
         className={cn(
-          "spotcheck-focus border-ink flex min-w-40 cursor-pointer items-center justify-between gap-3 border-(length:--rule) bg-transparent px-3 py-2 text-left text-sm",
+          "spotcheck-focus border-ink flex min-w-40 cursor-pointer items-center justify-between gap-3 border-(length:--rule) bg-transparent px-3 py-2 text-left font-(family-name:--f-body) text-sm",
           className,
         )}
       >
@@ -49,7 +49,7 @@ export function Select({
       </BaseSelect.Trigger>
       <BaseSelect.Portal>
         <BaseSelect.Positioner alignItemWithTrigger={false} sideOffset={4} className="z-50">
-          <BaseSelect.Popup className="border-ink bg-paper text-ink min-w-(--anchor-width) border-(length:--rule) shadow-[6px_6px_0_var(--ink)] outline-none">
+          <BaseSelect.Popup className="border-ink bg-paper text-ink min-w-(--anchor-width) border-(length:--rule) font-(family-name:--f-body) shadow-[6px_6px_0_var(--ink)] outline-none">
             <BaseSelect.List className="max-h-[min(280px,var(--available-height))] overflow-auto py-1">
               {options.map((option) => (
                 <BaseSelect.Item

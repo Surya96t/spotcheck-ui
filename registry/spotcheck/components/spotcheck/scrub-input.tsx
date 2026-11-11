@@ -96,7 +96,7 @@ export function ScrubInput({
   }
 
   return (
-    <div className={cn("inline-flex flex-col gap-0.5", className)}>
+    <div className={cn("inline-flex flex-col gap-0.5 font-(family-name:--f-body)", className)}>
       <span className="spotcheck-label">{label}</span>
       {draft === null ? (
         <div

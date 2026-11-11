@@ -64,7 +64,7 @@ export function Composer({
   const share = contextLimit ? Math.min(1, tokens / contextLimit) : 0
 
   return (
-    <div className={cn("border-ink bg-raise border-(length:--rule)", className)}>
+    <div className={cn("border-ink bg-raise border-(length:--rule) font-(family-name:--f-body)", className)}>
       <label className="block px-3.5 pt-2.5">
         <span className="spotcheck-label block">Prompt</span>
         <textarea
