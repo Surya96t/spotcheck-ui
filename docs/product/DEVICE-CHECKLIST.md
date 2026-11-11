@@ -1,6 +1,6 @@
 # Spotcheck UI: device checklist
 
-Written 2026-11-03 for Thursday 5 November. This is step 20 in [LAUNCH-PLAN.md](archive/LAUNCH-PLAN.md).
+Written 2026-11-03 for Thursday 5 November. This is step 20 in [LAUNCH-PLAN.md](../archive/LAUNCH-PLAN.md).
 Real phones and Safari haven't been checked for anything yet, so every line here is open.
 
 Run it on spotcheckui.com, on an iPhone in Safari and on a Mac in Safari. It takes about an hour.
