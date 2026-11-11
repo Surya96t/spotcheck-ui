@@ -6,7 +6,7 @@ Written 2026-11-02. This is the plan for Phase 6, and it answers open question 1
 The groundwork and all seven pieces merged on 2026-11-02 in PRs #8 and #9. One item is still open:
 confirming the `drum-picker` gutter on Surya's iPhone.
 
-Where this note and [PLAN.md](../PLAN.md) disagree about Depth, this note wins.
+Where this note and [PLAN.md](../product/PLAN.md) disagree about Depth, this note wins.
 
 ## Scope
 
