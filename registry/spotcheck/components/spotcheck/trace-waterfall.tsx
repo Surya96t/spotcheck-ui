@@ -65,7 +65,8 @@ export function TraceWaterfall({ label, spans, className }: TraceWaterfallProps)
             {TICKS.map((tick) => (
               <span
                 key={tick}
-                className="spotcheck-label absolute -translate-x-1/2 first:translate-x-0 last:-translate-x-full"
+                data-tick
+                className="spotcheck-label absolute -translate-x-1/2 whitespace-nowrap first:translate-x-0 last:-translate-x-full"
                 style={{ left: `${tick * 100}%` }}
               >
                 {formatMs(total * tick)}
