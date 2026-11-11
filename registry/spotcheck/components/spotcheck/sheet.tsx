@@ -23,7 +23,7 @@ export function SheetContent({ title, description, className, children }: SheetC
       <Drawer.Viewport className="fixed inset-0 z-50 flex justify-end">
         <Drawer.Popup
           className={cn(
-            "border-ink bg-paper text-ink h-full w-[min(24rem,calc(100vw-3rem))] touch-pan-y overflow-y-auto border-l-(length:--rule) p-5 [transform:translateX(var(--drawer-swipe-movement-x,0))] transition-transform duration-300 outline-none data-ending-style:[transform:translateX(100%)] data-starting-style:[transform:translateX(100%)] data-swiping:duration-0 motion-reduce:transition-none",
+            "border-ink bg-paper text-ink h-full w-[min(24rem,calc(100vw-3rem))] touch-pan-y overflow-y-auto border-l-(length:--rule) p-5 font-(family-name:--f-body) [transform:translateX(var(--drawer-swipe-movement-x,0))] transition-transform duration-300 outline-none data-ending-style:[transform:translateX(100%)] data-starting-style:[transform:translateX(100%)] data-swiping:duration-0 motion-reduce:transition-none",
             className,
           )}
         >

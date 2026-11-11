@@ -138,7 +138,7 @@ export function CommandPalette({
         <Dialog.Backdrop className="fixed inset-0 z-50 bg-[color-mix(in_srgb,var(--ink)_30%,transparent)]" />
         <Dialog.Popup
           initialFocus={input}
-          className="border-ink bg-paper text-ink fixed top-[12dvh] left-1/2 z-50 w-[min(520px,calc(100vw-2rem))] -translate-x-1/2 border-(length:--rule) shadow-[8px_8px_0_var(--ink)] transition-[translate,opacity] duration-150 outline-none data-starting-style:-translate-y-2 data-starting-style:opacity-40 motion-reduce:transition-none"
+          className="border-ink bg-paper text-ink fixed top-[12dvh] left-1/2 z-50 w-[min(520px,calc(100vw-2rem))] -translate-x-1/2 border-(length:--rule) font-(family-name:--f-body) shadow-[8px_8px_0_var(--ink)] transition-[translate,opacity] duration-150 outline-none data-starting-style:-translate-y-2 data-starting-style:opacity-40 motion-reduce:transition-none"
         >
           <Dialog.Title className="sr-only">{label}</Dialog.Title>
           <input

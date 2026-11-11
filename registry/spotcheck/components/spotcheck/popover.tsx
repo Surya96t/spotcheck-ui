@@ -20,7 +20,7 @@ export function PopoverContent({ side = "bottom", align = "start", className, ..
       <BasePopover.Positioner side={side} align={align} sideOffset={6} className="z-50">
         <BasePopover.Popup
           className={cn(
-            "border-ink bg-paper text-ink max-w-[calc(100vw-2rem)] border-(length:--rule) p-3 shadow-[6px_6px_0_var(--ink)] outline-none",
+            "border-ink bg-paper text-ink max-w-[calc(100vw-2rem)] border-(length:--rule) p-3 font-(family-name:--f-body) shadow-[6px_6px_0_var(--ink)] outline-none",
             className,
           )}
           {...props}

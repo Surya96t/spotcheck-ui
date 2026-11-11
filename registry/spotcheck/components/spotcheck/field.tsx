@@ -21,7 +21,7 @@ type FieldProps = {
 
 export function Field({ label, hint, error, children, className }: FieldProps) {
   return (
-    <BaseField.Root invalid={Boolean(error)} className={cn("flex min-w-0 flex-col gap-1", className)}>
+    <BaseField.Root invalid={Boolean(error)} className={cn("flex min-w-0 flex-col gap-1 font-(family-name:--f-body)", className)}>
       <div className="flex justify-between gap-3">
         <BaseField.Label className="spotcheck-label">{label}</BaseField.Label>
         {hint && <BaseField.Description className="spotcheck-label tabular-nums">{hint}</BaseField.Description>}

@@ -15,7 +15,7 @@ function ToastList() {
     <Toast.Root
       key={item.id}
       toast={item}
-      className="border-ink bg-paper text-ink relative border-(length:--rule) py-2.5 pr-8 pl-3 shadow-[6px_6px_0_var(--ink)] transition-[translate,opacity] duration-200 data-ending-style:opacity-0 data-starting-style:translate-y-2 data-starting-style:opacity-0 motion-reduce:transition-none"
+      className="border-ink bg-paper text-ink relative border-(length:--rule) py-2.5 pr-8 pl-3 font-(family-name:--f-body) shadow-[6px_6px_0_var(--ink)] transition-[translate,opacity] duration-200 data-ending-style:opacity-0 data-starting-style:translate-y-2 data-starting-style:opacity-0 motion-reduce:transition-none"
     >
       <Toast.Content>
         <Toast.Title className="spotcheck-heading text-lg leading-tight" />

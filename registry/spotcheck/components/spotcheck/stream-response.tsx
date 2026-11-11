@@ -112,7 +112,7 @@ export function SavedResponse({ text, sources = [], className }: { text: string;
   const scope = useCiteScope()
 
   return (
-    <div className={cn("flex flex-col gap-3.5", className)}>
+    <div className={cn("flex flex-col gap-3.5 font-(family-name:--f-body)", className)}>
       <StreamMarkdown text={text} scope={scope} />
       <StreamSources sources={sources} scope={scope} />
     </div>
@@ -139,7 +139,7 @@ export function StreamResponse({ text, sources = [], status, onStop, onRegenerat
   const scope = useCiteScope()
 
   return (
-    <div className={cn("flex flex-col gap-3.5", className)}>
+    <div className={cn("flex flex-col gap-3.5 font-(family-name:--f-body)", className)}>
       <StreamMarkdown text={text} scope={scope} streaming={streaming} className="min-h-[5em]">
         {streaming && (
           <span

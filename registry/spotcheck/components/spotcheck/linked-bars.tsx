@@ -245,7 +245,7 @@ export function LinkedBars({
   return (
     <div
       className={cn(
-        "border-ink grid min-w-0 border-(length:--rule) md:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)]",
+        "border-ink grid min-w-0 border-(length:--rule) font-(family-name:--f-body) md:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)]",
         className,
       )}
       {...props}

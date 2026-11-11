@@ -13,7 +13,7 @@ type CheckboxProps = Omit<BaseCheckbox.Root.Props, "children" | "className"> & {
 
 export function Checkbox({ children, className, ...props }: CheckboxProps) {
   return (
-    <label className={cn("inline-flex cursor-pointer items-center gap-2.5 text-sm", className)}>
+    <label className={cn("inline-flex cursor-pointer items-center gap-2.5 font-(family-name:--f-body) text-sm", className)}>
       <BaseCheckbox.Root
         className="spotcheck-focus border-ink bg-paper data-checked:bg-ink data-checked:text-paper grid size-5 flex-none place-items-center border-(length:--rule) data-disabled:opacity-45"
         {...props}

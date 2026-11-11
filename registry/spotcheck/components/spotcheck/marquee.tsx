@@ -20,7 +20,7 @@ export function Marquee({ items, speed = SPEED_SECONDS, className, style, ...pro
       role="group"
       aria-label={items.join(", ")}
       className={cn(
-        "group spotcheck-focus border-ink overflow-hidden border-y-(length:--rule) whitespace-nowrap",
+        "group spotcheck-focus border-ink overflow-hidden border-y-(length:--rule) font-(family-name:--f-body) whitespace-nowrap",
         className,
       )}
       style={style}

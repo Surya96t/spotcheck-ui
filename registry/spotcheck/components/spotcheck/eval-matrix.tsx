@@ -22,7 +22,7 @@ export function scoreShare(value: number, [low, high]: [number, number]) {
 
 export function EvalMatrix({ label, rows, cols, values, domain = [0.6, 1], className }: EvalMatrixProps) {
   return (
-    <div tabIndex={0} role="region" aria-label={label} className={cn("spotcheck-focus overflow-x-auto", className)}>
+    <div tabIndex={0} role="region" aria-label={label} className={cn("spotcheck-focus overflow-x-auto font-(family-name:--f-body)", className)}>
       <table className="w-full min-w-[420px] border-collapse font-(family-name:--f-mono) text-xs tabular-nums">
         <caption className="sr-only">{label}</caption>
         <thead>

@@ -131,7 +131,7 @@ export function DrumPicker({ label, options, value, defaultValue, onValueChange,
 
   return (
     // The padding is the gutter: the wheel can't share vertical swipes, so phones scroll beside it.
-    <div className={cn("min-w-0 pr-12 md:pr-0", className)}>
+    <div className={cn("min-w-0 pr-12 font-(family-name:--f-body) md:pr-0", className)}>
       <div
         ref={wheel}
         role="listbox"

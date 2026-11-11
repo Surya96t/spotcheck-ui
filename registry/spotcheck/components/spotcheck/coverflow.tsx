@@ -137,7 +137,7 @@ export function Coverflow({ label, items, value, defaultValue, onValueChange, cl
   }
 
   return (
-    <div className={cn("flex min-w-0 flex-col gap-3.5", className)}>
+    <div className={cn("flex min-w-0 flex-col gap-3.5 font-(family-name:--f-body)", className)}>
       <div
         ref={stage}
         role="listbox"

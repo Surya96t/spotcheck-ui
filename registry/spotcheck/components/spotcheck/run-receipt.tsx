@@ -53,7 +53,7 @@ export function RunReceipt({ title, meta, lines, total, footer = "Thank you for 
   }, [count, inView, reduced])
 
   return (
-    <div ref={host} className={cn("w-full max-w-80", className)}>
+    <div ref={host} className={cn("w-full max-w-80 font-(family-name:--f-body)", className)}>
       <div aria-hidden className="border-ink bg-ink relative z-10 h-2 border-(length:--rule)" />
       <div className="-mx-px overflow-hidden px-px pr-1.5 pb-1.5">
         <div ref={paper} data-testid="receipt-paper" className="drop-shadow-[4px_4px_0_var(--ink)]">

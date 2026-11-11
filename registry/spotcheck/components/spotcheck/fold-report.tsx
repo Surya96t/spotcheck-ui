@@ -50,7 +50,7 @@ export function FoldReport({ defaultOpen, open, onOpenChange, className, childre
 
   return (
     <FoldContext.Provider value={context}>
-      <div className={cn("flex min-w-0 flex-col", className)} {...props}>
+      <div className={cn("flex min-w-0 flex-col font-(family-name:--f-body)", className)} {...props}>
         {children}
       </div>
     </FoldContext.Provider>

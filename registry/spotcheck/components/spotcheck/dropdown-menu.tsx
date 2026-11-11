@@ -15,7 +15,7 @@ export function DropdownMenuContent({ className, ...props }: Omit<Menu.Popup.Pro
       <Menu.Positioner sideOffset={6} align="start" className="z-50">
         <Menu.Popup
           className={cn(
-            "border-ink bg-paper text-ink min-w-44 border-(length:--rule) py-1 shadow-[6px_6px_0_var(--ink)] outline-none",
+            "border-ink bg-paper text-ink min-w-44 border-(length:--rule) py-1 font-(family-name:--f-body) shadow-[6px_6px_0_var(--ink)] outline-none",
             className,
           )}
           {...props}

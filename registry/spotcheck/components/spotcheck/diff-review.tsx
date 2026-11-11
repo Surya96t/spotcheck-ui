@@ -48,7 +48,7 @@ export function DiffReview({ hunks, onDecide, className }: DiffReviewProps) {
   }
 
   return (
-    <div className={cn("flex flex-col gap-3", className)}>
+    <div className={cn("flex flex-col gap-3 font-(family-name:--f-body)", className)}>
       <div className="flex flex-wrap items-center justify-between gap-3">
         <span role="status" className="spotcheck-label" data-testid="review-count">
           {reviewed} of {hunks.length} reviewed

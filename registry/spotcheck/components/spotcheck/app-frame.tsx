@@ -9,7 +9,7 @@ type AppFrameProps = React.ComponentProps<"div"> & {
 
 export function AppFrame({ title, className, children, ...props }: AppFrameProps) {
   return (
-    <div className={cn("border-ink bg-raise relative overflow-hidden border-(length:--rule)", className)} {...props}>
+    <div className={cn("border-ink bg-raise relative overflow-hidden border-(length:--rule) font-(family-name:--f-body)", className)} {...props}>
       <div className="border-ink text-mute flex items-center justify-between border-b-(length:--rule) px-2.5 py-1.5 font-(family-name:--f-mono) text-[11px]">
         <span aria-hidden className="flex gap-1">
           <i className="border-ink size-[9px] border-[1.5px]" />

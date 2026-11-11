@@ -28,7 +28,7 @@ export function Thinking({ steps, interval = INTERVAL_MS, className }: ThinkingP
   }, [interval, reduced, steps.length])
 
   return (
-    <div className={cn("flex flex-wrap items-end gap-4", className)}>
+    <div className={cn("flex flex-wrap items-end gap-4 font-(family-name:--f-body)", className)}>
       <div aria-hidden className="flex h-14 items-end gap-[3px]">
         {Array.from({ length: BARS }, (_, bar) => (
           <i

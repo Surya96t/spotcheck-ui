@@ -72,7 +72,7 @@ export function TiltCard({ className, children, ...props }: TiltCardProps) {
     <TiltContext.Provider value={flat}>
       <div
         ref={stage}
-        className={cn("grid min-w-0 touch-pan-y place-items-center px-2 pt-5.5 pb-2.5", !flat && "perspective-[900px]")}
+        className={cn("grid min-w-0 touch-pan-y place-items-center px-2 pt-5.5 pb-2.5 font-(family-name:--f-body)", !flat && "perspective-[900px]")}
         onPointerMove={onPointerMove}
         onPointerLeave={onPointerLeave}
       >

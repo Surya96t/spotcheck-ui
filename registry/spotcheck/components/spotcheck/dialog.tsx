@@ -22,7 +22,7 @@ export function DialogContent({ title, description, className, children, ...prop
       <BaseDialog.Backdrop className="fixed inset-0 z-50 bg-[color-mix(in_srgb,var(--ink)_30%,transparent)]" />
       <BaseDialog.Popup
         className={cn(
-          "border-ink bg-paper text-ink fixed top-[14dvh] left-1/2 z-50 max-h-[76dvh] w-[min(480px,calc(100vw-2rem))] -translate-x-1/2 overflow-auto border-(length:--rule) p-5 shadow-[8px_8px_0_var(--ink)] transition-[translate,opacity] duration-150 outline-none data-ending-style:opacity-0 data-starting-style:-translate-y-2 data-starting-style:opacity-40 motion-reduce:transition-none",
+          "border-ink bg-paper text-ink fixed top-[14dvh] left-1/2 z-50 max-h-[76dvh] w-[min(480px,calc(100vw-2rem))] -translate-x-1/2 overflow-auto border-(length:--rule) p-5 font-(family-name:--f-body) shadow-[8px_8px_0_var(--ink)] transition-[translate,opacity] duration-150 outline-none data-ending-style:opacity-0 data-starting-style:-translate-y-2 data-starting-style:opacity-40 motion-reduce:transition-none",
           className,
         )}
         {...props}
