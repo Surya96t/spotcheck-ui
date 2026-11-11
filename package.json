@@ -15,7 +15,7 @@
     "test": "vitest run",
     "test:e2e": "playwright test",
     "test:install": "node scripts/install-test.mjs",
-    "installs": "node --env-file-if-exists=.env.local scripts/installs.mjs"
+    "installs": "node --env-file-if-exists=.env.counts scripts/installs.mjs"
   },
   "dependencies": {
     "@base-ui/react": "1.9.0",

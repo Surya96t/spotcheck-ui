@@ -1,13 +1,15 @@
 // Prints Surya's private counts from the Upstash database the site counts into (see lib/counts.ts):
 // downloads of each component's registry file, and Copy clicks on the site.
-// Get the variables first with `vercel env pull .env.local`, then run `pnpm installs`.
+// Get the variables first with `vercel env pull .env.counts --environment=production`, then run
+// `pnpm installs`. They live in their own file because Next.js loads .env.local, and a local dev
+// server holding them would add to the real counts.
 // Pass a number of days to see recent ones only: `pnpm installs 7`.
 import { Redis } from "@upstash/redis"
 
 const url = process.env.KV_REST_API_URL ?? process.env.UPSTASH_REDIS_REST_URL
 const token = process.env.KV_REST_API_TOKEN ?? process.env.UPSTASH_REDIS_REST_TOKEN
 if (!url || !token) {
-  console.error("No Upstash variables. Run `vercel env pull .env.local` first.")
+  console.error("No Upstash variables. Run `vercel env pull .env.counts --environment=production` first.")
   process.exit(1)
 }
 const redis = new Redis({ url, token })
